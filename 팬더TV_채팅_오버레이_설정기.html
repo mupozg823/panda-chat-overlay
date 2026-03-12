@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>팬더TV 채팅 오버레이 설정기</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+
+  .app {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ──── 왼쪽 설정 패널 ──── */
+  .settings-panel {
+    width: 380px;
+    min-width: 380px;
+    background: #1a1a2e;
+    border-right: 1px solid #2a2a4a;
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  .panel-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #e91e8c 0%, #b8166e 100%);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .panel-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .panel-header p {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
+  /* 테마 프리셋 */
+  .theme-presets {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #2a2a4a;
+    flex-wrap: wrap;
+  }
+  .theme-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #3a3a5a;
+    background: transparent;
+    color: #ccc;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .theme-btn:hover { border-color: #e91e8c; color: #fff; }
+  .theme-btn.active {
+    background: #e91e8c;
+    border-color: #e91e8c;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* 설정 섹션 */
+  .section {
+    padding: 16px 24px;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e91e8c;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .control-row:last-child { margin-bottom: 0; }
+
+  .control-label {
+    font-size: 13px;
+    color: #b0b0c0;
+    min-width: 100px;
+  }
+
+  .control-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* 슬라이더 */
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 120px;
+    height: 4px;
+    border-radius: 2px;
+    background: #3a3a5a;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #e91e8c;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(233, 30, 140, 0.4);
+  }
+
+  .value-display {
+    font-size: 12px;
+    color: #888;
+    min-width: 40px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 색상 입력 */
+  .color-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  input[type="color"] {
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 2px solid #3a3a5a;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+  }
+  input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+  input[type="color"]::-webkit-color-swatch { border-radius: 3px; border: none; }
+
+  .hex-input {
+    width: 75px;
+    background: #2a2a4a;
+    border: 1px solid #3a3a5a;
+    border-radius: 6px;
+    color: #ddd;
+    font-size: 12px;
+    padding: 4px 8px;
+    font-family: monospace;
+  }
+
+  /* 체크박스 */
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    background: #3a3a5a;
+    border-radius: 11px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .toggle-switch.on { background: #e91e8c; }
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .toggle-switch.on::after { transform: translateX(18px); }
+
+  /* ──── 오른쪽 미리보기 + CSS 출력 ──── */
+  .preview-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .preview-header {
+    padding: 12px 24px;
+    background: #16162a;
+    border-bottom: 1px solid #2a2a4a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .preview-header h2 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #aaa;
+  }
+
+  /* 미리보기 컨테이너 */
+  .preview-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    overflow: hidden;
+    transition: background 0.3s;
+    position: relative;
+    min-height: 0;
+  }
+  .preview-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect fill="%23222" width="20" height="20"/><rect fill="%23333" width="10" height="10"/><rect fill="%23333" x="10" y="10" width="10" height="10"/></svg>');
+    background-size: 20px 20px;
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  .preview-chat {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .preview-msg {
+    animation: slideIn 0.3s ease-out;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .preview-msg {
+    padding: 5px 14px;
+    border-radius: 16px;
+    width: max-content;
+    max-width: 90%;
+    font-size: 13px;
+    line-height: 1.5;
+    transition: background 0.3s, color 0.3s, border-radius 0.3s, font-size 0.3s, text-shadow 0.3s;
+  }
+  .preview-msg .nick {
+    font-weight: 700;
+    margin-right: 4px;
+  }
+
+  /* CSS 출력 영역 */
+  .css-output-area {
+    background: #12121f;
+    border-top: 1px solid #2a2a4a;
+    padding: 16px 24px;
+  }
+  .css-output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .css-output-header h3 {
+    font-size: 13px;
+    color: #aaa;
+    font-weight: 500;
+  }
+  .copy-btn {
+    padding: 8px 20px;
+    background: #e91e8c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: #ff2da0; transform: scale(1.02); }
+  .copy-btn.copied {
+    background: #00c853;
+  }
+
+  .css-code {
+    background: #1a1a30;
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    color: #8888aa;
+    max-height: 120px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  /* 사용법 가이드 */
+  .guide-section {
+    padding: 16px 24px;
+    border-bottom: 1px solid #2a2a4a;
+    background: #1e1e35;
+  }
+  .guide-steps {
+    list-style: none;
+    counter-reset: step;
+  }
+  .guide-steps li {
+    counter-increment: step;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 6px;
+    padding-left: 28px;
+    position: relative;
+  }
+  .guide-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    background: #e91e8c;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 배경 선택 */
+  .bg-selector {
+    display: flex;
+    gap: 6px;
+  }
+  .bg-option {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 2px solid #3a3a5a;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .bg-option:hover, .bg-option.active { border-color: #e91e8c; }
+  .bg-option.transparent {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect fill="%23444" width="10" height="10"/><rect fill="%23666" width="5" height="5"/><rect fill="%23666" x="5" y="5" width="5" height="5"/></svg>');
+    background-size: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- 왼쪽 설정 패널 -->
+  <div class="settings-panel">
+    <div class="panel-header">
+      <h1>팬더TV 채팅 오버레이 설정기</h1>
+      <p>테마를 선택하고 세부 설정을 조절하세요</p>
+    </div>
+
+    <!-- 사용법 -->
+    <div class="guide-section">
+      <div class="section-title">사용법</div>
+      <ol class="guide-steps">
+        <li>아래에서 테마와 설정을 조절하세요</li>
+        <li>오른쪽 미리보기에서 결과를 확인하세요</li>
+        <li>"CSS 복사하기" 버튼을 클릭하세요</li>
+        <li>OBS &rarr; 브라우저 소스 &rarr; 사용자 지정 CSS에 붙여넣기</li>
+      </ol>
+    </div>
+
+    <!-- 테마 프리셋 -->
+    <div class="theme-presets">
+      <button class="theme-btn active" onclick="applyTheme('pink')">핑크</button>
+      <button class="theme-btn" onclick="applyTheme('character')">캐릭터</button>
+      <button class="theme-btn" onclick="applyTheme('dark')">다크</button>
+      <button class="theme-btn" onclick="applyTheme('neon')">네온</button>
+      <button class="theme-btn" onclick="applyTheme('glass')">글래스</button>
+      <button class="theme-btn" onclick="applyTheme('minimal')">미니멀</button>
+    </div>
+
+    <!-- 말풍선 설정 -->
+    <div class="section">
+      <div class="section-title">말풍선</div>
+
+      <div class="control-row">
+        <span class="control-label">배경 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="bubbleColor" value="#fff0f5" oninput="onColorInput(this, 'bubbleHex')">
+          <input type="text" class="hex-input" id="bubbleHex" value="#fff0f5" oninput="onHexInput(this, 'bubbleColor')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">투명도</span>
+        <div class="control-right">
+          <input type="range" id="bubbleOpacity" min="10" max="90" value="55" oninput="update()">
+          <span class="value-display" id="bubbleOpacityVal">55%</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">모서리 둥글기</span>
+        <div class="control-right">
+          <input type="range" id="borderRadius" min="0" max="30" value="16" oninput="update()">
+          <span class="value-display" id="borderRadiusVal">16px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">블러 효과</span>
+        <div class="control-right">
+          <input type="range" id="blurAmount" min="0" max="20" value="6" oninput="update()">
+          <span class="value-display" id="blurAmountVal">6px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 후원 메시지 설정 -->
+    <div class="section">
+      <div class="section-title">후원 메시지</div>
+
+      <div class="control-row">
+        <span class="control-label">배경 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="donationColor" value="#ffdceb" oninput="onColorInput(this, 'donationHex')">
+          <input type="text" class="hex-input" id="donationHex" value="#ffdceb" oninput="onHexInput(this, 'donationColor')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">투명도</span>
+        <div class="control-right">
+          <input type="range" id="donationOpacity" min="10" max="90" value="60" oninput="update()">
+          <span class="value-display" id="donationOpacityVal">60%</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">이미지 크기 제한</span>
+        <div class="control-right">
+          <input type="range" id="donationImgSize" min="0" max="80" value="32" oninput="update()">
+          <span class="value-display" id="donationImgSizeVal">32px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">이미지 숨기기</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('hideImg')">
+          <div class="toggle-switch" id="hideImg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 알림 메시지 설정 -->
+    <div class="section">
+      <div class="section-title">알림/추천</div>
+
+      <div class="control-row">
+        <span class="control-label">배경 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="noticeColor" value="#ffebf5" oninput="onColorInput(this, 'noticeHex')">
+          <input type="text" class="hex-input" id="noticeHex" value="#ffebf5" oninput="onHexInput(this, 'noticeColor')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">투명도</span>
+        <div class="control-right">
+          <input type="range" id="noticeOpacity" min="10" max="90" value="50" oninput="update()">
+          <span class="value-display" id="noticeOpacityVal">50%</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="noticeTextColor" value="#b04080" oninput="onColorInput(this, 'noticeTextHex')">
+          <input type="text" class="hex-input" id="noticeTextHex" value="#b04080" oninput="onHexInput(this, 'noticeTextColor')">
+        </div>
+      </div>
+    </div>
+
+    <!-- 텍스트 설정 -->
+    <div class="section">
+      <div class="section-title">텍스트</div>
+
+      <div class="control-row">
+        <span class="control-label">닉네임 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="nickColor" value="#d4508a" oninput="onColorInput(this, 'nickHex')">
+          <input type="text" class="hex-input" id="nickHex" value="#d4508a" oninput="onHexInput(this, 'nickColor')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">채팅 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="textColor" value="#3a2a2e" oninput="onColorInput(this, 'textHex')">
+          <input type="text" class="hex-input" id="textHex" value="#3a2a2e" oninput="onHexInput(this, 'textColor')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">폰트 크기</span>
+        <div class="control-right">
+          <input type="range" id="fontSize" min="10" max="24" value="13" oninput="update()">
+          <span class="value-display" id="fontSizeVal">13px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 그림자</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('textShadow')">
+          <div class="toggle-switch" id="textShadow"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">닉네임 굵게</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('nickBold')">
+          <div class="toggle-switch on" id="nickBold"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">2줄 레이아웃</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('twoLine')">
+          <div class="toggle-switch" id="twoLine"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">닉 아이콘</span>
+        <div class="control-right">
+          <select id="nickIcon" onchange="onNickIconChange()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:13px;padding:4px 8px;">
+            <option value="">없음</option>
+            <option value="👧">👧 소녀</option>
+            <option value="🧑">🧑 사람</option>
+            <option value="💗">💗 하트</option>
+            <option value="⭐">⭐ 별</option>
+            <option value="🌸">🌸 꽃</option>
+            <option value="🎀">🎀 리본</option>
+            <option value="🐱">🐱 고양이</option>
+            <option value="🐰">🐰 토끼</option>
+            <option value="✨">✨ 반짝</option>
+            <option value="🍑">🍑 복숭아</option>
+            <option value="__custom_img__">커스텀 이미지</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="customIconPanel" style="display:none;">
+        <div class="control-row">
+          <span class="control-label">이미지 소스</span>
+          <div class="control-right" style="flex-direction:column;align-items:flex-end;gap:6px;">
+            <input type="text" id="customIconUrl" placeholder="이미지 URL 입력" oninput="onCustomIconInput()"
+              style="width:180px;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:11px;padding:4px 8px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:#aaa;">
+              <span style="background:#3a3a5a;padding:4px 10px;border-radius:6px;font-size:11px;color:#ddd;">파일 선택</span>
+              <input type="file" id="customIconFile" accept="image/*" onchange="onCustomIconFile(event)" style="display:none;">
+            </label>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">아이콘 크기</span>
+          <div class="control-right">
+            <input type="range" id="iconSize" min="12" max="32" value="18" oninput="update()">
+            <span class="value-display" id="iconSizeVal">18px</span>
+          </div>
+        </div>
+        <div id="iconPreviewRow" class="control-row" style="display:none;">
+          <span class="control-label">미리보기</span>
+          <div class="control-right">
+            <img id="iconPreviewImg" style="max-width:32px;max-height:32px;border-radius:4px;border:1px solid #3a3a5a;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 말풍선 그라데이션 -->
+    <div class="section">
+      <div class="section-title">그라데이션</div>
+
+      <div class="control-row">
+        <span class="control-label">사용</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('useGradient')">
+          <div class="toggle-switch" id="useGradient"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">시작 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="gradStart" value="#ffffff" oninput="onColorInput(this, 'gradStartHex')">
+          <input type="text" class="hex-input" id="gradStartHex" value="#ffffff" oninput="onHexInput(this, 'gradStart')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">끝 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="gradEnd" value="#ffe0f0" oninput="onColorInput(this, 'gradEndHex')">
+          <input type="text" class="hex-input" id="gradEndHex" value="#ffe0f0" oninput="onHexInput(this, 'gradEnd')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">방향</span>
+        <div class="control-right">
+          <select id="gradDirection" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+            <option value="135deg">↘ 대각선</option>
+            <option value="90deg">→ 가로</option>
+            <option value="180deg">↓ 세로</option>
+            <option value="45deg">↗ 역대각선</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 레이아웃 설정 -->
+    <div class="section">
+      <div class="section-title">레이아웃</div>
+
+      <div class="control-row">
+        <span class="control-label">폰트</span>
+        <div class="control-right">
+          <select id="fontFamily" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+            <option value="'Noto Sans KR', sans-serif">Noto Sans KR</option>
+            <option value="'Pretendard', sans-serif">Pretendard</option>
+            <option value="sans-serif">시스템 기본</option>
+            <option value="'D2Coding', monospace">D2Coding</option>
+            <option value="'NanumSquareRound', sans-serif">나눔스퀘어라운드</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">채팅 간격</span>
+        <div class="control-right">
+          <input type="range" id="chatGap" min="0" max="10" value="3" oninput="update()">
+          <span class="value-display" id="chatGapVal">3px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">패딩 (좌우)</span>
+        <div class="control-right">
+          <input type="range" id="paddingX" min="4" max="24" value="12" oninput="update()">
+          <span class="value-display" id="paddingXVal">12px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 기타 설정 -->
+    <div class="section">
+      <div class="section-title">기타</div>
+
+      <div class="control-row">
+        <span class="control-label">방송종료 숨기기</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('hideEnd')">
+          <div class="toggle-switch on" id="hideEnd"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">내비게이션 숨기기</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('hideNav')">
+          <div class="toggle-switch on" id="hideNav"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">아이콘 숨기기</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('hideIcon')">
+          <div class="toggle-switch on" id="hideIcon"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">페이드아웃 방지</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('preventFade')">
+          <div class="toggle-switch on" id="preventFade"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">애니메이션 제거</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('noAnimation')">
+          <div class="toggle-switch on" id="noAnimation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오른쪽: 미리보기 + CSS -->
+  <div class="preview-area">
+    <div class="preview-header">
+      <h2>미리보기</h2>
+      <div class="bg-selector">
+        <div class="bg-option transparent active" onclick="setBg(this, 'transparent')" title="투명 배경"></div>
+        <div class="bg-option" style="background:#1a1a2e;" onclick="setBg(this, '#1a1a2e')" title="어두운 배경"></div>
+        <div class="bg-option" style="background:#c9848a;" onclick="setBg(this, 'linear-gradient(180deg, #e8b4b8, #a06068)')" title="핑크 배경"></div>
+        <div class="bg-option" style="background:#4a7a4a;" onclick="setBg(this, '#2d5a2d')" title="게임 배경"></div>
+      </div>
+    </div>
+
+    <div class="preview-container" id="previewContainer">
+      <div class="preview-chat" id="previewChat">
+        <div class="preview-msg notice" id="pNotice1">
+          <span>쥬쥬님</span>님께서 추천하셨습니다.
+        </div>
+        <div class="preview-msg" id="pMsg1">
+          <span class="nick" id="pNick1">루야♡ai</span>
+          <span id="pText1">극한의앙카총님 어서오세요~</span>
+        </div>
+        <div class="preview-msg" id="pMsg2">
+          <span class="nick" id="pNick2">이유♡루야♡김잇콩</span>
+          <span id="pText2">점검중~</span>
+        </div>
+        <div class="preview-msg" id="pMsg3">
+          <span class="nick" id="pNick3">극한의앙카총</span>
+          <span id="pText3">ㄹㄹㅇ</span>
+        </div>
+        <div class="preview-msg donation" id="pDonation1">
+          ❤️루찌™❤️님께서 1004개를 선물하셨습니다.
+        </div>
+        <div class="preview-msg" id="pMsg4">
+          <span class="nick" id="pNick4">루야♡잇콩</span>
+          <span id="pText4">에헤</span>
+        </div>
+        <div class="preview-msg" id="pMsg5">
+          <span class="nick" id="pNick5">하루너만의</span>
+          <span id="pText5">❤️ 침대숙문어 앙카형 ㄹㄹ용</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS 출력 -->
+    <div class="css-output-area">
+      <div class="css-output-header">
+        <h3>OBS 사용자 지정 CSS</h3>
+        <button class="copy-btn" id="copyBtn" onclick="copyCSS()">CSS 복사하기</button>
+      </div>
+      <pre class="css-code" id="cssOutput"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+// ──── 테마 프리셋 ────
+const themes = {
+  pink: {
+    bubbleColor: '#fff0f5', bubbleOpacity: 55, borderRadius: 16, blurAmount: 6,
+    donationColor: '#ffdceb', donationOpacity: 60, donationImgSize: 32,
+    noticeColor: '#ffebf5', noticeOpacity: 50, noticeTextColor: '#b04080',
+    nickColor: '#d4508a', textColor: '#3a2a2e', fontSize: 13,
+    textShadow: false, nickBold: true, hideImg: false, hideEnd: true, hideNav: true,
+    fontFamily: "'Noto Sans KR', sans-serif", chatGap: 3, paddingX: 12,
+    hideIcon: true, preventFade: true, noAnimation: true,
+    twoLine: false, nickIcon: '', iconSize: 18, useGradient: false,
+    gradStart: '#ffffff', gradEnd: '#ffe0f0', gradDirection: '135deg'
+  },
+  character: {
+    bubbleColor: '#ffffff', bubbleOpacity: 55, borderRadius: 16, blurAmount: 6,
+    donationColor: '#fff0f5', donationOpacity: 60, donationImgSize: 32,
+    noticeColor: '#f5f0ff', noticeOpacity: 50, noticeTextColor: '#8060a0',
+    nickColor: '#e04888', textColor: '#3a2a2e', fontSize: 13,
+    textShadow: false, nickBold: true, hideImg: false, hideEnd: true, hideNav: true,
+    fontFamily: "'Noto Sans KR', sans-serif", chatGap: 4, paddingX: 14,
+    hideIcon: true, preventFade: true, noAnimation: true,
+    twoLine: true, nickIcon: '👧', iconSize: 18, useGradient: false,
+    gradStart: '#ffffff', gradEnd: '#ffe0f0', gradDirection: '135deg'
+  },
+  dark: {
+    bubbleColor: '#ffffff', bubbleOpacity: 18, borderRadius: 20, blurAmount: 12,
+    donationColor: '#ff96b4', donationOpacity: 25, donationImgSize: 36,
+    noticeColor: '#b4a0ff', noticeOpacity: 22, noticeTextColor: '#e8d0ff',
+    nickColor: '#ffcce0', textColor: '#ffffff', fontSize: 14,
+    textShadow: true, nickBold: true, hideImg: false, hideEnd: true, hideNav: true,
+    fontFamily: "'Noto Sans KR', sans-serif", chatGap: 4, paddingX: 14,
+    hideIcon: true, preventFade: true, noAnimation: true,
+    twoLine: false, nickIcon: '', iconSize: 18, useGradient: false,
+    gradStart: '#ffffff', gradEnd: '#ffe0f0', gradDirection: '135deg'
+  },
+  neon: {
+    bubbleColor: '#0a0a2e', bubbleOpacity: 70, borderRadius: 12, blurAmount: 8,
+    donationColor: '#2a0a3e', donationOpacity: 70, donationImgSize: 36,
+    noticeColor: '#0a2a3e', noticeOpacity: 60, noticeTextColor: '#00ffcc',
+    nickColor: '#ff00aa', textColor: '#ffffff', fontSize: 14,
+    textShadow: true, nickBold: true, hideImg: false, hideEnd: true, hideNav: true,
+    fontFamily: "'Noto Sans KR', sans-serif", chatGap: 4, paddingX: 14,
+    hideIcon: true, preventFade: true, noAnimation: true,
+    twoLine: false, nickIcon: '', useGradient: true,
+    gradStart: '#1a0030', gradEnd: '#000a2e', gradDirection: '135deg'
+  },
+  glass: {
+    bubbleColor: '#ffffff', bubbleOpacity: 25, borderRadius: 18, blurAmount: 16,
+    donationColor: '#ffffff', donationOpacity: 30, donationImgSize: 32,
+    noticeColor: '#ffffff', noticeOpacity: 20, noticeTextColor: '#aaaaff',
+    nickColor: '#88ccff', textColor: '#ffffff', fontSize: 13,
+    textShadow: true, nickBold: true, hideImg: false, hideEnd: true, hideNav: true,
+    fontFamily: "'Noto Sans KR', sans-serif", chatGap: 3, paddingX: 12,
+    hideIcon: true, preventFade: true, noAnimation: true,
+    twoLine: false, nickIcon: '', iconSize: 18, useGradient: false,
+    gradStart: '#ffffff', gradEnd: '#ffe0f0', gradDirection: '135deg'
+  },
+  minimal: {
+    bubbleColor: '#000000', bubbleOpacity: 0, borderRadius: 0, blurAmount: 0,
+    donationColor: '#000000', donationOpacity: 0, donationImgSize: 32,
+    noticeColor: '#000000', noticeOpacity: 0, noticeTextColor: '#ffcc00',
+    nickColor: '#ff8800', textColor: '#ffffff', fontSize: 14,
+    textShadow: true, nickBold: true, hideImg: false, hideEnd: true, hideNav: true,
+    fontFamily: "sans-serif", chatGap: 2, paddingX: 8,
+    hideIcon: true, preventFade: true, noAnimation: true,
+    twoLine: false, nickIcon: '', iconSize: 18, useGradient: false,
+    gradStart: '#000000', gradEnd: '#000000', gradDirection: '135deg'
+  }
+};
+
+let currentTheme = 'pink';
+
+function applyTheme(name) {
+  currentTheme = name;
+  const t = themes[name];
+
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.theme-btn[onclick*="${name}"]`).classList.add('active');
+
+  // 값 설정
+  setVal('bubbleColor', t.bubbleColor);
+  setVal('bubbleHex', t.bubbleColor);
+  setRange('bubbleOpacity', t.bubbleOpacity);
+  setRange('borderRadius', t.borderRadius);
+  setRange('blurAmount', t.blurAmount);
+  setVal('donationColor', t.donationColor);
+  setVal('donationHex', t.donationColor);
+  setRange('donationOpacity', t.donationOpacity);
+  setRange('donationImgSize', t.donationImgSize);
+  setVal('noticeColor', t.noticeColor);
+  setVal('noticeHex', t.noticeColor);
+  setRange('noticeOpacity', t.noticeOpacity);
+  setVal('noticeTextColor', t.noticeTextColor);
+  setVal('noticeTextHex', t.noticeTextColor);
+  setVal('nickColor', t.nickColor);
+  setVal('nickHex', t.nickColor);
+  setVal('textColor', t.textColor);
+  setVal('textHex', t.textColor);
+  setRange('fontSize', t.fontSize);
+  setToggle('textShadow', t.textShadow);
+  setToggle('nickBold', t.nickBold);
+  setToggle('hideImg', t.hideImg);
+  setToggle('hideEnd', t.hideEnd);
+  setToggle('hideNav', t.hideNav);
+  setToggle('hideIcon', t.hideIcon);
+  setToggle('preventFade', t.preventFade);
+  setToggle('noAnimation', t.noAnimation);
+  setSelect('fontFamily', t.fontFamily);
+  setRange('chatGap', t.chatGap);
+  setRange('paddingX', t.paddingX);
+  setToggle('twoLine', t.twoLine);
+  setSelect('nickIcon', t.nickIcon);
+  setRange('iconSize', t.iconSize);
+  // 커스텀 이미지 패널 표시/숨기기
+  document.getElementById('customIconPanel').style.display = t.nickIcon === '__custom_img__' ? 'block' : 'none';
+  setToggle('useGradient', t.useGradient);
+  setVal('gradStart', t.gradStart);
+  setVal('gradStartHex', t.gradStart);
+  setVal('gradEnd', t.gradEnd);
+  setVal('gradEndHex', t.gradEnd);
+  setSelect('gradDirection', t.gradDirection);
+
+  update();
+}
+
+// ──── 커스텀 아이콘 ────
+let customIconDataUrl = '';
+
+function onNickIconChange() {
+  const val = document.getElementById('nickIcon').value;
+  const panel = document.getElementById('customIconPanel');
+  if (val === '__custom_img__') {
+    panel.style.display = 'block';
+  } else {
+    panel.style.display = 'none';
+  }
+  update();
+}
+
+function onCustomIconInput() {
+  const url = document.getElementById('customIconUrl').value.trim();
+  if (url) {
+    customIconDataUrl = url;
+    document.getElementById('iconPreviewImg').src = url;
+    document.getElementById('iconPreviewRow').style.display = 'flex';
+    update();
+  }
+}
+
+function onCustomIconFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    customIconDataUrl = e.target.result;
+    document.getElementById('iconPreviewImg').src = customIconDataUrl;
+    document.getElementById('iconPreviewRow').style.display = 'flex';
+    document.getElementById('customIconUrl').value = '';
+    update();
+  };
+  reader.readAsDataURL(file);
+}
+
+function setVal(id, val) { document.getElementById(id).value = val; }
+function setRange(id, val) {
+  document.getElementById(id).value = val;
+}
+function setSelect(id, val) {
+  const el = document.getElementById(id);
+  for (let i = 0; i < el.options.length; i++) {
+    if (el.options[i].value === val) { el.selectedIndex = i; break; }
+  }
+}
+function setToggle(id, val) {
+  const el = document.getElementById(id);
+  if (val) el.classList.add('on'); else el.classList.remove('on');
+}
+
+function toggleSwitch(id) {
+  document.getElementById(id).classList.toggle('on');
+  update();
+}
+
+function getToggle(id) {
+  return document.getElementById(id).classList.contains('on');
+}
+
+// ──── 색상 헬퍼 ────
+function hexToRgb(hex) {
+  hex = hex.replace('#', '');
+  return {
+    r: parseInt(hex.substring(0, 2), 16),
+    g: parseInt(hex.substring(2, 4), 16),
+    b: parseInt(hex.substring(4, 6), 16)
+  };
+}
+
+function onColorInput(el, hexId) {
+  document.getElementById(hexId).value = el.value;
+  update();
+}
+function onHexInput(el, colorId) {
+  if (/^#[0-9a-fA-F]{6}$/.test(el.value)) {
+    document.getElementById(colorId).value = el.value;
+    update();
+  }
+}
+
+// ──── 미리보기 배경 ────
+function setBg(el, bg) {
+  document.querySelectorAll('.bg-option').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('previewContainer').style.background = bg;
+}
+
+// ──── 업데이트 ────
+function update() {
+  const v = getValues();
+  updatePreview(v);
+  updateCSS(v);
+}
+
+function getValues() {
+  return {
+    bubbleColor: document.getElementById('bubbleColor').value,
+    bubbleOpacity: +document.getElementById('bubbleOpacity').value,
+    borderRadius: +document.getElementById('borderRadius').value,
+    blurAmount: +document.getElementById('blurAmount').value,
+    donationColor: document.getElementById('donationColor').value,
+    donationOpacity: +document.getElementById('donationOpacity').value,
+    donationImgSize: +document.getElementById('donationImgSize').value,
+    noticeColor: document.getElementById('noticeColor').value,
+    noticeOpacity: +document.getElementById('noticeOpacity').value,
+    noticeTextColor: document.getElementById('noticeTextColor').value,
+    nickColor: document.getElementById('nickColor').value,
+    textColor: document.getElementById('textColor').value,
+    fontSize: +document.getElementById('fontSize').value,
+    textShadow: getToggle('textShadow'),
+    nickBold: getToggle('nickBold'),
+    hideImg: getToggle('hideImg'),
+    hideEnd: getToggle('hideEnd'),
+    hideNav: getToggle('hideNav'),
+    hideIcon: getToggle('hideIcon'),
+    preventFade: getToggle('preventFade'),
+    noAnimation: getToggle('noAnimation'),
+    fontFamily: document.getElementById('fontFamily').value,
+    chatGap: +document.getElementById('chatGap').value,
+    paddingX: +document.getElementById('paddingX').value,
+    twoLine: getToggle('twoLine'),
+    nickIcon: document.getElementById('nickIcon').value,
+    iconSize: +document.getElementById('iconSize').value,
+    customIconUrl: customIconDataUrl,
+    useGradient: getToggle('useGradient'),
+    gradStart: document.getElementById('gradStart').value,
+    gradEnd: document.getElementById('gradEnd').value,
+    gradDirection: document.getElementById('gradDirection').value
+  };
+}
+
+function updatePreview(v) {
+  // 값 표시 업데이트
+  document.getElementById('bubbleOpacityVal').textContent = v.bubbleOpacity + '%';
+  document.getElementById('borderRadiusVal').textContent = v.borderRadius + 'px';
+  document.getElementById('blurAmountVal').textContent = v.blurAmount + 'px';
+  document.getElementById('donationOpacityVal').textContent = v.donationOpacity + '%';
+  document.getElementById('donationImgSizeVal').textContent = v.donationImgSize + 'px';
+  document.getElementById('noticeOpacityVal').textContent = v.noticeOpacity + '%';
+  document.getElementById('fontSizeVal').textContent = v.fontSize + 'px';
+  document.getElementById('chatGapVal').textContent = v.chatGap + 'px';
+  document.getElementById('paddingXVal').textContent = v.paddingX + 'px';
+
+  const bRgb = hexToRgb(v.bubbleColor);
+  const dRgb = hexToRgb(v.donationColor);
+  const nRgb = hexToRgb(v.noticeColor);
+  const shadow = v.textShadow ? '0 0 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3)' : 'none';
+
+  // 채팅 영역 간격 및 폰트
+  const chatEl = document.getElementById('previewChat');
+  chatEl.style.gap = v.chatGap + 'px';
+  chatEl.style.fontFamily = v.fontFamily;
+
+  // 그라데이션 배경 계산
+  const gsRgb = hexToRgb(v.gradStart);
+  const geRgb = hexToRgb(v.gradEnd);
+  function getBubbleBg() {
+    if (v.useGradient) {
+      return `linear-gradient(${v.gradDirection}, rgba(${gsRgb.r},${gsRgb.g},${gsRgb.b},${v.bubbleOpacity/100}), rgba(${geRgb.r},${geRgb.g},${geRgb.b},${v.bubbleOpacity/100}))`;
+    }
+    return `rgba(${bRgb.r}, ${bRgb.g}, ${bRgb.b}, ${v.bubbleOpacity / 100})`;
+  }
+
+  // 일반 메시지
+  document.querySelectorAll('.preview-msg:not(.donation):not(.notice)').forEach(el => {
+    el.style.background = getBubbleBg();
+    el.style.borderRadius = v.borderRadius + 'px';
+    el.style.backdropFilter = `blur(${v.blurAmount}px)`;
+    el.style.fontSize = v.fontSize + 'px';
+    el.style.padding = v.twoLine ? `6px ${v.paddingX}px` : `4px ${v.paddingX}px`;
+    el.style.color = v.textColor;
+    el.style.textShadow = shadow;
+  });
+  document.querySelectorAll('.preview-msg .nick').forEach(el => {
+    el.style.color = v.nickColor;
+    el.style.fontWeight = v.nickBold ? '700' : '400';
+    el.style.display = v.twoLine ? 'block' : 'inline';
+    el.style.marginBottom = v.twoLine ? '2px' : '0';
+    el.style.marginRight = v.twoLine ? '0' : '4px';
+    // 아이콘 처리
+    el.setAttribute('data-icon', v.nickIcon);
+  });
+  document.querySelectorAll('.preview-msg span:not(.nick)').forEach(el => {
+    el.style.color = v.textColor;
+  });
+
+  // 닉 아이콘 스타일 동적 생성
+  document.getElementById('iconSizeVal').textContent = v.iconSize + 'px';
+  let iconStyle = document.getElementById('nickIconStyle');
+  if (!iconStyle) {
+    iconStyle = document.createElement('style');
+    iconStyle.id = 'nickIconStyle';
+    document.head.appendChild(iconStyle);
+  }
+  if (v.nickIcon === '__custom_img__' && v.customIconUrl) {
+    iconStyle.textContent = `.preview-msg .nick::before {
+      content: '' !important;
+      display: inline-block;
+      width: ${v.iconSize}px;
+      height: ${v.iconSize}px;
+      background-image: url('${v.customIconUrl}');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      vertical-align: middle;
+      margin-right: 4px;
+      border-radius: 50%;
+    }`;
+  } else if (v.nickIcon && v.nickIcon !== '__custom_img__') {
+    iconStyle.textContent = `.preview-msg .nick::before { content: '${v.nickIcon} '; }`;
+  } else {
+    iconStyle.textContent = `.preview-msg .nick::before { content: none; }`;
+  }
+
+  // 후원
+  document.querySelectorAll('.preview-msg.donation').forEach(el => {
+    el.style.background = `rgba(${dRgb.r}, ${dRgb.g}, ${dRgb.b}, ${v.donationOpacity / 100})`;
+    el.style.borderRadius = v.borderRadius + 'px';
+    el.style.backdropFilter = `blur(${v.blurAmount}px)`;
+    el.style.fontSize = (v.fontSize - 1) + 'px';
+    el.style.color = v.textColor;
+    el.style.textShadow = shadow;
+  });
+
+  // 알림
+  document.querySelectorAll('.preview-msg.notice').forEach(el => {
+    el.style.background = `rgba(${nRgb.r}, ${nRgb.g}, ${nRgb.b}, ${v.noticeOpacity / 100})`;
+    el.style.borderRadius = v.borderRadius + 'px';
+    el.style.backdropFilter = `blur(${v.blurAmount}px)`;
+    el.style.fontSize = (v.fontSize - 1) + 'px';
+    el.style.color = v.noticeTextColor;
+    el.style.textShadow = shadow;
+  });
+}
+
+function updateCSS(v) {
+  const bRgb = hexToRgb(v.bubbleColor);
+  const dRgb = hexToRgb(v.donationColor);
+  const nRgb = hexToRgb(v.noticeColor);
+  const shadow = v.textShadow
+    ? `  text-shadow: 0 0 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3) !important;\n`
+    : `  text-shadow: none !important;\n`;
+
+  let css = `body, html {\n  background: transparent !important;\n  overflow: hidden !important;\n}\n\n`;
+
+  if (v.hideNav) css += `nav { display: none !important; }\n\n`;
+
+  css += `ul.default, ul.neon, ul.kakaotalk, ul.box, ul.roundbox, ul.balloon, ul.board {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: flex-end !important;\n  align-items: flex-start !important;\n  min-height: 100vh !important;\n  padding: 8px 10px !important;\n  gap: ${v.chatGap}px !important;\n  list-style: none !important;\n  font-family: ${v.fontFamily} !important;\n  transition: none !important;\n}\n\n`;
+
+  css += `ul.default > li, ul.neon > li, ul.kakaotalk > li, ul.box > li, ul.roundbox > li, ul.balloon > li, ul.board > li {\n`;
+  if (v.useGradient) {
+    const gsRgb = hexToRgb(v.gradStart);
+    const geRgb = hexToRgb(v.gradEnd);
+    css += `  background: linear-gradient(${v.gradDirection}, rgba(${gsRgb.r},${gsRgb.g},${gsRgb.b},${(v.bubbleOpacity/100).toFixed(2)}), rgba(${geRgb.r},${geRgb.g},${geRgb.b},${(v.bubbleOpacity/100).toFixed(2)})) !important;\n`;
+  } else {
+    css += `  background: rgba(${bRgb.r}, ${bRgb.g}, ${bRgb.b}, ${(v.bubbleOpacity / 100).toFixed(2)}) !important;\n`;
+  }
+  if (v.blurAmount > 0) {
+    css += `  backdrop-filter: blur(${v.blurAmount}px) !important;\n`;
+    css += `  -webkit-backdrop-filter: blur(${v.blurAmount}px) !important;\n`;
+  }
+  css += `  border: none !important;\n`;
+  css += `  border-radius: ${v.borderRadius}px !important;\n`;
+  css += `  padding: ${v.twoLine ? 6 : 4}px ${v.paddingX}px !important;\n`;
+  css += `  margin: 1px 0 !important;\n`;
+  css += `  width: max-content !important;\n`;
+  css += `  max-width: 90% !important;\n`;
+  css += `  list-style: none !important;\n`;
+  css += `  font-size: ${v.fontSize}px !important;\n`;
+  css += `  line-height: 1.45 !important;\n`;
+  css += `  color: ${v.textColor} !important;\n`;
+  css += shadow;
+  css += `  box-shadow: none !important;\n`;
+  css += `  font-family: inherit !important;\n`;
+  css += `  transition: none !important;\n`;
+  css += `  text-align: left !important;\n`;
+  css += `  align-items: center !important;\n`;
+  css += `}\n\n`;
+
+  // 닉네임 - 인라인 style 오버라이드
+  css += `li.message__wrapper .message__nick { display: inline !important; padding: 0 !important; align-items: center !important; }\n`;
+  if (v.twoLine) {
+    css += `li.message__wrapper .message__name {\n  display: block !important;\n  color: ${v.nickColor} !important;\n  font-weight: ${v.nickBold ? 700 : 400} !important;\n  font-size: ${v.fontSize}px !important;\n  font-family: inherit !important;\n  margin-bottom: 1px !important;\n` + shadow + `}\n`;
+    // 2줄일 때 구분자(콜론) 숨기기
+    css += `li.message__wrapper .message__nick > span:not(.message__name):not(.message__text) { display: none !important; }\n`;
+  } else {
+    css += `li.message__wrapper .message__name {\n  color: ${v.nickColor} !important;\n  font-weight: ${v.nickBold ? 700 : 400} !important;\n  font-size: ${v.fontSize}px !important;\n  font-family: inherit !important;\n` + shadow + `}\n`;
+    css += `li.message__wrapper .message__nick > span:not(.message__name):not(.message__text) {\n  color: ${v.textColor} !important;\n` + shadow + `}\n`;
+  }
+  css += `li.message__wrapper .message__text {\n  color: ${v.textColor} !important;\n  font-size: ${v.fontSize}px !important;\n  font-family: inherit !important;\n` + shadow + `}\n`;
+  // 닉네임 앞 커스텀 아이콘
+  if (v.nickIcon === '__custom_img__' && v.customIconUrl) {
+    css += `li.message__wrapper .message__name::before {\n  content: '' !important;\n  display: inline-block !important;\n  width: ${v.iconSize}px !important;\n  height: ${v.iconSize}px !important;\n  background-image: url('${v.customIconUrl}') !important;\n  background-size: contain !important;\n  background-repeat: no-repeat !important;\n  background-position: center !important;\n  vertical-align: middle !important;\n  margin-right: 4px !important;\n  border-radius: 50% !important;\n}\n`;
+  } else if (v.nickIcon && v.nickIcon !== '__custom_img__') {
+    css += `li.message__wrapper .message__name::before {\n  content: '${v.nickIcon} ' !important;\n}\n`;
+  }
+  if (v.hideIcon) {
+    css += `li.message__wrapper .message__nick svg { display: none !important; }\n`;
+  }
+  css += `\n`;
+
+  // 후원 메시지
+  css += `li.heart__wrapper {\n  background: rgba(${dRgb.r}, ${dRgb.g}, ${dRgb.b}, ${(v.donationOpacity / 100).toFixed(2)}) !important;\n  width: max-content !important;\n  max-width: 90% !important;\n  display: block !important;\n}\n`;
+  css += `li.heart__wrapper .haert__image,\nli.heart__wrapper .haert__image div,\nli.heart__wrapper .haert__image p {\n  color: ${v.textColor} !important;\n  font-family: inherit !important;\n` + shadow + `}\n`;
+
+  if (v.hideImg) {
+    css += `li.heart__wrapper .haert__image img,\nli.heart__wrapper img[alt="heart_image"] {\n  display: none !important;\n}\n\n`;
+  } else {
+    css += `li.heart__wrapper .haert__image img,\nli.heart__wrapper img[alt="heart_image"] {\n  max-height: ${v.donationImgSize}px !important;\n  max-width: ${v.donationImgSize}px !important;\n  object-fit: contain !important;\n  display: inline-block !important;\n  vertical-align: middle !important;\n}\n\n`;
+  }
+
+  // 알림/추천 메시지
+  css += `li.chat__notice--list {\n  background: rgba(${nRgb.r}, ${nRgb.g}, ${nRgb.b}, ${(v.noticeOpacity / 100).toFixed(2)}) !important;\n}\n`;
+  css += `li.chat__notice--list .notice__text {\n  color: ${v.noticeTextColor} !important;\n  font-size: ${v.fontSize - 1}px !important;\n  font-family: inherit !important;\n` + shadow + `}\n\n`;
+
+  if (v.hideEnd) css += `.flex.flex-row.flex-wrap { display: none !important; }\n\n`;
+
+  // 페이드아웃 방지 (hide__opacity 클래스)
+  if (v.preventFade) {
+    css += `li[class*="hide__opacity"] {\n  opacity: 1 !important;\n  transition: none !important;\n}\n\n`;
+  }
+
+  // 테마별 특수 효과 제거
+  if (v.noAnimation) {
+    css += `li.balloon, li.balloon * { animation: none !important; }\n`;
+  }
+  css += `li.kakaotalk.message__wrapper .message__box { display: inline !important; }\n`;
+  css += `li.kakaotalk.message__wrapper .message__text { background: transparent !important; float: none !important; }\n`;
+  css += `li.kakaotalk.heart__wrapper .heart__text { background: transparent !important; float: none !important; }\n`;
+  css += `li.kakaotalk.chat__notice--list .notice__text { background: transparent !important; }\n`;
+  css += `li.box, li.roundbox, li.board { background-image: none !important; }\n\n`;
+
+  css += `* { scrollbar-width: none !important; }\n::-webkit-scrollbar { display: none !important; }\n`;
+
+  document.getElementById('cssOutput').textContent = css;
+}
+
+function copyCSS() {
+  const css = document.getElementById('cssOutput').textContent;
+  navigator.clipboard.writeText(css).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '복사 완료!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'CSS 복사하기';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// 초기화
+applyTheme('pink');
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+/* ============================================
+   팬더TV 채팅 오버레이 - 핑크 말풍선 스타일 v3
+   (인라인 스타일 11종 완전 오버라이드)
+
+   [사용법]
+   OBS Studio → 소스 → 브라우저 → 사용자 지정 CSS에 붙여넣기
+
+   [오버라이드 대상 인라인 속성]
+   color(90), font-size(83), text-shadow(83), width(71),
+   display(68), flex-direction(68), align-items(68),
+   transition(68), font-family(59), text-align(16), fill(6)
+   ============================================ */
+
+body, html {
+  background: transparent !important;
+  overflow: hidden !important;
+}
+
+nav { display: none !important; }
+
+/* 채팅 컨테이너 - 모든 7테마 대응 */
+ul.default, ul.neon, ul.kakaotalk, ul.box, ul.roundbox, ul.balloon, ul.board {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  align-items: flex-start !important;
+  min-height: 100vh !important;
+  padding: 8px 10px !important;
+  gap: 3px !important;
+  list-style: none !important;
+  font-family: 'Noto Sans KR', -apple-system, sans-serif !important;
+  transition: none !important;
+}
+
+/* 채팅 말풍선 - 모든 li 공통 */
+ul.default > li, ul.neon > li, ul.kakaotalk > li, ul.box > li, ul.roundbox > li, ul.balloon > li, ul.board > li {
+  background: rgba(255, 240, 245, 0.55) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 4px 12px !important;
+  margin: 1px 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  list-style: none !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  transition: none !important;
+  text-align: left !important;
+  align-items: center !important;
+}
+
+/* 닉네임 (인라인 color/font-size/text-shadow/font-family 오버라이드) */
+li.message__wrapper .message__nick {
+  display: inline !important;
+  padding: 0 !important;
+  align-items: center !important;
+}
+li.message__wrapper .message__name {
+  color: #d4508a !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  text-shadow: none !important;
+  font-family: inherit !important;
+}
+
+/* 채팅 텍스트 (인라인 color/font-size/text-shadow/font-family 오버라이드) */
+li.message__wrapper .message__text {
+  color: #3a2a2e !important;
+  font-size: 13px !important;
+  text-shadow: none !important;
+  font-family: inherit !important;
+}
+
+/* 구분자 span (닉네임 뒤 콜론/공백) */
+li.message__wrapper .message__nick > span:not(.message__name):not(.message__text) {
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+}
+
+/* SVG 아이콘 (fill 인라인 오버라이드) */
+li.message__wrapper .message__nick svg {
+  display: none !important;
+}
+
+/* 후원 배경 */
+li.heart__wrapper {
+  background: rgba(255, 220, 235, 0.60) !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  display: block !important;
+  transition: none !important;
+}
+
+/* 후원 텍스트 (인라인 오버라이드) */
+li.heart__wrapper .haert__image,
+li.heart__wrapper .haert__image div,
+li.heart__wrapper .haert__image p {
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+  font-family: inherit !important;
+}
+
+/* 후원 이미지 크기 제한 */
+li.heart__wrapper .haert__image img,
+li.heart__wrapper img[alt="heart_image"] {
+  max-height: 32px !important;
+  max-width: 32px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* 알림/추천 */
+li.chat__notice--list {
+  background: rgba(255, 235, 245, 0.50) !important;
+  transition: none !important;
+}
+li.chat__notice--list .notice__text {
+  color: #b04080 !important;
+  font-size: 12px !important;
+  text-shadow: none !important;
+  font-family: inherit !important;
+}
+
+/* 방송 종료 메시지 숨기기 */
+.flex.flex-row.flex-wrap { display: none !important; }
+
+/* hide__opacity 페이드아웃 무효화 (채팅이 사라지는 것 방지) */
+li[class*="hide__opacity"] {
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* 테마별 특수 효과 제거 */
+li.balloon, li.balloon * { animation: none !important; }
+li.kakaotalk.message__wrapper .message__box { display: inline !important; }
+li.kakaotalk.message__wrapper .message__text { background: transparent !important; float: none !important; }
+li.kakaotalk.heart__wrapper .heart__text { background: transparent !important; float: none !important; }
+li.kakaotalk.chat__notice--list .notice__text { background: transparent !important; }
+
+/* box/roundbox 테마 배경 오버라이드 */
+li.box, li.roundbox { background-image: none !important; }
+
+/* board 테마 배경 이미지 제거 */
+li.board { background-image: none !important; }
+
+/* 스크롤바 숨기기 */
+* { scrollbar-width: none !important; }
+::-webkit-scrollbar { display: none !important; }
