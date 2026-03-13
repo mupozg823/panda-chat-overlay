@@ -1888,6 +1888,7 @@
       <button class="quick-nav-btn active" onclick="scrollToSection('sec-compat')">호환성</button>
       <button class="quick-nav-btn" onclick="scrollToSection('sec-style')">말풍선</button>
       <button class="quick-nav-btn" onclick="scrollToSection('sec-name')">아이콘/캡슐</button>
+      <button class="quick-nav-btn" onclick="scrollToSection('sec-rankbadge')">등급배지</button>
       <button class="quick-nav-btn" onclick="scrollToSection('sec-text')">레이어</button>
       <button class="quick-nav-btn" onclick="scrollToSection('sec-donation')">후원&알림</button>
       <button class="quick-nav-btn" onclick="scrollToSection('sec-visibility')">가시성</button>
@@ -2141,7 +2142,7 @@
             </select>
           </div>
         </div>
-        <div class="control-row">
+        <div class="control-row" id="customIconSourceRow">
           <span class="control-label">이미지 소스</span>
           <div class="control-right" style="flex-direction:column;align-items:flex-end;gap:6px;">
             <input type="text" id="customIconUrl" placeholder="이미지 URL 입력" oninput="onCustomIconInput()"
@@ -2157,6 +2158,17 @@
           <div class="control-right">
             <input type="range" id="iconSize" min="12" max="32" value="18" oninput="update()">
             <span class="value-display" id="iconSizeVal">18px</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">프레임 형태</span>
+          <div class="control-right">
+            <select id="avatarFrameShape" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+              <option value="circle">원형 프레임</option>
+              <option value="rounded">둥근 사각</option>
+              <option value="square">사각 프레임</option>
+              <option value="bare">프레임 없음</option>
+            </select>
           </div>
         </div>
         <div id="iconPreviewRow" class="control-row" style="display:none;">
@@ -2401,6 +2413,40 @@
         </span>
       </div>
 
+      </div>
+    </div>
+
+    <!-- 등급별 배지 설정 -->
+    <div class="section collapsed" id="sec-rankbadge">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">등급별 배지</span>
+        </span>
+      </div>
+      <div class="section-body">
+      <div class="section-note" style="margin-bottom:12px;color:#9eacd8;font-size:11px;line-height:1.5;">
+        각 등급의 기본 배지를 커스텀 아이콘으로 교체합니다. <code>:has()</code> 셀렉터를 사용하므로 <strong>OBS v29+</strong> (Chromium 105+) 이상에서 동작합니다.
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">등급별 배지 사용</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('useRankBadge')">
+          <div class="toggle-switch" id="useRankBadge"></div>
+        </div>
+      </div>
+
+      <div id="rankBadgePanel" style="display:none;">
+        <div class="control-row">
+          <span class="control-label">배지 크기</span>
+          <div class="control-right">
+            <input type="range" id="rankBadgeSize" min="12" max="32" value="16" oninput="update()">
+            <span class="value-display" id="rankBadgeSizeVal">16px</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;" id="rankBadgeGrid">
+        </div>
+      </div>
       </div>
     </div>
 
@@ -3695,6 +3741,16 @@ const themes = {
 
 let currentTheme = 'pink';
 let customIconDataUrl = '';
+const RANK_BADGES = [
+  { key: 'bj', label: 'BJ', dataSrc: 'ico_class_bj', defaultEmoji: '🎙️', color: '#ff5500' },
+  { key: 'v',  label: 'VIP', dataSrc: 'ico_class_v', defaultEmoji: '👑', color: '#e4007f' },
+  { key: 'm',  label: '매니저', dataSrc: 'ico_class_m', defaultEmoji: '🛡️', color: '#3366ff' },
+  { key: 'g',  label: '가디언', dataSrc: 'ico_class_g', defaultEmoji: '⚔️', color: '#00aa66' },
+  { key: 's',  label: '서포터', dataSrc: 'ico_class_s', defaultEmoji: '💎', color: '#9944cc' },
+  { key: 'b',  label: '일반', dataSrc: 'ico_class_b', defaultEmoji: '💬', color: '#888888' },
+  { key: 'n',  label: '뉴비', dataSrc: 'ico_class_n', defaultEmoji: '🌱', color: '#44bb44' }
+];
+let rankBadgeIcons = {};
 let previewThemeOverride = 'auto';
 let currentPresetCategory = 'basic';
 let lastSettingsStatus = '텍스트 기본 편집은 팬더HP에서, 이곳은 오버레이 전용 설정 저장/복구를 담당합니다.';
@@ -3986,6 +4042,47 @@ function buildNameBubbleBackground(v) {
   return buildAlphaColor(v.nameBubbleColor, v.nameBubbleOpacity);
 }
 
+const avatarFrameShapeOptions = [
+  { value: 'circle', text: '원형 프레임' },
+  { value: 'rounded', text: '둥근 사각' },
+  { value: 'square', text: '사각 프레임' },
+  { value: 'bare', text: '프레임 없음' }
+];
+
+function hasActiveNickIcon(v) {
+  return Boolean((v.nickIcon === '__custom_img__' && v.customIconUrl) || (v.nickIcon && v.nickIcon !== '__custom_img__'));
+}
+
+function getAvatarFrameShape(v) {
+  return v.avatarFrameShape || 'circle';
+}
+
+function getAvatarFrameRadius(shape, size) {
+  if (shape === 'circle') return '50%';
+  if (shape === 'rounded') return `${Math.max(6, Math.round(size * 0.24))}px`;
+  return '0px';
+}
+
+function buildAvatarFrameTokens(v, frameSize) {
+  const shape = getAvatarFrameShape(v);
+  const bare = shape === 'bare';
+  const bg = hexToRgb(v.avatarBgColor || '#ffffff');
+  const border = hexToRgb(v.avatarBorderColor || '#ffffff');
+  return {
+    shape,
+    bare,
+    radius: getAvatarFrameRadius(shape, frameSize),
+    background: bare ? 'transparent' : `rgba(${bg.r},${bg.g},${bg.b},${v.avatarBgOpacity / 100})`,
+    border: bare || v.avatarBorderWidth <= 0
+      ? 'none'
+      : `${v.avatarBorderWidth}px solid rgba(${border.r},${border.g},${border.b},0.72)`,
+    shadow: bare || v.avatarShadow <= 0
+      ? 'none'
+      : `0 ${Math.round(v.avatarShadow * 0.375)}px ${v.avatarShadow}px rgba(0,0,0,0.2)`,
+    imageFit: bare ? 'contain' : 'cover'
+  };
+}
+
 function escapeForCssContent(value) {
   return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
@@ -4030,7 +4127,8 @@ function syncRangeDisplays(v) {
     capsuleRadiusVal: v.capsuleRadius >= 50 ? 'max' : `${v.capsuleRadius}px`,
     textBgOpacityVal: `${v.textBgOpacity}%`,
     textBgRadiusVal: `${v.textBgRadius}px`,
-    textBgPaddingVal: `${v.textBgPadding}px`
+    textBgPaddingVal: `${v.textBgPadding}px`,
+    rankBadgeSizeVal: `${v.rankBadgeSize}px`
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
@@ -4240,9 +4338,10 @@ function applyTheme(name) {
   setRange('avatarOffsetX', t.avatarOffsetX != null ? t.avatarOffsetX : 0);
   setRange('avatarOffsetY', t.avatarOffsetY != null ? t.avatarOffsetY : 0);
   setRange('avatarFrameSize', t.avatarFrameSize != null ? t.avatarFrameSize : 0);
+  setSelect('avatarFrameShape', t.avatarFrameShape || 'circle');
   customIconDataUrl = t.customIconUrl || '';
-  document.getElementById('customIconPanel').style.display = t.nickIcon === '__custom_img__' ? 'block' : 'none';
   document.getElementById('customIconUrl').value = '';
+  syncIconPanelState();
   if (customIconDataUrl) {
     document.getElementById('iconPreviewImg').src = customIconDataUrl;
     document.getElementById('iconPreviewRow').style.display = 'flex';
@@ -4302,10 +4401,21 @@ function applyTheme(name) {
   update();
 }
 
-function onNickIconChange() {
-  const val = document.getElementById('nickIcon').value;
+function syncIconPanelState() {
+  const rawIcon = document.getElementById('nickIcon').value;
+  const hasIcon = rawIcon !== '';
+  const isCustomSource = rawIcon === '__custom_img__';
   const panel = document.getElementById('customIconPanel');
-  panel.style.display = val === '__custom_img__' ? 'block' : 'none';
+  const sourceRow = document.getElementById('customIconSourceRow');
+  const previewRow = document.getElementById('iconPreviewRow');
+
+  if (panel) panel.style.display = hasIcon ? 'block' : 'none';
+  if (sourceRow) sourceRow.style.display = isCustomSource ? 'flex' : 'none';
+  if (previewRow) previewRow.style.display = isCustomSource && customIconDataUrl ? 'flex' : 'none';
+}
+
+function onNickIconChange() {
+  syncIconPanelState();
   update();
 }
 
@@ -4371,6 +4481,60 @@ function onCustomIconFile(event) {
   reader.readAsDataURL(file);
 }
 
+// === 등급별 배지 ===
+function initRankBadgeUI() {
+  const grid = document.getElementById('rankBadgeGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  RANK_BADGES.forEach(rank => {
+    const saved = rankBadgeIcons[rank.key] || {};
+    const type = saved.type || 'emoji';
+    const emoji = saved.emoji || rank.defaultEmoji;
+    const url = saved.url || '';
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 8px;background:#1a1a2e;border-radius:8px;';
+    row.innerHTML = `
+      <span style="width:18px;height:18px;border-radius:50%;background:${rank.color};display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:bold;flex-shrink:0;">${rank.key.toUpperCase().charAt(0)}</span>
+      <span style="width:52px;font-size:12px;color:#ccc;flex-shrink:0;">${rank.label}</span>
+      <select id="rankType_${rank.key}" onchange="onRankBadgeChange('${rank.key}')" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:5px;color:#ddd;font-size:11px;padding:2px 4px;width:70px;">
+        <option value="default"${type === 'default' ? ' selected' : ''}>기본</option>
+        <option value="emoji"${type === 'emoji' ? ' selected' : ''}>이모지</option>
+        <option value="image"${type === 'image' ? ' selected' : ''}>이미지</option>
+        <option value="hide"${type === 'hide' ? ' selected' : ''}>숨김</option>
+      </select>
+      <input type="text" id="rankEmoji_${rank.key}" value="${emoji}" maxlength="4" onchange="onRankBadgeChange('${rank.key}')"
+        style="width:36px;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:5px;color:#ddd;font-size:14px;padding:2px;text-align:center;${type === 'emoji' ? '' : 'display:none;'}">
+      <input type="text" id="rankUrl_${rank.key}" placeholder="이미지 URL" onchange="onRankBadgeChange('${rank.key}')"
+        value="${url}"
+        style="flex:1;min-width:0;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:5px;color:#ddd;font-size:11px;padding:2px 6px;${type === 'image' ? '' : 'display:none;'}">
+    `;
+    grid.appendChild(row);
+  });
+}
+
+function onRankBadgeChange(key) {
+  const type = document.getElementById('rankType_' + key).value;
+  const emojiInput = document.getElementById('rankEmoji_' + key);
+  const urlInput = document.getElementById('rankUrl_' + key);
+  emojiInput.style.display = type === 'emoji' ? '' : 'none';
+  urlInput.style.display = type === 'image' ? '' : 'none';
+  rankBadgeIcons[key] = {
+    type: type,
+    emoji: emojiInput.value.trim(),
+    url: urlInput.value.trim()
+  };
+  update();
+}
+
+function onRankBadgeToggle() {
+  const on = document.getElementById('useRankBadge').classList.contains('on');
+  document.getElementById('rankBadgePanel').style.display = on ? 'block' : 'none';
+  if (on && !document.getElementById('rankBadgeGrid').children.length) {
+    initRankBadgeUI();
+  }
+  update();
+}
+
 function setVal(id, val) {
   document.getElementById(id).value = val;
 }
@@ -4397,7 +4561,8 @@ function setToggle(id, val) {
 
 function toggleSwitch(id) {
   document.getElementById(id).classList.toggle('on');
-  update();
+  if (id === 'useRankBadge') onRankBadgeToggle();
+  else update();
 }
 
 function getToggle(id) {
@@ -4454,6 +4619,7 @@ function _captureState() {
   });
   inputs['__currentTheme'] = currentTheme;
   inputs['__customIconDataUrl'] = customIconDataUrl;
+  inputs['__rankBadgeIcons'] = JSON.stringify(rankBadgeIcons);
   return JSON.stringify(inputs);
 }
 
@@ -4463,6 +4629,10 @@ function _restoreState(json) {
   Object.entries(inputs).forEach(([key, val]) => {
     if (key === '__customIconDataUrl') {
       customIconDataUrl = val;
+      return;
+    }
+    if (key === '__rankBadgeIcons') {
+      try { rankBadgeIcons = JSON.parse(val); } catch(e) {}
       return;
     }
     if (key === '__currentTheme') {
@@ -4480,15 +4650,20 @@ function _restoreState(json) {
     else el.value = val;
   });
   // 아이콘 패널 및 미리보기 동기화
-  const nickIconVal = document.getElementById('nickIcon').value;
-  const iconPanel = document.getElementById('customIconPanel');
-  if (iconPanel) iconPanel.style.display = nickIconVal === '__custom_img__' ? 'block' : 'none';
   if (customIconDataUrl) {
     const previewImg = document.getElementById('iconPreviewImg');
-    const previewRow = document.getElementById('iconPreviewRow');
     if (previewImg) previewImg.src = customIconDataUrl;
-    if (previewRow) previewRow.style.display = 'flex';
+  } else {
+    const previewImg = document.getElementById('iconPreviewImg');
+    const previewRow = document.getElementById('iconPreviewRow');
+    if (previewImg) previewImg.removeAttribute('src');
+    if (previewRow) previewRow.style.display = 'none';
   }
+  syncIconPanelState();
+  // 등급 배지 패널 동기화
+  const rankOn = document.getElementById('useRankBadge').classList.contains('on');
+  document.getElementById('rankBadgePanel').style.display = rankOn ? 'block' : 'none';
+  if (rankOn) initRankBadgeUI();
   const v = getValues();
   syncThemeSelectionUI();
   syncLayoutPhase();
@@ -4602,6 +4777,7 @@ function getValues() {
     avatarOffsetX: +document.getElementById('avatarOffsetX').value,
     avatarOffsetY: +document.getElementById('avatarOffsetY').value,
     avatarFrameSize: +document.getElementById('avatarFrameSize').value,
+    avatarFrameShape: document.getElementById('avatarFrameShape').value,
     customIconUrl: customIconDataUrl,
     useGradient: getToggle('useGradient'),
     gradStart: document.getElementById('gradStart').value,
@@ -4639,7 +4815,10 @@ function getValues() {
     textBgOpacity: +document.getElementById('textBgOpacity').value,
     textBgRadius: +document.getElementById('textBgRadius').value,
     textBgPadding: +document.getElementById('textBgPadding').value,
-    customCss: document.getElementById('customCss').value
+    customCss: document.getElementById('customCss').value,
+    useRankBadge: getToggle('useRankBadge'),
+    rankBadgeSize: +document.getElementById('rankBadgeSize').value,
+    rankBadgeIcons: JSON.parse(JSON.stringify(rankBadgeIcons))
   };
   if (v.nickIcon === '__local_character__') {
     v.nickIcon = '__custom_img__';
@@ -4677,8 +4856,9 @@ function updatePreview(v) {
   const effectiveSplitTextOffsetX = v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : (layeredMode ? 2 : 0);
   const hasCustomAvatar = v.nickIcon === '__custom_img__' && v.customIconUrl;
   const hasEmojiAvatar = v.nickIcon && v.nickIcon !== '__custom_img__';
-  const hasAvatar = hasCustomAvatar || hasEmojiAvatar;
+  const hasAvatar = hasActiveNickIcon(v);
   const avatarSize = v.avatarFrameSize > 0 ? v.avatarFrameSize : Math.max(v.iconSize + 2, 18);
+  const avatarFrame = buildAvatarFrameTokens(v, avatarSize);
   const avatarAsLeft = hasAvatar && v.iconPlacement === 'messageAvatar';
   const avatarInset = avatarAsLeft ? Math.max(avatarSize - 1, 0) : 0;
   const avatarOffsetX = v.avatarOffsetX || 0;
@@ -5008,18 +5188,19 @@ function updatePreview(v) {
       top: ${(layeredMode ? 0 : v.paddingY) + avatarOffsetY}px;
       width: ${avatarSize}px;
       height: ${avatarSize}px;
+      display: block;
+      box-sizing: border-box;
+      background-color: ${avatarFrame.background};
       background-image: url('${escapeForCssUrl(v.customIconUrl)}');
-      background-size: cover;
+      background-size: ${avatarFrame.imageFit};
       background-repeat: no-repeat;
       background-position: center;
-      border-radius: 50%;
-      border: ${v.avatarBorderWidth}px solid ${(() => { const c = hexToRgb(v.avatarBorderColor); return `rgba(${c.r},${c.g},${c.b},0.72)`; })()};
-      box-shadow: ${v.avatarShadow > 0 ? `0 ${Math.round(v.avatarShadow * 0.375)}px ${v.avatarShadow}px rgba(0,0,0,0.2)` : 'none'};
+      border-radius: ${avatarFrame.radius};
+      border: ${avatarFrame.border};
+      box-shadow: ${avatarFrame.shadow};
     }
     #previewChat .message__name::before { content: none !important; }`;
   } else if (avatarAsLeft && hasEmojiAvatar) {
-    const abg = hexToRgb(v.avatarBgColor);
-    const abgA = v.avatarBgOpacity / 100;
     iconStyle.textContent = `#previewChat li.message__wrapper::before {
       content: '${escapeForCssContent(v.nickIcon)}' !important;
       position: absolute;
@@ -5028,42 +5209,59 @@ function updatePreview(v) {
       width: ${avatarSize}px;
       height: ${avatarSize}px;
       display: flex;
+      box-sizing: border-box;
       align-items: center;
       justify-content: center;
       font-size: ${v.iconSize}px;
       line-height: 1;
-      background: rgba(${abg.r},${abg.g},${abg.b},${abgA});
-      border-radius: 50%;
-      box-shadow: ${v.avatarShadow > 0 ? `0 ${Math.round(v.avatarShadow * 0.375)}px ${v.avatarShadow}px rgba(0,0,0,0.18)` : 'none'};
+      background: ${avatarFrame.background};
+      border-radius: ${avatarFrame.radius};
+      border: ${avatarFrame.border};
+      box-shadow: ${avatarFrame.shadow};
     }
     #previewChat .message__name::before { content: none !important; }`;
   } else if (v.nickIcon === '__custom_img__' && v.customIconUrl) {
     iconStyle.textContent = `#previewChat li.message__wrapper::before { content: none !important; }
-    #previewChat .message__nick::before {
+    #previewChat .message__name::before {
       content: '' !important;
-      display: inline-block !important;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
       width: ${v.iconSize}px;
       height: ${v.iconSize}px;
+      background-color: ${avatarFrame.background};
       background-image: url('${escapeForCssUrl(v.customIconUrl)}');
-      background-size: contain;
+      background-size: ${avatarFrame.imageFit};
       background-repeat: no-repeat;
       background-position: center;
       vertical-align: -3px;
       margin-right: 4px;
-      border-radius: 50%;
+      border-radius: ${avatarFrame.radius};
+      border: ${avatarFrame.border};
+      box-shadow: ${avatarFrame.shadow};
     }
-    #previewChat .message__name::before { content: none !important; }`;
+    #previewChat .message__nick::before { content: none !important; }`;
   } else if (v.nickIcon && v.nickIcon !== '__custom_img__') {
     iconStyle.textContent = `#previewChat li.message__wrapper::before { content: none !important; }
-    #previewChat .message__nick::before {
+    #previewChat .message__name::before {
       content: '${escapeForCssContent(v.nickIcon)}' !important;
-      display: inline-block !important;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      width: ${v.iconSize}px;
+      height: ${v.iconSize}px;
       font-size: ${v.iconSize}px;
       line-height: 1;
       margin-right: 4px;
       vertical-align: -2px;
+      background: ${avatarFrame.background};
+      border-radius: ${avatarFrame.radius};
+      border: ${avatarFrame.border};
+      box-shadow: ${avatarFrame.shadow};
     }
-    #previewChat .message__name::before { content: none !important; }`;
+    #previewChat .message__nick::before { content: none !important; }`;
   } else {
     iconStyle.textContent = '#previewChat li.message__wrapper::before { content: none !important; } #previewChat .message__nick::before { content: none !important; } #previewChat .message__name::before { content: none !important; }';
   }
@@ -5095,8 +5293,9 @@ function updateCSS(v) {
   const effectiveSplitTextOffsetX = v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : (layeredMode ? 2 : 0);
   const hasCustomAvatar = v.nickIcon === '__custom_img__' && v.customIconUrl;
   const hasEmojiAvatar = v.nickIcon && v.nickIcon !== '__custom_img__';
-  const hasAvatar = hasCustomAvatar || hasEmojiAvatar;
+  const hasAvatar = hasActiveNickIcon(v);
   const avatarSize = v.avatarFrameSize > 0 ? v.avatarFrameSize : Math.max(v.iconSize + 2, 18);
+  const avatarFrame = buildAvatarFrameTokens(v, avatarSize);
   const avatarAsLeft = hasAvatar && v.iconPlacement === 'messageAvatar';
   const avatarInset = avatarAsLeft ? Math.max(avatarSize - 1, 0) : 0;
   const avatarOffsetX = v.avatarOffsetX || 0;
@@ -5334,13 +5533,16 @@ function updateCSS(v) {
       `top: ${topPos} !important;`,
       `width: ${avatarSize}px !important;`,
       `height: ${avatarSize}px !important;`,
+      'display: block !important;',
+      'box-sizing: border-box !important;',
+      `background-color: ${avatarFrame.background} !important;`,
       `background-image: url('${escapeForCssUrl(v.customIconUrl)}') !important;`,
-      'background-size: cover !important;',
+      `background-size: ${avatarFrame.imageFit} !important;`,
       'background-repeat: no-repeat !important;',
       'background-position: center !important;',
-      'border-radius: 50% !important;',
-      `border: ${v.avatarBorderWidth}px solid ${(() => { const c = hexToRgb(v.avatarBorderColor); return `rgba(${c.r},${c.g},${c.b},0.72)`; })()} !important;`,
-      `${v.avatarShadow > 0 ? `box-shadow: 0 ${Math.round(v.avatarShadow * 0.375)}px ${v.avatarShadow}px rgba(0,0,0,0.2) !important;` : 'box-shadow: none !important;'}`
+      `border-radius: ${avatarFrame.radius} !important;`,
+      `border: ${avatarFrame.border} !important;`,
+      `box-shadow: ${avatarFrame.shadow} !important;`
     ]));
   } else if (avatarAsLeft && hasEmojiAvatar) {
     const leftPos = `${(layeredMode ? 0 : v.paddingX) + avatarOffsetX}px`;
@@ -5356,13 +5558,15 @@ function updateCSS(v) {
       `width: ${avatarSize}px !important;`,
       `height: ${avatarSize}px !important;`,
       'display: flex !important;',
+      'box-sizing: border-box !important;',
       'align-items: center !important;',
       'justify-content: center !important;',
       `font-size: ${v.iconSize}px !important;`,
       'line-height: 1 !important;',
-      `background: ${(() => { const c = hexToRgb(v.avatarBgColor); return `rgba(${c.r},${c.g},${c.b},${v.avatarBgOpacity / 100})`; })()} !important;`,
-      'border-radius: 50% !important;',
-      `${v.avatarShadow > 0 ? `box-shadow: 0 ${Math.round(v.avatarShadow * 0.375)}px ${v.avatarShadow}px rgba(0,0,0,0.18) !important;` : 'box-shadow: none !important;'}`
+      `background: ${avatarFrame.background} !important;`,
+      `border-radius: ${avatarFrame.radius} !important;`,
+      `border: ${avatarFrame.border} !important;`,
+      `box-shadow: ${avatarFrame.shadow} !important;`
     ]));
   } else if (v.nickIcon === '__custom_img__' && v.customIconUrl) {
     parts.push(buildRule(selectors.messageItemBefore, [
@@ -5370,25 +5574,40 @@ function updateCSS(v) {
     ]));
     parts.push(buildRule(selectors.messageNameBefore, [
       "content: '' !important;",
-      'display: inline-block !important;',
+      'display: inline-flex !important;',
+      'align-items: center !important;',
+      'justify-content: center !important;',
+      'box-sizing: border-box !important;',
       `width: ${v.iconSize}px !important;`,
       `height: ${v.iconSize}px !important;`,
+      `background-color: ${avatarFrame.background} !important;`,
       `background-image: url('${escapeForCssUrl(v.customIconUrl)}') !important;`,
-      'background-size: contain !important;',
+      `background-size: ${avatarFrame.imageFit} !important;`,
       'background-repeat: no-repeat !important;',
       'background-position: center !important;',
       'vertical-align: -3px !important;',
       'margin-right: 4px !important;',
-      'border-radius: 50% !important;'
+      `border-radius: ${avatarFrame.radius} !important;`,
+      `border: ${avatarFrame.border} !important;`,
+      `box-shadow: ${avatarFrame.shadow} !important;`
     ]));
   } else if (v.nickIcon && v.nickIcon !== '__custom_img__') {
     parts.push(buildRule(selectors.messageNameBefore, [
       `content: '${escapeForCssContent(v.nickIcon)}' !important;`,
-      'display: inline-block !important;',
+      'display: inline-flex !important;',
+      'align-items: center !important;',
+      'justify-content: center !important;',
+      'box-sizing: border-box !important;',
+      `width: ${v.iconSize}px !important;`,
+      `height: ${v.iconSize}px !important;`,
       `font-size: ${v.iconSize}px !important;`,
       'line-height: 1 !important;',
       'margin-right: 4px !important;',
-      'vertical-align: -2px !important;'
+      'vertical-align: -2px !important;',
+      `background: ${avatarFrame.background} !important;`,
+      `border-radius: ${avatarFrame.radius} !important;`,
+      `border: ${avatarFrame.border} !important;`,
+      `box-shadow: ${avatarFrame.shadow} !important;`
     ]));
   } else {
     parts.push(buildRule(selectors.messageItemBefore, [
@@ -5585,6 +5804,45 @@ function updateCSS(v) {
     'display: none !important;'
   ]));
 
+  // 등급별 배지
+  if (v.useRankBadge && v.rankBadgeIcons) {
+    const badgeSize = v.rankBadgeSize || 16;
+    const badgeParts = [];
+    RANK_BADGES.forEach(rank => {
+      const cfg = v.rankBadgeIcons[rank.key];
+      if (!cfg || cfg.type === 'default') return;
+      const sel = `div.mr-1:has(svg[data-src*="${rank.dataSrc}"])`;
+      if (cfg.type === 'hide') {
+        badgeParts.push(buildRule(sel, ['display: none !important;']));
+      } else if (cfg.type === 'emoji' && cfg.emoji) {
+        badgeParts.push(buildRule(sel + ' svg', ['display: none !important;']));
+        badgeParts.push(buildRule(sel + '::before', [
+          `content: '${escapeForCssContent(cfg.emoji)}' !important;`,
+          `font-size: ${badgeSize}px !important;`,
+          'line-height: 1 !important;',
+          'vertical-align: middle !important;'
+        ]));
+      } else if (cfg.type === 'image' && cfg.url) {
+        badgeParts.push(buildRule(sel + ' svg', ['display: none !important;']));
+        badgeParts.push(buildRule(sel + '::before', [
+          "content: '' !important;",
+          'display: inline-block !important;',
+          `width: ${badgeSize}px !important;`,
+          `height: ${badgeSize}px !important;`,
+          `background-image: url('${escapeForCssUrl(cfg.url)}') !important;`,
+          'background-size: contain !important;',
+          'background-repeat: no-repeat !important;',
+          'background-position: center !important;',
+          'vertical-align: middle !important;'
+        ]));
+      }
+    });
+    if (badgeParts.length) {
+      parts.push('/* 등급별 배지 커스터마이즈 (:has() 필요 - OBS v29+) */\n');
+      badgeParts.forEach(p => parts.push(p));
+    }
+  }
+
   const customCss = normalizeCustomCss(v.customCss);
   if (customCss) {
     parts.push('/* 사용자 추가 커스텀 CSS */\n');
@@ -5770,6 +6028,43 @@ syncPhaseDashboard();
 
 // ── 양방향 편집: 미리보기 클릭 → 플로팅 에디터 ──
 
+function getAvatarEditorControls() {
+  const v = getValues();
+  const controls = [
+    { label: '아이콘', type: 'select', id: 'nickIcon', options: () => {
+      const sel = document.getElementById('nickIcon');
+      return [...sel.options].map(o => ({ value: o.value, text: o.textContent }));
+    }},
+    ...(v.nickIcon === '__custom_img__' ? [{ label: '이미지', type: 'custom_icon_upload' }] : []),
+    { label: '배치', type: 'select', id: 'iconPlacement', options: () => {
+      const sel = document.getElementById('iconPlacement');
+      return [...sel.options].map(o => ({ value: o.value, text: o.textContent }));
+    }},
+    { label: '크기', type: 'range', id: 'iconSize', min: 12, max: 40, unit: 'px' },
+    { label: '프레임', type: 'select', id: 'avatarFrameShape', options: avatarFrameShapeOptions }
+  ];
+
+  if (v.iconPlacement === 'messageAvatar') {
+    controls.push(
+      { label: '프레임크기', type: 'range', id: 'avatarFrameSize', min: 0, max: 32, unit: 'px', fmt: value => value === 0 ? '자동' : value + 'px' },
+      { label: 'X오프셋', type: 'range', id: 'avatarOffsetX', min: -8, max: 8, unit: 'px' },
+      { label: 'Y오프셋', type: 'range', id: 'avatarOffsetY', min: -8, max: 8, unit: 'px' }
+    );
+  }
+
+  if (v.avatarFrameShape !== 'bare') {
+    controls.push(
+      { label: '배경색', type: 'color', id: 'avatarBgColor', hex: 'avatarBgHex' },
+      { label: '배경 투명도', type: 'range', id: 'avatarBgOpacity', min: 0, max: 100, unit: '%' },
+      { label: '테두리색', type: 'color', id: 'avatarBorderColor', hex: 'avatarBorderHex' },
+      { label: '테두리 두께', type: 'range', id: 'avatarBorderWidth', min: 0, max: 5, unit: 'px' },
+      { label: '그림자', type: 'range', id: 'avatarShadow', min: 0, max: 30, unit: 'px' }
+    );
+  }
+
+  return controls;
+}
+
 function feGetControls(type) {
   const style = document.getElementById('messageStyle').value;
   const isCapsule = style === 'nameCapsule';
@@ -5878,27 +6173,13 @@ function feGetControls(type) {
     },
     avatar: {
       title: '아바타 / 아이콘',
-      context: '원본 배지와 분리된 커스텀 아이콘 경로를 미리보기에서 바로 점검합니다.',
-      controls: [
-        { label: '아이콘', type: 'select', id: 'nickIcon', options: () => {
-          const sel = document.getElementById('nickIcon');
-          return [...sel.options].map(o => ({ value: o.value, text: o.textContent }));
-        }},
-        { label: '이미지', type: 'custom_icon_upload' },
-        { label: '배치', type: 'select', id: 'iconPlacement', options: () => {
-          const sel = document.getElementById('iconPlacement');
-          return [...sel.options].map(o => ({ value: o.value, text: o.textContent }));
-        }},
-        { label: '크기', type: 'range', id: 'iconSize', min: 12, max: 40, unit: 'px' },
-        { label: '프레임크기', type: 'range', id: 'avatarFrameSize', min: 0, max: 32, unit: 'px', fmt: v => v === 0 ? '자동' : v + 'px' },
-        { label: 'X오프셋', type: 'range', id: 'avatarOffsetX', min: -8, max: 8, unit: 'px' },
-        { label: 'Y오프셋', type: 'range', id: 'avatarOffsetY', min: -8, max: 8, unit: 'px' },
-        { label: '배경색', type: 'color', id: 'avatarBgColor', hex: 'avatarBgHex' },
-        { label: '배경 투명도', type: 'range', id: 'avatarBgOpacity', min: 0, max: 100, unit: '%' },
-        { label: '테두리색', type: 'color', id: 'avatarBorderColor', hex: 'avatarBorderHex' },
-        { label: '테두리 두께', type: 'range', id: 'avatarBorderWidth', min: 0, max: 5, unit: 'px' },
-        { label: '그림자', type: 'range', id: 'avatarShadow', min: 0, max: 30, unit: 'px' }
-      ]
+      context: () => {
+        const v = getValues();
+        if (v.avatarFrameShape === 'bare') return '프레임 없이 아이콘 자체만 노출합니다. 배경/테두리/그림자는 적용하지 않습니다.';
+        if (v.iconPlacement === 'messageAvatar') return '좌측 아바타 슬롯을 직접 조정합니다. 프레임 크기와 오프셋까지 함께 수정합니다.';
+        return '닉네임 앞 아이콘을 조정합니다. 현재 배치에서는 프레임 크기와 오프셋 대신 아이콘 크기와 프레임 형태가 우선 적용됩니다.';
+      },
+      controls: () => getAvatarEditorControls()
     }
   };
   return configs[type] || null;
@@ -5908,7 +6189,7 @@ function feIdentify(el, e) {
   const li = el.closest('li.message__wrapper');
   if (li && e) {
     const v = getValues();
-    const hasIcon = (v.nickIcon === '__custom_img__' && v.customIconUrl) || (v.nickIcon && v.nickIcon !== '__custom_img__');
+    const hasIcon = hasActiveNickIcon(v);
 
     if (hasIcon) {
       const liRect = li.getBoundingClientRect();
@@ -5964,7 +6245,7 @@ function feGetAvailableTypes(anchorEl) {
   if (!root) return [];
   if (root.classList.contains('message__wrapper')) {
     const v = getValues();
-    const hasIcon = (v.nickIcon === '__custom_img__' && v.customIconUrl) || (v.nickIcon && v.nickIcon !== '__custom_img__');
+    const hasIcon = hasActiveNickIcon(v);
     return ['bubble', 'nick', 'text', ...(hasIcon ? ['avatar'] : [])];
   }
   if (root.classList.contains('heart__wrapper')) return ['donation'];
@@ -6078,6 +6359,8 @@ function feShow(type, anchorEl, triggerEl = anchorEl) {
   body.innerHTML = '';
   feApplyHighlight(type, rootAnchor, triggerEl);
   feSetHint(type);
+  const controls = typeof cfg.controls === 'function' ? cfg.controls() : cfg.controls;
+  const contextText = typeof cfg.context === 'function' ? cfg.context() : cfg.context;
 
   const availableTypes = feGetAvailableTypes(rootAnchor);
   if (availableTypes.length > 1) {
@@ -6095,14 +6378,14 @@ function feShow(type, anchorEl, triggerEl = anchorEl) {
     body.appendChild(targetBar);
   }
 
-  if (cfg.context) {
+  if (contextText) {
     const context = document.createElement('div');
     context.className = 'fe-context';
-    context.textContent = cfg.context;
+    context.textContent = contextText;
     body.appendChild(context);
   }
 
-  cfg.controls.forEach(c => {
+  controls.forEach(c => {
     const row = document.createElement('div');
     row.className = 'fe-row';
     const lbl = document.createElement('span');
@@ -6179,6 +6462,7 @@ function feShow(type, anchorEl, triggerEl = anchorEl) {
       const urlInput = document.createElement('input');
       urlInput.type = 'text';
       urlInput.placeholder = '이미지 URL 입력';
+      urlInput.value = document.getElementById('customIconUrl').value;
       urlInput.style.cssText = 'width:100%;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:11px;padding:3px 6px;';
       urlInput.addEventListener('change', () => {
         const val = urlInput.value.trim();
@@ -6272,9 +6556,24 @@ function feShow(type, anchorEl, triggerEl = anchorEl) {
         document.getElementById(c.id).value = sel.value;
         if (c.id === 'nickIcon') {
           onNickIconChange();
-          // 플로팅 에디터 내 파일 업로드 영역 표시/숨김
-          const uploadRow = document.getElementById('feIconUploadRow');
-          if (uploadRow) uploadRow.style.display = sel.value === '__custom_img__' ? '' : 'none';
+          _feCurrentType = null;
+          requestAnimationFrame(() => {
+            const nextTypes = feGetAvailableTypes(rootAnchor);
+            if (sel.value === '__custom_img__') {
+              feShow('avatar', rootAnchor, rootAnchor);
+              return;
+            }
+            if (!nextTypes.includes('avatar')) {
+              feClose();
+              syncPreviewQuickDock(rootAnchor);
+              return;
+            }
+            feShow('avatar', rootAnchor, rootAnchor);
+          });
+        } else if (c.id === 'iconPlacement' || c.id === 'avatarFrameShape') {
+          update();
+          _feCurrentType = null;
+          requestAnimationFrame(() => feShow(type, rootAnchor, rootAnchor));
         } else if (c.id === 'messageStyle') {
           update();
           _feCurrentType = null;
@@ -6408,7 +6707,7 @@ function dragInjectHandles() {
   const v = getValues();
   const layeredMode = v.messageStyle !== 'fullBubble';
   const splitMode = v.messageStyle === 'splitLayers';
-  const hasIcon = (v.nickIcon === '__custom_img__' && v.customIconUrl) || (v.nickIcon && v.nickIcon !== '__custom_img__');
+  const hasIcon = hasActiveNickIcon(v);
   const avatarAsLeft = hasIcon && v.iconPlacement === 'messageAvatar';
   const avatarSize = dragGetEffectiveValue('avatarFrameSize', v);
   const avatarInset = avatarAsLeft ? Math.max(avatarSize - 1, 0) : 0;
