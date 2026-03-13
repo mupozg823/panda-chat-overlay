@@ -1,0 +1,861 @@
+/* ============================================
+   PandaTV Chat Overlay
+   compatibility-first default preset
+
+   기준:
+   - 전체 테마 대상 (개별 셀렉터 — OBS CEF 호환)
+   - 안정형 호환 모드
+   - 내부 테마 셸 리셋 활성화
+   - 페이드아웃/애니메이션 제거 활성화
+   ============================================ */
+
+body,
+html {
+  background: transparent !important;
+  overflow: hidden !important;
+}
+
+nav {
+  display: none !important;
+}
+
+/* 컨테이너 */
+ul.default,
+ul.kakaotalk,
+ul.neon,
+ul.box,
+ul.roundbox,
+ul.balloon,
+ul.board {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  align-items: flex-start !important;
+  min-height: 100vh !important;
+  padding: 8px 10px !important;
+  gap: 3px !important;
+  list-style: none !important;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  transition: none !important;
+}
+
+/* 일반 메시지 */
+ul.default > li.message__wrapper,
+ul.kakaotalk > li.message__wrapper,
+ul.neon > li.message__wrapper,
+ul.box > li.message__wrapper,
+ul.roundbox > li.message__wrapper,
+ul.balloon > li.message__wrapper,
+ul.board > li.message__wrapper {
+  display: block !important;
+  overflow: visible !important;
+  background: rgba(255, 240, 245, 0.55) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 4px 12px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  list-style: none !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  align-self: flex-start !important;
+  transition: none !important;
+}
+
+ul.default > li.message__wrapper > div.message__box,
+ul.kakaotalk > li.message__wrapper > div.message__box,
+ul.neon > li.message__wrapper > div.message__box,
+ul.box > li.message__wrapper > div.message__box,
+ul.roundbox > li.message__wrapper > div.message__box,
+ul.balloon > li.message__wrapper > div.message__box,
+ul.board > li.message__wrapper > div.message__box {
+  display: block !important;
+  float: none !important;
+  width: auto !important;
+  max-width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+  font-family: inherit !important;
+}
+
+ul.default > li.message__wrapper .message__nick,
+ul.kakaotalk > li.message__wrapper .message__nick,
+ul.neon > li.message__wrapper .message__nick,
+ul.box > li.message__wrapper .message__nick,
+ul.roundbox > li.message__wrapper .message__nick,
+ul.balloon > li.message__wrapper .message__nick,
+ul.board > li.message__wrapper .message__nick {
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+ul.default > li.message__wrapper .message__name,
+ul.kakaotalk > li.message__wrapper .message__name,
+ul.neon > li.message__wrapper .message__name,
+ul.box > li.message__wrapper .message__name,
+ul.roundbox > li.message__wrapper .message__name,
+ul.balloon > li.message__wrapper .message__name,
+ul.board > li.message__wrapper .message__name {
+  color: #d4508a !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+}
+
+ul.default > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul.kakaotalk > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul.neon > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul.box > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul.roundbox > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul.balloon > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul.board > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text) {
+  display: inline !important;
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+}
+
+ul.default > li.message__wrapper .message__text,
+ul.kakaotalk > li.message__wrapper .message__text,
+ul.neon > li.message__wrapper .message__text,
+ul.box > li.message__wrapper .message__text,
+ul.roundbox > li.message__wrapper .message__text,
+ul.balloon > li.message__wrapper .message__text,
+ul.board > li.message__wrapper .message__text {
+  display: inline !important;
+  margin-top: 0 !important;
+  color: #3a2a2e !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  float: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+ul.default > li.message__wrapper .message__name::before,
+ul.kakaotalk > li.message__wrapper .message__name::before,
+ul.neon > li.message__wrapper .message__name::before,
+ul.box > li.message__wrapper .message__name::before,
+ul.roundbox > li.message__wrapper .message__name::before,
+ul.balloon > li.message__wrapper .message__name::before,
+ul.board > li.message__wrapper .message__name::before {
+  content: none !important;
+}
+
+ul.default > li.message__wrapper .message__nick svg,
+ul.kakaotalk > li.message__wrapper .message__nick svg,
+ul.neon > li.message__wrapper .message__nick svg,
+ul.box > li.message__wrapper .message__nick svg,
+ul.roundbox > li.message__wrapper .message__nick svg,
+ul.balloon > li.message__wrapper .message__nick svg,
+ul.board > li.message__wrapper .message__nick svg {
+  display: none !important;
+}
+
+/* 후원 메시지 */
+ul.default > li.heart__wrapper,
+ul.kakaotalk > li.heart__wrapper,
+ul.neon > li.heart__wrapper,
+ul.box > li.heart__wrapper,
+ul.roundbox > li.heart__wrapper,
+ul.balloon > li.heart__wrapper,
+ul.board > li.heart__wrapper {
+  display: block !important;
+  background: rgba(255, 220, 235, 0.60) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 6px 12px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  transition: none !important;
+}
+
+ul.default > li.heart__wrapper .haert__image,
+ul.kakaotalk > li.heart__wrapper .haert__image,
+ul.neon > li.heart__wrapper .haert__image,
+ul.box > li.heart__wrapper .haert__image,
+ul.roundbox > li.heart__wrapper .haert__image,
+ul.balloon > li.heart__wrapper .haert__image,
+ul.board > li.heart__wrapper .haert__image {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+ul.default > li.heart__wrapper .heart__text,
+ul.kakaotalk > li.heart__wrapper .heart__text,
+ul.neon > li.heart__wrapper .heart__text,
+ul.box > li.heart__wrapper .heart__text,
+ul.roundbox > li.heart__wrapper .heart__text,
+ul.balloon > li.heart__wrapper .heart__text,
+ul.board > li.heart__wrapper .heart__text,
+ul.default > li.heart__wrapper .haert__image,
+ul.kakaotalk > li.heart__wrapper .haert__image,
+ul.neon > li.heart__wrapper .haert__image,
+ul.box > li.heart__wrapper .haert__image,
+ul.roundbox > li.heart__wrapper .haert__image,
+ul.balloon > li.heart__wrapper .haert__image,
+ul.board > li.heart__wrapper .haert__image,
+ul.default > li.heart__wrapper .haert__image p,
+ul.kakaotalk > li.heart__wrapper .haert__image p,
+ul.neon > li.heart__wrapper .haert__image p,
+ul.box > li.heart__wrapper .haert__image p,
+ul.roundbox > li.heart__wrapper .haert__image p,
+ul.balloon > li.heart__wrapper .haert__image p,
+ul.board > li.heart__wrapper .haert__image p,
+ul.default > li.heart__wrapper .haert__image div,
+ul.kakaotalk > li.heart__wrapper .haert__image div,
+ul.neon > li.heart__wrapper .haert__image div,
+ul.box > li.heart__wrapper .haert__image div,
+ul.roundbox > li.heart__wrapper .haert__image div,
+ul.balloon > li.heart__wrapper .haert__image div,
+ul.board > li.heart__wrapper .haert__image div {
+  color: #3a2a2e !important;
+  font-size: 12px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+ul.default > li.heart__wrapper .heart__text .mx-1,
+ul.kakaotalk > li.heart__wrapper .heart__text .mx-1,
+ul.neon > li.heart__wrapper .heart__text .mx-1,
+ul.box > li.heart__wrapper .heart__text .mx-1,
+ul.roundbox > li.heart__wrapper .heart__text .mx-1,
+ul.balloon > li.heart__wrapper .heart__text .mx-1,
+ul.board > li.heart__wrapper .heart__text .mx-1,
+ul.default > li.heart__wrapper .donation-amount,
+ul.kakaotalk > li.heart__wrapper .donation-amount,
+ul.neon > li.heart__wrapper .donation-amount,
+ul.box > li.heart__wrapper .donation-amount,
+ul.roundbox > li.heart__wrapper .donation-amount,
+ul.balloon > li.heart__wrapper .donation-amount,
+ul.board > li.heart__wrapper .donation-amount {
+  color: #ff6b6b !important;
+  font-weight: 700 !important;
+}
+
+ul.default > li.heart__wrapper .heart__image--wrapper,
+ul.kakaotalk > li.heart__wrapper .heart__image--wrapper,
+ul.neon > li.heart__wrapper .heart__image--wrapper,
+ul.box > li.heart__wrapper .heart__image--wrapper,
+ul.roundbox > li.heart__wrapper .heart__image--wrapper,
+ul.balloon > li.heart__wrapper .heart__image--wrapper,
+ul.board > li.heart__wrapper .heart__image--wrapper {
+  display: block !important;
+}
+
+ul.default > li.heart__wrapper .heart__image--wrapper img,
+ul.kakaotalk > li.heart__wrapper .heart__image--wrapper img,
+ul.neon > li.heart__wrapper .heart__image--wrapper img,
+ul.box > li.heart__wrapper .heart__image--wrapper img,
+ul.roundbox > li.heart__wrapper .heart__image--wrapper img,
+ul.balloon > li.heart__wrapper .heart__image--wrapper img,
+ul.board > li.heart__wrapper .heart__image--wrapper img,
+ul.default > li.heart__wrapper .haert__image > img,
+ul.kakaotalk > li.heart__wrapper .haert__image > img,
+ul.neon > li.heart__wrapper .haert__image > img,
+ul.box > li.heart__wrapper .haert__image > img,
+ul.roundbox > li.heart__wrapper .haert__image > img,
+ul.balloon > li.heart__wrapper .haert__image > img,
+ul.board > li.heart__wrapper .haert__image > img,
+ul.default > li.heart__wrapper img[alt="heart_image"],
+ul.kakaotalk > li.heart__wrapper img[alt="heart_image"],
+ul.neon > li.heart__wrapper img[alt="heart_image"],
+ul.box > li.heart__wrapper img[alt="heart_image"],
+ul.roundbox > li.heart__wrapper img[alt="heart_image"],
+ul.balloon > li.heart__wrapper img[alt="heart_image"],
+ul.board > li.heart__wrapper img[alt="heart_image"] {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* 알림/추천 */
+ul.default > li.chat__notice--list,
+ul.kakaotalk > li.chat__notice--list,
+ul.neon > li.chat__notice--list,
+ul.box > li.chat__notice--list,
+ul.roundbox > li.chat__notice--list,
+ul.balloon > li.chat__notice--list,
+ul.board > li.chat__notice--list {
+  background: rgba(255, 235, 245, 0.50) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 5px 12px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  box-shadow: none !important;
+}
+
+ul.default > li.chat__notice--list .notice__text,
+ul.kakaotalk > li.chat__notice--list .notice__text,
+ul.neon > li.chat__notice--list .notice__text,
+ul.box > li.chat__notice--list .notice__text,
+ul.roundbox > li.chat__notice--list .notice__text,
+ul.balloon > li.chat__notice--list .notice__text,
+ul.board > li.chat__notice--list .notice__text {
+  color: #b04080 !important;
+  font-size: 12px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* 페이드아웃 방지 */
+ul.default > li.hide__opacity,
+ul.kakaotalk > li.hide__opacity,
+ul.neon > li.hide__opacity,
+ul.box > li.hide__opacity,
+ul.roundbox > li.hide__opacity,
+ul.balloon > li.hide__opacity,
+ul.board > li.hide__opacity,
+ul.default > li .hide__opacity,
+ul.kakaotalk > li .hide__opacity,
+ul.neon > li .hide__opacity,
+ul.box > li .hide__opacity,
+ul.roundbox > li .hide__opacity,
+ul.balloon > li .hide__opacity,
+ul.board > li .hide__opacity {
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* 내부 테마 셸 리셋 */
+ul.kakaotalk > li.message__wrapper > div.message__box,
+ul.neon > li.message__wrapper > div.message__box,
+ul.box > li.message__wrapper > div.message__box,
+ul.roundbox > li.message__wrapper > div.message__box,
+ul.balloon > li.message__wrapper > div.message__box,
+ul.kakaotalk > li.message__wrapper .message__text,
+ul.neon > li.message__wrapper .message__text,
+ul.box > li.message__wrapper .message__text,
+ul.roundbox > li.message__wrapper .message__text,
+ul.balloon > li.message__wrapper .message__text,
+ul.kakaotalk > li.heart__wrapper .haert__image,
+ul.neon > li.heart__wrapper .haert__image,
+ul.box > li.heart__wrapper .haert__image,
+ul.roundbox > li.heart__wrapper .haert__image,
+ul.balloon > li.heart__wrapper .haert__image,
+ul.kakaotalk > li.heart__wrapper .heart__text,
+ul.neon > li.heart__wrapper .heart__text,
+ul.box > li.heart__wrapper .heart__text,
+ul.roundbox > li.heart__wrapper .heart__text,
+ul.balloon > li.heart__wrapper .heart__text,
+ul.kakaotalk > li.chat__notice--list .notice__text,
+ul.neon > li.chat__notice--list .notice__text,
+ul.box > li.chat__notice--list .notice__text,
+ul.roundbox > li.chat__notice--list .notice__text,
+ul.balloon > li.chat__notice--list .notice__text {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  float: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  filter: none !important;
+}
+
+/* 테마 효과 리셋 */
+ul.kakaotalk > li > *,
+ul.neon > li > *,
+ul.box > li > *,
+ul.roundbox > li > *,
+ul.balloon > li > *,
+ul.board > li > *,
+ul.kakaotalk > li > *::before,
+ul.neon > li > *::before,
+ul.box > li > *::before,
+ul.roundbox > li > *::before,
+ul.balloon > li > *::before,
+ul.board > li > *::before,
+ul.kakaotalk > li > *::after,
+ul.neon > li > *::after,
+ul.box > li > *::after,
+ul.roundbox > li > *::after,
+ul.balloon > li > *::after,
+ul.board > li > *::after,
+ul.kakaotalk > li *,
+ul.neon > li *,
+ul.box > li *,
+ul.roundbox > li *,
+ul.balloon > li *,
+ul.board > li * {
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* 애니메이션 제거 */
+ul.default > li,
+ul.kakaotalk > li,
+ul.neon > li,
+ul.box > li,
+ul.roundbox > li,
+ul.balloon > li,
+ul.board > li,
+ul.default > li *,
+ul.kakaotalk > li *,
+ul.neon > li *,
+ul.box > li *,
+ul.roundbox > li *,
+ul.balloon > li *,
+ul.board > li * {
+  animation: none !important;
+  transition: none !important;
+}
+
+* {
+  scrollbar-width: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* OBS li-theme compatibility supplement
+   일부 실위젯은 테마 클래스가 ul이 아니라 li에 붙는다. */
+ul > li.default.message__wrapper,
+ul > li.kakaotalk.message__wrapper,
+ul > li.neon.message__wrapper,
+ul > li.box.message__wrapper,
+ul > li.roundbox.message__wrapper,
+ul > li.balloon.message__wrapper,
+ul > li.board.message__wrapper {
+  display: block !important;
+  overflow: visible !important;
+  background: rgba(255, 240, 245, 0.55) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 4px 12px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  list-style: none !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  align-self: flex-start !important;
+  transition: none !important;
+}
+
+ul > li.default.message__wrapper > div.message__box,
+ul > li.kakaotalk.message__wrapper > div.message__box,
+ul > li.neon.message__wrapper > div.message__box,
+ul > li.box.message__wrapper > div.message__box,
+ul > li.roundbox.message__wrapper > div.message__box,
+ul > li.balloon.message__wrapper > div.message__box,
+ul > li.board.message__wrapper > div.message__box {
+  display: block !important;
+  float: none !important;
+  width: auto !important;
+  max-width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+  font-family: inherit !important;
+}
+
+ul > li.default.message__wrapper .message__nick,
+ul > li.kakaotalk.message__wrapper .message__nick,
+ul > li.neon.message__wrapper .message__nick,
+ul > li.box.message__wrapper .message__nick,
+ul > li.roundbox.message__wrapper .message__nick,
+ul > li.balloon.message__wrapper .message__nick,
+ul > li.board.message__wrapper .message__nick {
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+ul > li.default.message__wrapper .message__name,
+ul > li.kakaotalk.message__wrapper .message__name,
+ul > li.neon.message__wrapper .message__name,
+ul > li.box.message__wrapper .message__name,
+ul > li.roundbox.message__wrapper .message__name,
+ul > li.balloon.message__wrapper .message__name,
+ul > li.board.message__wrapper .message__name {
+  color: #d4508a !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+}
+
+ul > li.default.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul > li.kakaotalk.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul > li.neon.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul > li.box.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul > li.roundbox.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul > li.balloon.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
+ul > li.board.message__wrapper .message__nick > span:not(.message__name):not(.message__text) {
+  display: inline !important;
+  color: #3a2a2e !important;
+  text-shadow: none !important;
+}
+
+ul > li.default.message__wrapper .message__text,
+ul > li.kakaotalk.message__wrapper .message__text,
+ul > li.neon.message__wrapper .message__text,
+ul > li.box.message__wrapper .message__text,
+ul > li.roundbox.message__wrapper .message__text,
+ul > li.balloon.message__wrapper .message__text,
+ul > li.board.message__wrapper .message__text {
+  display: inline !important;
+  margin-top: 0 !important;
+  color: #3a2a2e !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  float: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+ul > li.default.message__wrapper .message__name::before,
+ul > li.kakaotalk.message__wrapper .message__name::before,
+ul > li.neon.message__wrapper .message__name::before,
+ul > li.box.message__wrapper .message__name::before,
+ul > li.roundbox.message__wrapper .message__name::before,
+ul > li.balloon.message__wrapper .message__name::before,
+ul > li.board.message__wrapper .message__name::before {
+  content: none !important;
+}
+
+ul > li.default.message__wrapper .message__nick svg,
+ul > li.kakaotalk.message__wrapper .message__nick svg,
+ul > li.neon.message__wrapper .message__nick svg,
+ul > li.box.message__wrapper .message__nick svg,
+ul > li.roundbox.message__wrapper .message__nick svg,
+ul > li.balloon.message__wrapper .message__nick svg,
+ul > li.board.message__wrapper .message__nick svg {
+  display: none !important;
+}
+
+ul > li.default.heart__wrapper,
+ul > li.kakaotalk.heart__wrapper,
+ul > li.neon.heart__wrapper,
+ul > li.box.heart__wrapper,
+ul > li.roundbox.heart__wrapper,
+ul > li.balloon.heart__wrapper,
+ul > li.board.heart__wrapper {
+  display: block !important;
+  background: rgba(255, 220, 235, 0.60) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 6px 12px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+  font-family: inherit !important;
+  transition: none !important;
+}
+
+ul > li.default.heart__wrapper .haert__image,
+ul > li.kakaotalk.heart__wrapper .haert__image,
+ul > li.neon.heart__wrapper .haert__image,
+ul > li.box.heart__wrapper .haert__image,
+ul > li.roundbox.heart__wrapper .haert__image,
+ul > li.balloon.heart__wrapper .haert__image,
+ul > li.board.heart__wrapper .haert__image {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+ul > li.default.heart__wrapper .heart__text,
+ul > li.kakaotalk.heart__wrapper .heart__text,
+ul > li.neon.heart__wrapper .heart__text,
+ul > li.box.heart__wrapper .heart__text,
+ul > li.roundbox.heart__wrapper .heart__text,
+ul > li.balloon.heart__wrapper .heart__text,
+ul > li.board.heart__wrapper .heart__text,
+ul > li.default.heart__wrapper .haert__image,
+ul > li.kakaotalk.heart__wrapper .haert__image,
+ul > li.neon.heart__wrapper .haert__image,
+ul > li.box.heart__wrapper .haert__image,
+ul > li.roundbox.heart__wrapper .haert__image,
+ul > li.balloon.heart__wrapper .haert__image,
+ul > li.board.heart__wrapper .haert__image,
+ul > li.default.heart__wrapper .haert__image p,
+ul > li.kakaotalk.heart__wrapper .haert__image p,
+ul > li.neon.heart__wrapper .haert__image p,
+ul > li.box.heart__wrapper .haert__image p,
+ul > li.roundbox.heart__wrapper .haert__image p,
+ul > li.balloon.heart__wrapper .haert__image p,
+ul > li.board.heart__wrapper .haert__image p,
+ul > li.default.heart__wrapper .haert__image div,
+ul > li.kakaotalk.heart__wrapper .haert__image div,
+ul > li.neon.heart__wrapper .haert__image div,
+ul > li.box.heart__wrapper .haert__image div,
+ul > li.roundbox.heart__wrapper .haert__image div,
+ul > li.balloon.heart__wrapper .haert__image div,
+ul > li.board.heart__wrapper .haert__image div {
+  color: #3a2a2e !important;
+  font-size: 12px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+ul > li.default.heart__wrapper .heart__text .mx-1,
+ul > li.kakaotalk.heart__wrapper .heart__text .mx-1,
+ul > li.neon.heart__wrapper .heart__text .mx-1,
+ul > li.box.heart__wrapper .heart__text .mx-1,
+ul > li.roundbox.heart__wrapper .heart__text .mx-1,
+ul > li.balloon.heart__wrapper .heart__text .mx-1,
+ul > li.board.heart__wrapper .heart__text .mx-1,
+ul > li.default.heart__wrapper .donation-amount,
+ul > li.kakaotalk.heart__wrapper .donation-amount,
+ul > li.neon.heart__wrapper .donation-amount,
+ul > li.box.heart__wrapper .donation-amount,
+ul > li.roundbox.heart__wrapper .donation-amount,
+ul > li.balloon.heart__wrapper .donation-amount,
+ul > li.board.heart__wrapper .donation-amount {
+  color: #ff6b6b !important;
+  font-weight: 700 !important;
+}
+
+ul > li.default.heart__wrapper .heart__image--wrapper,
+ul > li.kakaotalk.heart__wrapper .heart__image--wrapper,
+ul > li.neon.heart__wrapper .heart__image--wrapper,
+ul > li.box.heart__wrapper .heart__image--wrapper,
+ul > li.roundbox.heart__wrapper .heart__image--wrapper,
+ul > li.balloon.heart__wrapper .heart__image--wrapper,
+ul > li.board.heart__wrapper .heart__image--wrapper {
+  display: block !important;
+}
+
+ul > li.default.heart__wrapper .heart__image--wrapper img,
+ul > li.kakaotalk.heart__wrapper .heart__image--wrapper img,
+ul > li.neon.heart__wrapper .heart__image--wrapper img,
+ul > li.box.heart__wrapper .heart__image--wrapper img,
+ul > li.roundbox.heart__wrapper .heart__image--wrapper img,
+ul > li.balloon.heart__wrapper .heart__image--wrapper img,
+ul > li.board.heart__wrapper .heart__image--wrapper img,
+ul > li.default.heart__wrapper .haert__image > img,
+ul > li.kakaotalk.heart__wrapper .haert__image > img,
+ul > li.neon.heart__wrapper .haert__image > img,
+ul > li.box.heart__wrapper .haert__image > img,
+ul > li.roundbox.heart__wrapper .haert__image > img,
+ul > li.balloon.heart__wrapper .haert__image > img,
+ul > li.board.heart__wrapper .haert__image > img,
+ul > li.default.heart__wrapper img[alt="heart_image"],
+ul > li.kakaotalk.heart__wrapper img[alt="heart_image"],
+ul > li.neon.heart__wrapper img[alt="heart_image"],
+ul > li.box.heart__wrapper img[alt="heart_image"],
+ul > li.roundbox.heart__wrapper img[alt="heart_image"],
+ul > li.balloon.heart__wrapper img[alt="heart_image"],
+ul > li.board.heart__wrapper img[alt="heart_image"] {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+ul > li.default.chat__notice--list,
+ul > li.kakaotalk.chat__notice--list,
+ul > li.neon.chat__notice--list,
+ul > li.box.chat__notice--list,
+ul > li.roundbox.chat__notice--list,
+ul > li.balloon.chat__notice--list,
+ul > li.board.chat__notice--list {
+  background: rgba(255, 235, 245, 0.50) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 5px 12px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: 90% !important;
+  box-shadow: none !important;
+}
+
+ul > li.default.chat__notice--list .notice__text,
+ul > li.kakaotalk.chat__notice--list .notice__text,
+ul > li.neon.chat__notice--list .notice__text,
+ul > li.box.chat__notice--list .notice__text,
+ul > li.roundbox.chat__notice--list .notice__text,
+ul > li.balloon.chat__notice--list .notice__text,
+ul > li.board.chat__notice--list .notice__text {
+  color: #b04080 !important;
+  font-size: 12px !important;
+  font-family: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+ul > li.default.hide__opacity,
+ul > li.kakaotalk.hide__opacity,
+ul > li.neon.hide__opacity,
+ul > li.box.hide__opacity,
+ul > li.roundbox.hide__opacity,
+ul > li.balloon.hide__opacity,
+ul > li.board.hide__opacity,
+ul > li.default .hide__opacity,
+ul > li.kakaotalk .hide__opacity,
+ul > li.neon .hide__opacity,
+ul > li.box .hide__opacity,
+ul > li.roundbox .hide__opacity,
+ul > li.balloon .hide__opacity,
+ul > li.board .hide__opacity {
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+ul > li.kakaotalk.message__wrapper > div.message__box,
+ul > li.neon.message__wrapper > div.message__box,
+ul > li.box.message__wrapper > div.message__box,
+ul > li.roundbox.message__wrapper > div.message__box,
+ul > li.balloon.message__wrapper > div.message__box,
+ul > li.kakaotalk.message__wrapper .message__text,
+ul > li.neon.message__wrapper .message__text,
+ul > li.box.message__wrapper .message__text,
+ul > li.roundbox.message__wrapper .message__text,
+ul > li.balloon.message__wrapper .message__text,
+ul > li.kakaotalk.heart__wrapper .haert__image,
+ul > li.neon.heart__wrapper .haert__image,
+ul > li.box.heart__wrapper .haert__image,
+ul > li.roundbox.heart__wrapper .haert__image,
+ul > li.balloon.heart__wrapper .haert__image,
+ul > li.kakaotalk.heart__wrapper .heart__text,
+ul > li.neon.heart__wrapper .heart__text,
+ul > li.box.heart__wrapper .heart__text,
+ul > li.roundbox.heart__wrapper .heart__text,
+ul > li.balloon.heart__wrapper .heart__text,
+ul > li.kakaotalk.chat__notice--list .notice__text,
+ul > li.neon.chat__notice--list .notice__text,
+ul > li.box.chat__notice--list .notice__text,
+ul > li.roundbox.chat__notice--list .notice__text,
+ul > li.balloon.chat__notice--list .notice__text {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  float: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  filter: none !important;
+}
+
+ul > li.kakaotalk > *,
+ul > li.neon > *,
+ul > li.box > *,
+ul > li.roundbox > *,
+ul > li.balloon > *,
+ul > li.board > *,
+ul > li.kakaotalk > *::before,
+ul > li.neon > *::before,
+ul > li.box > *::before,
+ul > li.roundbox > *::before,
+ul > li.balloon > *::before,
+ul > li.board > *::before,
+ul > li.kakaotalk > *::after,
+ul > li.neon > *::after,
+ul > li.box > *::after,
+ul > li.roundbox > *::after,
+ul > li.balloon > *::after,
+ul > li.board > *::after,
+ul > li.kakaotalk *,
+ul > li.neon *,
+ul > li.box *,
+ul > li.roundbox *,
+ul > li.balloon *,
+ul > li.board * {
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+ul > li.default,
+ul > li.kakaotalk,
+ul > li.neon,
+ul > li.box,
+ul > li.roundbox,
+ul > li.balloon,
+ul > li.board,
+ul > li.default *,
+ul > li.kakaotalk *,
+ul > li.neon *,
+ul > li.box *,
+ul > li.roundbox *,
+ul > li.balloon *,
+ul > li.board * {
+  animation: none !important;
+  transition: none !important;
+}

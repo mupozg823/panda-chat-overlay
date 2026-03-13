@@ -1,0 +1,10 @@
+{
+  "name": "panda-chat-overlay",
+  "private": true,
+  "version": "0.2.0",
+  "description": "PandaTV chat overlay generator and compatibility-first CSS tool",
+  "scripts": {
+    "start": "node scripts/serve.js",
+    "serve": "node scripts/serve.js"
+  }
+}

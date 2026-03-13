@@ -1,2 +1,9 @@
 .DS_Store
+Thumbs.db
 *.log
+node_modules/
+.serena/
+dist/
+.tmp_*
+*_original.png
+.vercel

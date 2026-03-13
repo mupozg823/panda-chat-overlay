@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PandaTV Chat Overlay</title>
+<style>
+  :root {
+    --bg: #120f17;
+    --panel: rgba(23, 19, 30, 0.82);
+    --line: rgba(255, 255, 255, 0.08);
+    --text: #f7eef6;
+    --muted: #bca8ba;
+    --accent: #ff68b1;
+    --accent-2: #ff9bcf;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: var(--text);
+    background: linear-gradient(180deg, #16121d 0%, #0d0a12 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    max-width: 520px;
+    width: calc(100% - 32px);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px 36px;
+    text-align: center;
+    backdrop-filter: blur(18px);
+  }
+  h1 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.03em; }
+  .ver { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+  .desc { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 28px; }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    transition: transform 0.15s;
+    margin-bottom: 10px;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.primary {
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    color: white;
+  }
+  .btn.secondary {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+  }
+  .how {
+    margin-top: 28px;
+    text-align: left;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+  }
+  .how h2 { font-size: 15px; margin: 0 0 12px; }
+  .how ol { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; line-height: 2; }
+  .how code {
+    background: rgba(255,255,255,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  .platforms {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+  .tag {
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: var(--muted);
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>PandaTV Chat Overlay</h1>
+    <div class="ver">v0.2.0</div>
+    <p class="desc">
+      팬더TV 자체에서 지원하지 않는 채팅창 커스터마이징 기능을 제공합니다.<br>
+      말풍선, 닉네임 캡슐, 그라데이션 배경 등 플랫폼 기본 설정으로는<br>
+      불가능한 세밀한 채팅창 꾸미기를 설정기에서 조정하고, OBS에 붙여넣으세요.
+    </p>
+
+    <a class="btn primary" href="overlay-settings.html">설정기 열기</a>
+    <a class="btn secondary" href="overlay-settings.html?preset=reference">레퍼런스 프리셋으로 열기</a>
+
+    <div class="how">
+      <h2>사용법</h2>
+      <ol>
+        <li><strong>Windows</strong>: <code>start.bat</code> 더블클릭</li>
+        <li><strong>Mac</strong>: <code>start.command</code> 더블클릭</li>
+        <li>또는 <code>overlay-settings.html</code>을 브라우저에서 직접 열기</li>
+        <li>설정 완료 후 <strong>CSS 복사하기</strong> 클릭</li>
+        <li>OBS &rarr; 브라우저 소스 &rarr; 사용자 지정 CSS에 붙여넣기</li>
+      </ol>
+    </div>
+
+    <div class="platforms">
+      <span class="tag">Windows</span>
+      <span class="tag">macOS</span>
+      <span class="tag">Node 불필요</span>
+      <span class="tag">설치 불필요</span>
+    </div>
+  </div>
+</body>
+</html>
