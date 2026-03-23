@@ -124,131 +124,9 @@
     <!-- Phase 2: 디자인 -->
     <div class="phase-content" id="phase-design" data-phase="design">
     <div id="designPhaseSummary" style="display:none"></div>
-    <div class="preset-category-tabs">
-      <button class="preset-cat-btn" type="button" data-cat="all" onclick="filterPresets('all')">전체</button>
-      <button class="preset-cat-btn active" type="button" data-cat="basic" onclick="filterPresets('basic')">기본</button>
-      <button class="preset-cat-btn" type="button" data-cat="cute" onclick="filterPresets('cute')">귀여운 & 감성</button>
-      <button class="preset-cat-btn" type="button" data-cat="dark" onclick="filterPresets('dark')">다크 & 특수</button>
-    </div>
-    <!-- 테마 프리셋 -->
-    <div class="theme-presets">
-      <!-- 기본 -->
-      <button class="theme-btn active" data-cat="basic" onclick="applyTheme('pink')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff8fbc,#ffb0d0)"></div><div class="preset-label">핑크 말풍선</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('reference')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e07aad,#f5a0c8)"></div><div class="preset-label">아바타 캡슐</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('character')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc6699,#e088aa)"></div><div class="preset-label">아이콘 2줄</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('studioFlat')"><div class="preset-swatch" style="background:linear-gradient(90deg,#5577bb,#7799cc)"></div><div class="preset-label">스튜디오</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('naturalSoft')"><div class="preset-swatch" style="background:linear-gradient(90deg,#88aa66,#aacc88)"></div><div class="preset-label">내추럴</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#5566aa,#7788cc)"></div><div class="preset-label">클린 카드</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('minimal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#888,#aaa)"></div><div class="preset-label">텍스트만</div></button>
 
-      <!-- 귀여운 & 감성 -->
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('cherryblossom')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff8faa,#ffb0c0)"></div><div class="preset-label">🌸 벚꽃</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('lavenderDream')"><div class="preset-swatch" style="background:linear-gradient(90deg,#a080cc,#c8a0e8)"></div><div class="preset-label">💜 라벤더 드림</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('mintChoco')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6bbaa0,#a0d8c4)"></div><div class="preset-label">🍫 민트초코</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('peachCream')"><div class="preset-swatch" style="background:linear-gradient(90deg,#f0a070,#ffcc99)"></div><div class="preset-label">🍑 피치크림</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('cottonCandy')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ee88bb,#88bbee)"></div><div class="preset-label">🍬 솜사탕</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('babyBlue')"><div class="preset-swatch" style="background:linear-gradient(90deg,#7099dd,#a8c8f0)"></div><div class="preset-label">☁️ 베이비 블루</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('strawberryMilk')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff7799,#ffb0c8)"></div><div class="preset-label">🍓 딸기우유</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('lemonSherbet')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e6c040,#f0e088)"></div><div class="preset-label">🍋 레몬셔벗</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('rosegold')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc8870,#ddaa90)"></div><div class="preset-label">✨ 로즈골드</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('lilacBubble')"><div class="preset-swatch" style="background:linear-gradient(90deg,#b088dd,#d0b8e8)"></div><div class="preset-label">💐 라일락 버블</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('softGradient')"><div class="preset-swatch" style="background:linear-gradient(90deg,#c090e0,#f0a0c0)"></div><div class="preset-label">🌷 소프트 그라데이션</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e5579d 0%,#ff85b8 46%,#f5eff2 46%,#f5eff2 100%)"></div><div class="preset-label">👑 공주</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess2')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e84880 0%,#ff6aa0 46%,#484850 46%,#484850 100%)"></div><div class="preset-label">👑 공주2</div></button>
-
-      <!-- 다크 & 특수 -->
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('dark')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a3a5a,#5a5a7a)"></div><div class="preset-label">어두운 유리</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('neon')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff44cc,#aa44ff)"></div><div class="preset-label">네온</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('glass')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.15),rgba(255,255,255,0.3))"></div><div class="preset-label">투명 유리</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('glassLite')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.2),rgba(255,255,255,0.4))"></div><div class="preset-label">라이트 유리</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('cyberOutline')"><div class="preset-swatch" style="background:linear-gradient(90deg,#00ccff,#0088ff)"></div><div class="preset-label">사이버</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('gradientNeon')"><div class="preset-swatch" style="background:linear-gradient(135deg,#ff00aa,#00ffff)"></div><div class="preset-label">그라데이션 네온</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('retroTerminal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#00aa00,#00ff00)"></div><div class="preset-label">레트로 터미널</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('gamingSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#0d1117,#00cc66)"></div><div class="preset-label">게이밍 분리형</div></button>
-
-      <!-- 캡슐 & 분리형 -->
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('streamCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a7ad5,#5a9ae5)"></div><div class="preset-label">스트림 카드</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('darkCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#bb3333,#dd5555)"></div><div class="preset-label">다크 캡슐</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('twilightCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6633aa,#8855cc)"></div><div class="preset-label">🌙 트와일라잇</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#4477cc,#88aadd)"></div><div class="preset-label">클린 분리형</div></button>
-    </div>
-    <div class="preset-helper">
-      <div class="preset-helper-box">
-        <span class="preset-helper-label">현재 프리셋 안내</span>
-        <strong id="presetHelperTitle">핑크 말풍선</strong>
-        <p id="presetHelperText">분홍 반투명 말풍선 — 가장 무난한 시작점</p>
-      </div>
-    </div>
-    </div><!-- /phase-design -->
-
-    <!-- Phase 3: 고급 -->
-    <div class="phase-content" id="phase-advanced" data-phase="advanced">
-    <div id="detailPhaseSummary" style="display:none"></div>
-    <!-- 섹션 퀵 네비게이션 -->
-    <div class="quick-nav" id="quickNav">
-      <button class="quick-nav-btn active" onclick="scrollToSection('sec-compat')">호환성</button>
-      <button class="quick-nav-btn" onclick="scrollToSection('sec-style')">말풍선</button>
-      <button class="quick-nav-btn" onclick="scrollToSection('sec-name')">아이콘/캡슐</button>
-      <button class="quick-nav-btn" onclick="scrollToSection('sec-rankbadge')">등급배지</button>
-      <button class="quick-nav-btn" onclick="scrollToSection('sec-text')">레이어</button>
-      <button class="quick-nav-btn" onclick="scrollToSection('sec-donation')">후원&알림</button>
-      <button class="quick-nav-btn" onclick="scrollToSection('sec-visibility')">가시성</button>
-    </div>
-
-    <!-- 호환성 설정 -->
-    <div class="section" id="sec-compat">
-      <div class="section-title" onclick="toggleSection(this)">
-        <span class="section-title-main">
-          <span class="section-title-text">호환성</span>
-        </span>
-      </div>
-      <div class="section-body">
-
-      <div class="control-row">
-        <span class="control-label">대상 테마</span>
-        <div class="control-right">
-          <select id="compatTheme" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
-            <option value="all">전체 테마</option>
-            <option value="default">default</option>
-            <option value="kakaotalk">kakaotalk</option>
-            <option value="neon">neon</option>
-            <option value="box">box</option>
-            <option value="roundbox">roundbox</option>
-            <option value="balloon">balloon</option>
-            <option value="board">board</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">호환 모드</span>
-        <div class="control-right">
-          <select id="compatMode" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
-            <option value="stable">안정형</option>
-            <option value="balanced">균형형</option>
-            <option value="preserve">원형 유지</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">내부 말풍선 리셋</span>
-        <div class="toggle-wrap" onclick="toggleSwitch('resetInner')">
-          <div class="toggle-switch on" id="resetInner"></div>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">테마 효과 제거</span>
-        <div class="toggle-wrap" onclick="toggleSwitch('themeReset')">
-          <div class="toggle-switch on" id="themeReset"></div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <!-- 말풍선 설정 -->
-    <div class="section" id="sec-style">
+    <!-- 말풍선 섹션 -->
+    <div class="section" id="sec-bubble">
       <div class="section-title" onclick="toggleSection(this)">
         <span class="section-title-main">
           <span class="section-title-text">말풍선</span>
@@ -400,8 +278,169 @@
       </div>
     </div>
 
-    <!-- 닉네임 & 아이콘 -->
-    <div class="section" id="sec-name">
+    <!-- 레이아웃 섹션 -->
+    <div class="section collapsed" id="sec-layout">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">레이아웃</span>
+        </span>
+      </div>
+      <div class="section-body">
+
+      <div class="layout-cards">
+        <div class="layout-card active" data-style="fullBubble" onclick="selectLayout('fullBubble')">
+          <span class="layout-card-icon">💬</span>
+          <span class="layout-card-name">전체 말풍선</span>
+          <span class="layout-card-desc">닉+메시지 한 덩어리</span>
+        </div>
+        <div class="layout-card" data-style="nameCapsule" onclick="selectLayout('nameCapsule')">
+          <span class="layout-card-icon">💊</span>
+          <span class="layout-card-name">캡슐형</span>
+          <span class="layout-card-desc">닉네임 캡슐 강조</span>
+        </div>
+        <div class="layout-card" data-style="splitLayers" onclick="selectLayout('splitLayers')">
+          <span class="layout-card-icon">📑</span>
+          <span class="layout-card-name">분리형</span>
+          <span class="layout-card-desc">닉/메시지 분리 레이어</span>
+        </div>
+      </div>
+
+      <div class="control-row" style="align-items:flex-start;">
+        <span style="color:#9eacd8;font-size:11px;line-height:1.6;">
+          텍스트 색상, 폰트, 굵기, 그림자, 정렬 방향은 팬더HP 채팅 설정에서 조정하세요.
+          여기서는 팬더HP에서 불가능한 2줄 배치, 분리형 레이어, 텍스트 배경, 구분자 등 오버레이 전용 항목만 다룹니다.
+        </span>
+      </div>
+
+      <!-- pandahp.kr 중복 컨트롤은 숨김 처리 (CSS 출력 호환용 hidden) -->
+      <input type="color" id="nickColor" value="#d4508a" style="display:none">
+      <input type="text" class="hex-input" id="nickHex" value="#d4508a" style="display:none">
+      <input type="color" id="textColor" value="#3a2a2e" style="display:none">
+      <input type="text" class="hex-input" id="textHex" value="#3a2a2e" style="display:none">
+      <input type="range" id="fontSize" min="10" max="24" value="13" style="display:none">
+      <span id="fontSizeVal" style="display:none">13px</span>
+      <input type="range" id="nickFontSize" min="0" max="24" value="0" style="display:none">
+      <span id="nickFontSizeVal" style="display:none">auto</span>
+      <input type="range" id="namePaddingX" min="0" max="24" value="0" style="display:none">
+      <span id="namePaddingXVal" style="display:none">auto</span>
+      <input type="range" id="splitTextPaddingX" min="0" max="24" value="0" style="display:none">
+      <span id="splitTextPaddingXVal" style="display:none">auto</span>
+      <input type="range" id="splitTextPaddingY" min="0" max="12" value="0" style="display:none">
+      <span id="splitTextPaddingYVal" style="display:none">auto</span>
+      <input type="range" id="splitTextOffsetX" min="-1" max="12" value="-1" style="display:none">
+      <span id="splitTextOffsetXVal" style="display:none">auto</span>
+      <div class="toggle-switch on" id="nickBold" style="display:none"></div>
+      <div class="toggle-switch" id="textShadow" style="display:none"></div>
+      <input type="range" id="textShadowSize" min="1" max="5" value="2" style="display:none">
+      <span id="textShadowSizeVal" style="display:none">2px</span>
+      <input type="color" id="textShadowColor" value="#000000" style="display:none">
+      <input type="text" class="hex-input" id="textShadowColorHex" value="#000000" style="display:none">
+
+      <div class="sub-divider">레이아웃</div>
+
+      <!-- 폰트는 pandahp.kr/chat에서 설정 (hidden) -->
+      <select id="fontFamily" style="display:none">
+        <option value="'Noto Sans KR', sans-serif" selected>Noto Sans KR</option>
+      </select>
+
+      <div class="control-row">
+        <span class="control-label">메시지 스타일</span>
+        <div class="control-right">
+          <select id="messageStyle" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+            <option value="fullBubble">전체 말풍선</option>
+            <option value="nameCapsule">닉네임 캡슐형</option>
+            <option value="splitLayers">닉/본문 분리형</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">닉네임/채팅 줄바꿈</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('twoLine')">
+          <div class="toggle-switch" id="twoLine"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">메시지 간격</span>
+        <div class="control-right">
+          <input type="range" id="chatGap" min="0" max="10" value="3" oninput="update()">
+          <span class="value-display" id="chatGapVal">3px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">안쪽 여백</span>
+        <div class="control-right">
+          <input type="range" id="paddingX" min="4" max="24" value="12" oninput="update()">
+          <span class="value-display" id="paddingXVal">12px</span>
+        </div>
+      </div>
+
+      <!-- 채팅 표시 방향은 팬더HP에서 제어 (숨김, CSS 호환용 hidden) -->
+      <div class="control-row" style="display:none;">
+        <span class="control-label">채팅 표시 방향</span>
+        <div class="control-right">
+          <select id="chatAlign" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+            <option value="left">왼쪽 정렬</option>
+            <option value="right">오른쪽 정렬</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sub-divider">텍스트 배경</div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 배경색</span>
+        <div class="color-input-wrap">
+          <input type="color" id="textBgColor" value="#000000" oninput="onColorInput(this, 'textBgHex')">
+          <input type="text" class="hex-input" id="textBgHex" value="#000000" oninput="onHexInput(this, 'textBgColor')">
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 배경 투명도</span>
+        <div class="control-right">
+          <input type="range" id="textBgOpacity" min="0" max="100" value="0" oninput="update()">
+          <span class="value-display" id="textBgOpacityVal">0%</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 배경 둥글기</span>
+        <div class="control-right">
+          <input type="range" id="textBgRadius" min="0" max="16" value="4" oninput="update()">
+          <span class="value-display" id="textBgRadiusVal">4px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 배경 패딩</span>
+        <div class="control-right">
+          <input type="range" id="textBgPadding" min="0" max="12" value="2" oninput="update()">
+          <span class="value-display" id="textBgPaddingVal">2px</span>
+        </div>
+      </div>
+
+      <div class="sub-divider">구분자</div>
+
+      <div class="control-row">
+        <span class="control-label">구분자 텍스트</span>
+        <div class="control-right">
+          <input type="text" id="separatorText" value=": " oninput="update()"
+            style="width:60px;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:monospace;text-align:center;">
+        </div>
+      </div>
+      <div class="control-row" id="separatorNote" style="display:none;">
+        <span style="color:#88aacc;font-size:11px;line-height:1.3;">
+          ℹ 기본 ": " 외 텍스트는 CSS ::after로 대체됩니다. 비워두면 구분자가 숨겨집니다.
+        </span>
+      </div>
+
+      </div>
+    </div>
+
+    <!-- 아이콘 & 캡슐 섹션 -->
+    <div class="section collapsed" id="sec-icon">
       <div class="section-title" onclick="toggleSection(this)">
         <span class="section-title-main">
           <span class="section-title-text">아이콘 & 캡슐</span>
@@ -575,184 +614,14 @@
       </div>
     </div>
 
-    <!-- 텍스트 & 레이아웃 -->
-    <div class="section" id="sec-text">
-      <div class="section-title" onclick="toggleSection(this)">
-        <span class="section-title-main">
-          <span class="section-title-text">레이아웃 & 커스텀 레이어</span>
-        </span>
-      </div>
-      <div class="section-body">
-      <div class="control-row" style="align-items:flex-start;">
-        <span style="color:#9eacd8;font-size:11px;line-height:1.6;">
-          텍스트 색상, 폰트, 굵기, 그림자, 정렬 방향은 팬더HP 채팅 설정에서 조정하세요.
-          여기서는 팬더HP에서 불가능한 2줄 배치, 분리형 레이어, 텍스트 배경, 구분자 등 오버레이 전용 항목만 다룹니다.
-        </span>
-      </div>
+    </div><!-- /phase-design -->
 
-      <!-- pandahp.kr 중복 컨트롤은 숨김 처리 (CSS 출력 호환용 hidden) -->
-      <input type="color" id="nickColor" value="#d4508a" style="display:none">
-      <input type="text" class="hex-input" id="nickHex" value="#d4508a" style="display:none">
-      <input type="color" id="textColor" value="#3a2a2e" style="display:none">
-      <input type="text" class="hex-input" id="textHex" value="#3a2a2e" style="display:none">
-      <input type="range" id="fontSize" min="10" max="24" value="13" style="display:none">
-      <span id="fontSizeVal" style="display:none">13px</span>
-      <input type="range" id="nickFontSize" min="0" max="24" value="0" style="display:none">
-      <span id="nickFontSizeVal" style="display:none">auto</span>
-      <input type="range" id="namePaddingX" min="0" max="24" value="0" style="display:none">
-      <span id="namePaddingXVal" style="display:none">auto</span>
-      <input type="range" id="splitTextPaddingX" min="0" max="24" value="0" style="display:none">
-      <span id="splitTextPaddingXVal" style="display:none">auto</span>
-      <input type="range" id="splitTextPaddingY" min="0" max="12" value="0" style="display:none">
-      <span id="splitTextPaddingYVal" style="display:none">auto</span>
-      <input type="range" id="splitTextOffsetX" min="-1" max="12" value="-1" style="display:none">
-      <span id="splitTextOffsetXVal" style="display:none">auto</span>
-      <div class="toggle-switch on" id="nickBold" style="display:none"></div>
-      <div class="toggle-switch" id="textShadow" style="display:none"></div>
-      <input type="range" id="textShadowSize" min="1" max="5" value="2" style="display:none">
-      <span id="textShadowSizeVal" style="display:none">2px</span>
-      <input type="color" id="textShadowColor" value="#000000" style="display:none">
-      <input type="text" class="hex-input" id="textShadowColorHex" value="#000000" style="display:none">
-
-      <div class="sub-divider">레이아웃</div>
-
-      <!-- 폰트는 pandahp.kr/chat에서 설정 (hidden) -->
-      <select id="fontFamily" style="display:none">
-        <option value="'Noto Sans KR', sans-serif" selected>Noto Sans KR</option>
-      </select>
-
-      <div class="control-row">
-        <span class="control-label">메시지 스타일</span>
-        <div class="control-right">
-          <select id="messageStyle" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
-            <option value="fullBubble">전체 말풍선</option>
-            <option value="nameCapsule">닉네임 캡슐형</option>
-            <option value="splitLayers">닉/본문 분리형</option>
-          </select>
-        </div>
-      </div>
-      <div class="control-row">
-        <span class="control-label">닉네임/채팅 줄바꿈</span>
-        <div class="toggle-wrap" onclick="toggleSwitch('twoLine')">
-          <div class="toggle-switch" id="twoLine"></div>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">메시지 간격</span>
-        <div class="control-right">
-          <input type="range" id="chatGap" min="0" max="10" value="3" oninput="update()">
-          <span class="value-display" id="chatGapVal">3px</span>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">안쪽 여백</span>
-        <div class="control-right">
-          <input type="range" id="paddingX" min="4" max="24" value="12" oninput="update()">
-          <span class="value-display" id="paddingXVal">12px</span>
-        </div>
-      </div>
-
-      <!-- 채팅 표시 방향은 팬더HP에서 제어 (숨김, CSS 호환용 hidden) -->
-      <div class="control-row" style="display:none;">
-        <span class="control-label">채팅 표시 방향</span>
-        <div class="control-right">
-          <select id="chatAlign" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
-            <option value="left">왼쪽 정렬</option>
-            <option value="right">오른쪽 정렬</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="sub-divider">텍스트 배경</div>
-
-      <div class="control-row">
-        <span class="control-label">텍스트 배경색</span>
-        <div class="color-input-wrap">
-          <input type="color" id="textBgColor" value="#000000" oninput="onColorInput(this, 'textBgHex')">
-          <input type="text" class="hex-input" id="textBgHex" value="#000000" oninput="onHexInput(this, 'textBgColor')">
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">텍스트 배경 투명도</span>
-        <div class="control-right">
-          <input type="range" id="textBgOpacity" min="0" max="100" value="0" oninput="update()">
-          <span class="value-display" id="textBgOpacityVal">0%</span>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">텍스트 배경 둥글기</span>
-        <div class="control-right">
-          <input type="range" id="textBgRadius" min="0" max="16" value="4" oninput="update()">
-          <span class="value-display" id="textBgRadiusVal">4px</span>
-        </div>
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">텍스트 배경 패딩</span>
-        <div class="control-right">
-          <input type="range" id="textBgPadding" min="0" max="12" value="2" oninput="update()">
-          <span class="value-display" id="textBgPaddingVal">2px</span>
-        </div>
-      </div>
-
-      <div class="sub-divider">구분자</div>
-
-      <div class="control-row">
-        <span class="control-label">구분자 텍스트</span>
-        <div class="control-right">
-          <input type="text" id="separatorText" value=": " oninput="update()"
-            style="width:60px;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:monospace;text-align:center;">
-        </div>
-      </div>
-      <div class="control-row" id="separatorNote" style="display:none;">
-        <span style="color:#88aacc;font-size:11px;line-height:1.3;">
-          ℹ 기본 ": " 외 텍스트는 CSS ::after로 대체됩니다. 비워두면 구분자가 숨겨집니다.
-        </span>
-      </div>
-
-      </div>
-    </div>
-
-    <!-- 등급별 배지 설정 -->
-    <div class="section collapsed" id="sec-rankbadge">
-      <div class="section-title" onclick="toggleSection(this)">
-        <span class="section-title-main">
-          <span class="section-title-text">등급별 배지</span>
-        </span>
-      </div>
-      <div class="section-body">
-      <div class="section-note" style="margin-bottom:12px;color:#9eacd8;font-size:11px;line-height:1.5;">
-        각 등급의 기본 배지를 커스텀 아이콘으로 교체합니다. <code>:has()</code> 셀렉터를 사용하므로 <strong>OBS v29+</strong> (Chromium 105+) 이상에서 동작합니다.
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">등급별 배지 사용</span>
-        <div class="toggle-wrap" onclick="toggleSwitch('useRankBadge')">
-          <div class="toggle-switch" id="useRankBadge"></div>
-        </div>
-      </div>
-
-      <div id="rankBadgePanel" style="display:none;">
-        <div class="control-row">
-          <span class="control-label">배지 크기</span>
-          <div class="control-right">
-            <input type="range" id="rankBadgeSize" min="12" max="32" value="16" oninput="update()">
-            <span class="value-display" id="rankBadgeSizeVal">16px</span>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;" id="rankBadgeGrid">
-        </div>
-      </div>
-      </div>
-    </div>
+    <!-- Phase 3: 고급 -->
+    <div class="phase-content" id="phase-advanced" data-phase="advanced">
+    <div id="detailPhaseSummary" style="display:none"></div>
 
     <!-- 후원 & 알림 설정 -->
-    <div class="section collapsed" id="sec-donation">
+    <div class="section" id="sec-donation">
       <div class="section-title" onclick="toggleSection(this)">
         <span class="section-title-main">
           <span class="section-title-text">후원 & 알림</span>
@@ -865,14 +734,75 @@
       </div>
     </div>
 
-    <!-- 기타 설정 -->
-    <div class="section collapsed" id="sec-visibility">
+    <!-- 등급별 배지 설정 -->
+    <div class="section collapsed" id="sec-rankbadge">
       <div class="section-title" onclick="toggleSection(this)">
         <span class="section-title-main">
-          <span class="section-title-text">가시성 & 모션</span>
+          <span class="section-title-text">등급별 배지</span>
         </span>
       </div>
       <div class="section-body">
+      <div class="section-note" style="margin-bottom:12px;color:#9eacd8;font-size:11px;line-height:1.5;">
+        각 등급의 기본 배지를 커스텀 아이콘으로 교체합니다. <code>:has()</code> 셀렉터를 사용하므로 <strong>OBS v29+</strong> (Chromium 105+) 이상에서 동작합니다.
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">등급별 배지 사용</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('useRankBadge')">
+          <div class="toggle-switch" id="useRankBadge"></div>
+        </div>
+      </div>
+
+      <div id="rankBadgePanel" style="display:none;">
+        <div class="control-row">
+          <span class="control-label">배지 크기</span>
+          <div class="control-right">
+            <input type="range" id="rankBadgeSize" min="12" max="32" value="16" oninput="update()">
+            <span class="value-display" id="rankBadgeSizeVal">16px</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;" id="rankBadgeGrid">
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- 표시 설정 -->
+    <div class="section collapsed" id="sec-display">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">표시 설정</span>
+        </span>
+      </div>
+      <div class="section-body">
+
+      <div class="control-row">
+        <span class="control-label">대상 테마</span>
+        <div class="control-right">
+          <select id="compatTheme" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+            <option value="all">전체 테마</option>
+            <option value="default">default</option>
+            <option value="kakaotalk">kakaotalk</option>
+            <option value="neon">neon</option>
+            <option value="box">box</option>
+            <option value="roundbox">roundbox</option>
+            <option value="balloon">balloon</option>
+            <option value="board">board</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 삭제된 sec-compat의 나머지 컨트롤 (호환 모드, 리셋 등) — hidden으로 유지 -->
+      <div style="display:none">
+        <select id="compatMode" onchange="update()">
+          <option value="stable">안정형</option>
+          <option value="balanced">균형형</option>
+          <option value="preserve">원형 유지</option>
+        </select>
+        <div class="toggle-switch on" id="resetInner"></div>
+        <div class="toggle-switch on" id="themeReset"></div>
+      </div>
 
       <div class="control-row">
         <span class="control-label">상단 바 숨기기 <span style="font-size:10px;color:var(--text-muted)">(내비+방송종료)</span></span>
@@ -905,6 +835,29 @@
           <div class="toggle-switch on" id="noAnimation"></div>
         </div>
       </div>
+      </div>
+    </div>
+
+    <!-- 추가 CSS -->
+    <div class="section collapsed" id="sec-customcss">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">추가 CSS</span>
+        </span>
+      </div>
+      <div class="section-body">
+        <p class="custom-css-note" style="color:#9eacd8;font-size:11px;line-height:1.5;margin-bottom:8px;">
+          생성된 CSS 맨 아래에 그대로 붙습니다. OBS에서 특정 테마만 추가 보정하거나, 실위젯 편차를 긴급하게 덮어쓸 때 사용합니다.
+        </p>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+          <button class="copy-btn custom-css-clear" type="button" onclick="clearCustomCss()">비우기</button>
+        </div>
+        <textarea
+          class="custom-css-input"
+          id="customCss"
+          oninput="update()"
+          placeholder="예: ul > li.board.message__wrapper { margin-bottom: 6px !important; }"
+        ></textarea>
       </div>
     </div>
 
@@ -1061,21 +1014,6 @@
         </div>
       </div>
       <div class="action-status" id="settingsStatus">텍스트 기본 편집은 팬더HP에서, 이곳은 오버레이 전용 설정 저장/복구를 담당합니다.</div>
-      <div class="custom-css-panel">
-        <div class="custom-css-header">
-          <strong>추가 커스텀 CSS</strong>
-          <button class="copy-btn custom-css-clear" type="button" onclick="clearCustomCss()">비우기</button>
-        </div>
-        <p class="custom-css-note">
-          생성된 CSS 맨 아래에 그대로 붙습니다. OBS에서 특정 테마만 추가 보정하거나, 실위젯 편차를 긴급하게 덮어쓸 때 사용합니다.
-        </p>
-        <textarea
-          class="custom-css-input"
-          id="customCss"
-          oninput="update()"
-          placeholder="예: ul > li.board.message__wrapper { margin-bottom: 6px !important; }"
-        ></textarea>
-      </div>
       <pre class="css-code" id="cssOutput"></pre>
       <div class="obs-guide" id="obsGuide">
         <h4>OBS에 적용하는 순서</h4>
@@ -1895,7 +1833,7 @@ const LOCAL_SETTINGS_META_KEY = 'panda_chat_overlay_saved_meta_v1';
 
 function _captureState() {
   const inputs = {};
-  document.querySelectorAll('.settings-panel input, .settings-panel select, .css-output-area textarea').forEach(el => {
+  document.querySelectorAll('.settings-panel input, .settings-panel select, .settings-panel textarea, .css-output-area textarea').forEach(el => {
     if (el.type === 'file') return;
     if (!el.id) return;
     inputs[el.id] = el.type === 'checkbox' ? el.checked : el.value;
