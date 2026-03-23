@@ -213,14 +213,6 @@
 
       <div class="sub-divider">크기 & 간격</div>
 
-      <div class="control-row" style="display:none">
-        <span class="control-label">줄 높이</span>
-        <div class="control-right">
-          <input type="range" id="lineHeight" min="100" max="250" value="145" oninput="update()">
-          <span class="value-display" id="lineHeightVal">1.45</span>
-        </div>
-      </div>
-
       <div class="control-row">
         <span class="control-label">최대 너비</span>
         <div class="control-right">
@@ -311,22 +303,7 @@
         </div>
       </div>
 
-      <div class="control-row" style="align-items:flex-start;">
-        <span style="color:#9eacd8;font-size:11px;line-height:1.6;">
-          텍스트 색상, 폰트, 굵기, 그림자, 정렬 방향은 팬더HP 채팅 설정에서 조정하세요.
-          여기서는 팬더HP에서 불가능한 2줄 배치, 분리형 레이어, 텍스트 배경, 구분자 등 오버레이 전용 항목만 다룹니다.
-        </span>
-      </div>
-
-      <!-- pandahp.kr 중복 컨트롤은 숨김 처리 (CSS 출력 호환용 hidden) -->
-      <input type="color" id="nickColor" value="#d4508a" style="display:none">
-      <input type="text" class="hex-input" id="nickHex" value="#d4508a" style="display:none">
-      <input type="color" id="textColor" value="#3a2a2e" style="display:none">
-      <input type="text" class="hex-input" id="textHex" value="#3a2a2e" style="display:none">
-      <input type="range" id="fontSize" min="10" max="24" value="13" style="display:none">
-      <span id="fontSizeVal" style="display:none">13px</span>
-      <input type="range" id="nickFontSize" min="0" max="24" value="0" style="display:none">
-      <span id="nickFontSizeVal" style="display:none">auto</span>
+      <!-- 드래그 핸들 전용 (숨김 유지) -->
       <input type="range" id="namePaddingX" min="0" max="24" value="0" style="display:none">
       <span id="namePaddingXVal" style="display:none">auto</span>
       <input type="range" id="splitTextPaddingX" min="0" max="24" value="0" style="display:none">
@@ -335,19 +312,8 @@
       <span id="splitTextPaddingYVal" style="display:none">auto</span>
       <input type="range" id="splitTextOffsetX" min="-1" max="12" value="-1" style="display:none">
       <span id="splitTextOffsetXVal" style="display:none">auto</span>
-      <div class="toggle-switch on" id="nickBold" style="display:none"></div>
-      <div class="toggle-switch" id="textShadow" style="display:none"></div>
-      <input type="range" id="textShadowSize" min="1" max="5" value="2" style="display:none">
-      <span id="textShadowSizeVal" style="display:none">2px</span>
-      <input type="color" id="textShadowColor" value="#000000" style="display:none">
-      <input type="text" class="hex-input" id="textShadowColorHex" value="#000000" style="display:none">
 
       <div class="sub-divider">레이아웃</div>
-
-      <!-- 폰트는 pandahp.kr/chat에서 설정 (hidden) -->
-      <select id="fontFamily" style="display:none">
-        <option value="'Noto Sans KR', sans-serif" selected>Noto Sans KR</option>
-      </select>
 
       <div class="control-row">
         <span class="control-label">메시지 스타일</span>
@@ -379,17 +345,6 @@
         <div class="control-right">
           <input type="range" id="paddingX" min="4" max="24" value="12" oninput="update()">
           <span class="value-display" id="paddingXVal">12px</span>
-        </div>
-      </div>
-
-      <!-- 채팅 표시 방향은 팬더HP에서 제어 (숨김, CSS 호환용 hidden) -->
-      <div class="control-row" style="display:none;">
-        <span class="control-label">채팅 표시 방향</span>
-        <div class="control-right">
-          <select id="chatAlign" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
-            <option value="left">왼쪽 정렬</option>
-            <option value="right">오른쪽 정렬</option>
-          </select>
         </div>
       </div>
 
@@ -442,6 +397,104 @@
         </span>
       </div>
 
+      </div>
+    </div>
+
+    <!-- 텍스트 섹션 -->
+    <div class="section collapsed" id="sec-text-style">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">텍스트</span>
+        </span>
+      </div>
+      <div class="section-body">
+        <div class="control-row">
+          <span class="control-label">닉네임 색상</span>
+          <div class="color-input-wrap">
+            <input type="color" id="nickColor" value="#d4508a" oninput="onColorInput(this, 'nickHex')">
+            <input type="text" class="hex-input" id="nickHex" value="#d4508a" oninput="onHexInput(this, 'nickColor')">
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">채팅 색상</span>
+          <div class="color-input-wrap">
+            <input type="color" id="textColor" value="#3a2a2e" oninput="onColorInput(this, 'textHex')">
+            <input type="text" class="hex-input" id="textHex" value="#3a2a2e" oninput="onHexInput(this, 'textColor')">
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">폰트 크기</span>
+          <div class="control-right">
+            <input type="range" id="fontSize" min="10" max="24" value="13" oninput="update()">
+            <span class="value-display" id="fontSizeVal">13px</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">닉네임 크기</span>
+          <div class="control-right">
+            <input type="range" id="nickFontSize" min="0" max="24" value="0" oninput="update()">
+            <span class="value-display" id="nickFontSizeVal">auto</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">줄 높이</span>
+          <div class="control-right">
+            <input type="range" id="lineHeight" min="100" max="250" value="145" oninput="update()">
+            <span class="value-display" id="lineHeightVal">1.45</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">닉네임 굵게</span>
+          <div class="toggle-wrap" onclick="toggleSwitch('nickBold')">
+            <div class="toggle-switch on" id="nickBold"></div>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">텍스트 그림자</span>
+          <div class="toggle-wrap" onclick="toggleSwitch('textShadow')">
+            <div class="toggle-switch" id="textShadow"></div>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">그림자 크기</span>
+          <div class="control-right">
+            <input type="range" id="textShadowSize" min="1" max="5" value="2" oninput="update()">
+            <span class="value-display" id="textShadowSizeVal">2px</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">그림자 색상</span>
+          <div class="color-input-wrap">
+            <input type="color" id="textShadowColor" value="#000000" oninput="onColorInput(this, 'textShadowColorHex')">
+            <input type="text" class="hex-input" id="textShadowColorHex" value="#000000" oninput="onHexInput(this, 'textShadowColor')">
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">폰트</span>
+          <select id="fontFamily" class="settings-select" onchange="update()">
+            <option value="'Noto Sans KR', sans-serif" selected>Noto Sans KR</option>
+            <option value="'Jeju Gothic', sans-serif">제주 고딕</option>
+            <option value="'Nanum Gothic', sans-serif">나눔 고딕</option>
+            <option value="'Nanum Myeongjo', serif">나눔 명조</option>
+            <option value="'Black Han Sans', sans-serif">블랙 한산스</option>
+            <option value="'Do Hyeon', sans-serif">도현</option>
+            <option value="'Jua', sans-serif">주아</option>
+            <option value="'Gaegu', sans-serif">개구</option>
+            <option value="'Hi Melody', sans-serif">하이 멜로디</option>
+            <option value="'Gamja Flower', sans-serif">감자꽃</option>
+            <option value="'Single Day', sans-serif">싱글데이</option>
+            <option value="'Dongle', sans-serif">동글</option>
+            <option value="'Gowun Dodum', sans-serif">고운 도둠</option>
+            <option value="'IBM Plex Sans KR', sans-serif">IBM Plex Sans KR</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <span class="control-label">채팅 방향</span>
+          <select id="chatAlign" class="settings-select" onchange="update()">
+            <option value="left" selected>왼쪽</option>
+            <option value="right">오른쪽</option>
+          </select>
+        </div>
       </div>
     </div>
 
