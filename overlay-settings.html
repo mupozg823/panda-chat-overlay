@@ -96,29 +96,6 @@
           <span class="layout-card-desc">닉/메시지 분리 레이어</span>
         </div>
       </div>
-      <div class="layout-options">
-        <div class="layout-opt">
-          <span>줄바꿈</span>
-          <div class="toggle-wrap" onclick="toggleSwitch('twoLine'); syncLayoutPhase();">
-            <div class="toggle-switch" id="twoLine2"></div>
-          </div>
-        </div>
-        <!-- 정렬은 팬더HP에서 제어 (숨김) -->
-        <div class="layout-opt" style="display:none;">
-          <span>정렬</span>
-          <select id="chatAlign2" onchange="document.getElementById('chatAlign').value=this.value; update();">
-            <option value="left">왼쪽</option>
-            <option value="right">오른쪽</option>
-          </select>
-        </div>
-        <div class="layout-opt">
-          <span>아이콘 위치</span>
-          <select id="iconPlacement2" onchange="document.getElementById('iconPlacement').value=this.value; update();">
-            <option value="nickSlot">닉네임 앞</option>
-            <option value="messageAvatar">아바타 (왼쪽)</option>
-          </select>
-        </div>
-      </div>
     </div>
 
     <!-- Phase 2: 디자인 -->
@@ -1385,24 +1362,6 @@ function selectLayout(style) {
   update();
 }
 
-function syncLayoutPhase() {
-  const style = document.getElementById('messageStyle').value;
-  document.querySelectorAll('.layout-card').forEach(card => {
-    card.classList.toggle('active', card.dataset.style === style);
-  });
-  const twoLine2 = document.getElementById('twoLine2');
-  const twoLine = document.getElementById('twoLine');
-  if (twoLine2 && twoLine) {
-    twoLine2.className = twoLine.className;
-  }
-  const chatAlign2 = document.getElementById('chatAlign2');
-  const chatAlign = document.getElementById('chatAlign');
-  if (chatAlign2 && chatAlign) chatAlign2.value = chatAlign.value;
-  const iconP2 = document.getElementById('iconPlacement2');
-  const iconP = document.getElementById('iconPlacement');
-  if (iconP2 && iconP) iconP2.value = iconP.value;
-  syncPhaseDashboard();
-}
 
 function filterPresets(cat) {
   hydrateDashboardBindings();
@@ -1535,7 +1494,7 @@ function applyTheme(name) {
   setRange('textBgPadding', t.textBgPadding !== undefined ? t.textBgPadding : 2);
 
   updatePresetHelper();
-  syncLayoutPhase();
+  syncPhaseDashboard();
   update();
 }
 
@@ -1830,7 +1789,7 @@ function _restoreState(json) {
   if (rankOn) initRankBadgeUI();
   const v = getValues();
   syncThemeSelectionUI();
-  syncLayoutPhase();
+  syncPhaseDashboard();
   updatePresetHelper();
   updatePreview(v);
   clearTimeout(_updateCssTimer);
