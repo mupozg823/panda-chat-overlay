@@ -78,24 +78,53 @@
 
     <!-- Phase 1: 프리셋 -->
     <div class="phase-content active" id="phase-preset" data-phase="preset">
-      <div id="layoutPhaseSummary" style="display:none"></div>
-      <div class="layout-cards">
-        <div class="layout-card active" data-style="fullBubble" onclick="selectLayout('fullBubble')">
-          <span class="layout-card-icon">💬</span>
-          <span class="layout-card-name">전체 말풍선</span>
-          <span class="layout-card-desc">닉+메시지 한 덩어리</span>
-        </div>
-        <div class="layout-card" data-style="nameCapsule" onclick="selectLayout('nameCapsule')">
-          <span class="layout-card-icon">💊</span>
-          <span class="layout-card-name">캡슐형</span>
-          <span class="layout-card-desc">닉네임 캡슐 강조</span>
-        </div>
-        <div class="layout-card" data-style="splitLayers" onclick="selectLayout('splitLayers')">
-          <span class="layout-card-icon">📑</span>
-          <span class="layout-card-name">분리형</span>
-          <span class="layout-card-desc">닉/메시지 분리 레이어</span>
-        </div>
+    <div class="preset-category-tabs">
+      <button class="preset-cat-btn" type="button" data-cat="all" onclick="filterPresets('all')">전체</button>
+      <button class="preset-cat-btn active" type="button" data-cat="basic" onclick="filterPresets('basic')">기본</button>
+      <button class="preset-cat-btn" type="button" data-cat="cute" onclick="filterPresets('cute')">귀여운 & 감성</button>
+      <button class="preset-cat-btn" type="button" data-cat="dark" onclick="filterPresets('dark')">다크 & 특수</button>
+    </div>
+    <div class="theme-presets">
+      <button class="theme-btn active" data-cat="basic" onclick="applyTheme('pink')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff8fbc,#ffb0d0)"></div><div class="preset-label">핑크 말풍선</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('reference')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e07aad,#f5a0c8)"></div><div class="preset-label">아바타 캡슐</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('character')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc6699,#e088aa)"></div><div class="preset-label">아이콘 2줄</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('studioFlat')"><div class="preset-swatch" style="background:linear-gradient(90deg,#5577bb,#7799cc)"></div><div class="preset-label">스튜디오</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('naturalSoft')"><div class="preset-swatch" style="background:linear-gradient(90deg,#88aa66,#aacc88)"></div><div class="preset-label">내추럴</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#5566aa,#7788cc)"></div><div class="preset-label">클린 카드</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('minimal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#888,#aaa)"></div><div class="preset-label">텍스트만</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('cherryblossom')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff8faa,#ffb0c0)"></div><div class="preset-label">🌸 벚꽃</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('lavenderDream')"><div class="preset-swatch" style="background:linear-gradient(90deg,#a080cc,#c8a0e8)"></div><div class="preset-label">💜 라벤더 드림</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('mintChoco')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6bbaa0,#a0d8c4)"></div><div class="preset-label">🍫 민트초코</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('peachCream')"><div class="preset-swatch" style="background:linear-gradient(90deg,#f0a070,#ffcc99)"></div><div class="preset-label">🍑 피치크림</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('cottonCandy')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ee88bb,#88bbee)"></div><div class="preset-label">🍬 솜사탕</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('babyBlue')"><div class="preset-swatch" style="background:linear-gradient(90deg,#7099dd,#a8c8f0)"></div><div class="preset-label">☁️ 베이비 블루</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('strawberryMilk')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff7799,#ffb0c8)"></div><div class="preset-label">🍓 딸기우유</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('lemonSherbet')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e6c040,#f0e088)"></div><div class="preset-label">🍋 레몬셔벗</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('rosegold')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc8870,#ddaa90)"></div><div class="preset-label">✨ 로즈골드</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('lilacBubble')"><div class="preset-swatch" style="background:linear-gradient(90deg,#b088dd,#d0b8e8)"></div><div class="preset-label">💐 라일락 버블</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('softGradient')"><div class="preset-swatch" style="background:linear-gradient(90deg,#c090e0,#f0a0c0)"></div><div class="preset-label">🌷 소프트 그라데이션</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e5579d 0%,#ff85b8 46%,#f5eff2 46%,#f5eff2 100%)"></div><div class="preset-label">👑 공주</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess2')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e84880 0%,#ff6aa0 46%,#484850 46%,#484850 100%)"></div><div class="preset-label">👑 공주2</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('dark')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a3a5a,#5a5a7a)"></div><div class="preset-label">어두운 유리</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('neon')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff44cc,#aa44ff)"></div><div class="preset-label">네온</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('glass')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.15),rgba(255,255,255,0.3))"></div><div class="preset-label">투명 유리</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('glassLite')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.2),rgba(255,255,255,0.4))"></div><div class="preset-label">라이트 유리</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('cyberOutline')"><div class="preset-swatch" style="background:linear-gradient(90deg,#00ccff,#0088ff)"></div><div class="preset-label">사이버</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('gradientNeon')"><div class="preset-swatch" style="background:linear-gradient(135deg,#ff00aa,#00ffff)"></div><div class="preset-label">그라데이션 네온</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('retroTerminal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#00aa00,#00ff00)"></div><div class="preset-label">레트로 터미널</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('gamingSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#0d1117,#00cc66)"></div><div class="preset-label">게이밍 분리형</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('streamCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a7ad5,#5a9ae5)"></div><div class="preset-label">스트림 카드</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('darkCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#bb3333,#dd5555)"></div><div class="preset-label">다크 캡슐</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('twilightCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6633aa,#8855cc)"></div><div class="preset-label">🌙 트와일라잇</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#4477cc,#88aadd)"></div><div class="preset-label">클린 분리형</div></button>
+    </div>
+    <div class="preset-helper">
+      <div class="preset-helper-box">
+        <span class="preset-helper-label">현재 프리셋 안내</span>
+        <strong id="presetHelperTitle">핑크 말풍선</strong>
+        <p id="presetHelperText">분홍 반투명 말풍선 — 가장 무난한 시작점</p>
       </div>
+    </div>
     </div>
 
     <!-- Phase 2: 디자인 -->
