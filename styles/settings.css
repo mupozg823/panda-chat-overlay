@@ -774,16 +774,6 @@ input[type="color"]::-webkit-color-swatch {
   min-width: 0;
 }
 
-.preview-header {
-  padding: 12px 24px;
-  background: #16192d;
-  border-bottom: 1px solid var(--line-soft);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
 .preview-header h2 {
   font-size: 14px;
   font-weight: 500;
@@ -1688,8 +1678,7 @@ body.fe-dragging * {
   .preview-header {
     padding: 12px 16px;
   }
-  .preview-container,
-  .css-output-area {
+  .preview-container {
     padding-left: 16px;
     padding-right: 16px;
   }
@@ -1817,4 +1806,86 @@ body.fe-dragging * {
 
 .obs-guide.flash {
   animation: previewFlash 0.45s ease-out;
+}
+
+/* ──── preview-header 재구성 ──── */
+.preview-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--line-soft);
+  flex-shrink: 0;
+  gap: 8px;
+}
+.preview-header-left,
+.preview-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.preview-label {
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.copy-btn-primary {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 16px;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.copy-btn-primary:hover {
+  background: #e5e5e5;
+}
+.copy-btn-primary.copied {
+  background: var(--success);
+  color: #fff;
+}
+
+/* ──── CSS 출력 접기/펼치기 바 ──── */
+.css-output-bar {
+  border-top: 1px solid var(--line-soft);
+  background: var(--bg-main);
+  flex-shrink: 0;
+}
+.css-output-toggle {
+  padding: 6px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.css-output-toggle:hover {
+  background: var(--bg-panel);
+}
+.css-output-preview {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-family: "Menlo", "Consolas", monospace;
+  opacity: 0.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 20px);
+}
+.css-output-expand {
+  color: var(--text-muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.css-output-expanded {
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid var(--line-soft);
 }

@@ -990,34 +990,13 @@
     </div>
 
     <!-- CSS 출력 -->
-    <div class="css-output-area">
-      <div class="css-output-header">
-        <h3>OBS 사용자 지정 CSS</h3>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <button class="copy-btn" id="copyBtn" onclick="copyCSS()">CSS 복사</button>
-          <div style="position:relative;display:inline-block;">
-            <button class="copy-btn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
-            <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:130px;">
-              <button class="copy-btn" style="background:#3a5a7a;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettingsToBrowser()">브라우저 저장</button>
-              <button class="copy-btn" style="background:#4e5d8a;width:100%;font-size:11px;padding:6px 10px;" onclick="loadSettingsFromBrowser()">브라우저 불러오기</button>
-              <button class="copy-btn" style="background:#3f5a78;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettings()">파일 저장</button>
-              <button class="copy-btn" style="background:#5a4a6a;width:100%;font-size:11px;padding:6px 10px;" onclick="document.getElementById('loadSettingsFile').click()">파일 불러오기</button>
-            </div>
-          </div>
-          <input type="file" id="loadSettingsFile" accept=".json" style="display:none" onchange="loadSettings(event)">
-        </div>
+    <div class="css-output-bar">
+      <div class="css-output-toggle" id="cssOutputToggle" onclick="toggleCssOutput()">
+        <span class="css-output-preview" id="cssOutputPreview">/* PandaTV Chat Overlay */</span>
+        <span class="css-output-expand">▸</span>
       </div>
-      <div class="action-status" id="settingsStatus">텍스트 기본 편집은 팬더HP에서, 이곳은 오버레이 전용 설정 저장/복구를 담당합니다.</div>
-      <pre class="css-code" id="cssOutput"></pre>
-      <div class="obs-guide" id="obsGuide">
-        <h4>OBS에 적용하는 순서</h4>
-        <ol>
-          <li>OBS Studio에서 브라우저 소스를 선택합니다.</li>
-          <li>사용자 지정 CSS 칸을 찾습니다.</li>
-          <li>위의 CSS 복사하기 버튼으로 복사한 코드를 붙여넣습니다.</li>
-          <li>적용 후 미리보기가 다르면 브라우저 소스를 새로고침해 확인합니다.</li>
-        </ol>
-        <p>초보자 팁: 처음에는 프리셋을 크게 바꾸지 말고, 글자 크기와 말풍선 색상 정도만 맞춘 뒤 실제 방송 화면에서 읽기 쉬운지 확인하는 편이 안전합니다.</p>
+      <div class="css-output-expanded" id="cssOutputExpanded" style="display:none;">
+        <pre class="css-code" id="cssOutput"></pre>
       </div>
     </div>
   </div>
@@ -1027,6 +1006,15 @@
 <script src="scripts/css-generator.js"></script>
 <script>
 'use strict';
+// ──── CSS 출력 접기/펼치기 ────
+function toggleCssOutput() {
+  const expanded = document.getElementById('cssOutputExpanded');
+  const toggle = document.getElementById('cssOutputToggle');
+  const isOpen = expanded.style.display !== 'none';
+  expanded.style.display = isOpen ? 'none' : 'block';
+  toggle.querySelector('.css-output-expand').textContent = isOpen ? '▸' : '▾';
+}
+
 // ──── 섹션 접기/펼치기 ────
 function toggleSection(titleEl) {
   const section = titleEl.closest('.section');
