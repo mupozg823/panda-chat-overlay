@@ -793,17 +793,6 @@
         </div>
       </div>
 
-      <!-- 삭제된 sec-compat의 나머지 컨트롤 (호환 모드, 리셋 등) — hidden으로 유지 -->
-      <div style="display:none">
-        <select id="compatMode" onchange="update()">
-          <option value="stable">안정형</option>
-          <option value="balanced">균형형</option>
-          <option value="preserve">원형 유지</option>
-        </select>
-        <div class="toggle-switch on" id="resetInner"></div>
-        <div class="toggle-switch on" id="themeReset"></div>
-      </div>
-
       <div class="control-row">
         <span class="control-label">상단 바 숨기기 <span style="font-size:10px;color:var(--text-muted)">(내비+방송종료)</span></span>
         <div class="toggle-wrap" onclick="toggleSwitch('hideNav')">
@@ -863,28 +852,14 @@
 
     </div><!-- /phase-advanced -->
 
-    <!-- 플로팅 복사 버튼 -->
-    <div class="floating-copy">
-      <button class="floating-copy-btn" id="floatingCopyBtn" onclick="copyCSS()">CSS 복사하기</button>
-    </div>
   </div>
 
   <!-- 오른쪽: 미리보기 + CSS -->
   <div class="preview-area">
     <div class="preview-header">
-      <div>
-        <h2>미리보기</h2>
-        <div class="preview-meta" id="previewMeta">대상 테마: 전체 테마 / 호환 모드: 안정형</div>
-        <div class="preview-quick-dock" id="previewQuickDock">
-          <div class="preview-quick-buttons" id="previewQuickButtons">
-          </div>
-        </div>
-        <div id="previewEditHint" style="display:none"></div>
-        <div id="previewQuickStatus" style="display:none"></div>
-      </div>
-      <div class="preview-toolbar">
+      <div class="preview-header-left">
+        <span class="preview-label">미리보기</span>
         <div class="preview-theme-picker">
-          <label for="previewThemeSelect">미리보기 테마</label>
           <select id="previewThemeSelect" class="preview-theme-select" onchange="setPreviewThemeOverride(this.value)">
             <option value="auto">자동</option>
             <option value="default">default</option>
@@ -903,6 +878,25 @@
           <div class="bg-option" style="background:#4a7a4a;" onclick="setBg(this, '#2d5a2d')" title="게임 배경"></div>
         </div>
       </div>
+      <div class="preview-header-right">
+        <button class="copy-btn-primary" id="copyBtn" onclick="copyCSS()">CSS 복사</button>
+        <div style="position:relative;display:inline-block;">
+          <button class="copy-btn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
+          <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:130px;">
+            <button class="copy-btn" style="background:#3a5a7a;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettingsToBrowser()">브라우저 저장</button>
+            <button class="copy-btn" style="background:#4e5d8a;width:100%;font-size:11px;padding:6px 10px;" onclick="loadSettingsFromBrowser()">브라우저 불러오기</button>
+            <button class="copy-btn" style="background:#3f5a78;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettings()">파일 저장</button>
+            <button class="copy-btn" style="background:#5a4a6a;width:100%;font-size:11px;padding:6px 10px;" onclick="document.getElementById('loadSettingsFile').click()">파일 불러오기</button>
+          </div>
+        </div>
+        <input type="file" id="loadSettingsFile" accept=".json" style="display:none" onchange="loadSettings(event)">
+      </div>
+      <div class="preview-quick-dock" id="previewQuickDock">
+        <div class="preview-quick-buttons" id="previewQuickButtons">
+        </div>
+      </div>
+      <div id="previewEditHint" style="display:none"></div>
+      <div id="previewQuickStatus" style="display:none"></div>
     </div>
 
     <div class="preview-container" id="previewContainer">
@@ -1037,45 +1031,6 @@
 function toggleSection(titleEl) {
   const section = titleEl.closest('.section');
   section.classList.toggle('collapsed');
-  updateQuickNavHighlight();
-}
-
-function scrollToSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (!section) return;
-  if (section.classList.contains('collapsed')) {
-    section.classList.remove('collapsed');
-  }
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  updateQuickNavHighlight(sectionId);
-}
-
-function updateQuickNavHighlight(activeId) {
-  document.querySelectorAll('.quick-nav-btn').forEach(btn => {
-    const target = btn.getAttribute('onclick').match(/'([^']+)'/);
-    if (target) {
-      btn.classList.toggle('active', target[1] === activeId);
-    }
-  });
-}
-
-// 스크롤 위치에 따라 퀵 네비 하이라이트 업데이트
-function initScrollSpy() {
-  const panel = document.querySelector('.settings-panel');
-  const sections = panel.querySelectorAll('.section[id]');
-  const navBtns = document.querySelectorAll('.quick-nav-btn');
-
-  panel.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(sec => {
-      const rect = sec.getBoundingClientRect();
-      if (rect.top <= 180) current = sec.id;
-    });
-    navBtns.forEach(btn => {
-      const target = btn.getAttribute('onclick').match(/'([^']+)'/);
-      if (target) btn.classList.toggle('active', target[1] === current);
-    });
-  });
 }
 
 let currentTheme = 'pink';
@@ -1211,7 +1166,7 @@ function syncPhaseDashboard() {
   const layoutSummary = getLayoutSummary(v);
   const layoutNote = getIconPlacementLabel(v.iconPlacement);
   const designNote = `${presetCategoryLabels[currentPresetCategory] || '기본'} 카테고리`;
-  const detailValue = `${getCompatThemeLabel(v.compatTheme)} · ${getSelectText('compatMode')}`;
+  const detailValue = getCompatThemeLabel(v.compatTheme);
   const detailNote = getSavedSettingsLabel();
 
   const overviewLabel = document.getElementById('phaseOverviewLabel');
@@ -1558,9 +1513,6 @@ function applyTheme(name) {
   setVal('heartAmountColor', t.heartAmountColor);
   setVal('heartAmountHex', t.heartAmountColor);
   setSelect('compatTheme', t.compatTheme);
-  setSelect('compatMode', t.compatMode);
-  setToggle('resetInner', t.resetInner);
-  setToggle('themeReset', t.themeReset);
   setSelect('chatAlign', t.chatAlign || 'left');
 
   setRange('borderWidth', t.borderWidth || 0);
@@ -2011,9 +1963,9 @@ function getValues() {
     hideDonation: getToggle('hideDonation'),
     heartAmountColor: document.getElementById('heartAmountColor').value,
     compatTheme: document.getElementById('compatTheme').value,
-    compatMode: document.getElementById('compatMode').value,
-    resetInner: getToggle('resetInner'),
-    themeReset: getToggle('themeReset'),
+    compatMode: 'stable',    // full-injection 고정값
+    resetInner: true,         // full-injection 고정값
+    themeReset: true,         // full-injection 고정값
     chatAlign: document.getElementById('chatAlign').value,
     borderWidth: +document.getElementById('borderWidth').value,
     borderColor: document.getElementById('borderColor').value,
@@ -2092,15 +2044,12 @@ function updatePreview(v) {
   const previewSuffix = v.compatTheme === 'all'
     ? ` / 미리보기 테마: ${themeLabels[previewTheme]}${previewThemeOverride === 'auto' ? ' (자동)' : ''}`
     : '';
-  previewMeta.textContent = `CSS 대상: ${themeLabels[v.compatTheme]} / 호환 모드: ${compatModeLabels[v.compatMode]}${previewSuffix}`;
+  if (previewMeta) previewMeta.textContent = `CSS 대상: ${themeLabels[v.compatTheme]}${previewSuffix}`;
   previewChat.style.gap = `${v.chatGap}px`;
   previewChat.style.padding = `${v.containerPadding}px`;
   previewChat.style.fontFamily = v.fontFamily;
   const alignVal = v.chatAlign === 'right' ? 'flex-end' : 'flex-start';
   previewChat.style.alignItems = alignVal;
-  previewChat.dataset.compatMode = v.compatMode;
-  previewChat.dataset.resetInner = String(v.resetInner);
-  previewChat.dataset.themeReset = String(v.themeReset);
   setPreviewThemeClass(previewChat, previewTheme);
 
   previewChat.querySelectorAll('li.message__wrapper').forEach(item => {
@@ -2485,7 +2434,6 @@ currentTheme = initialTheme;
 syncThemeSelectionUI();
 applyTheme(initialTheme);
 switchPhase('preset');
-initScrollSpy();
 syncSavedSettingsState();
 syncPhaseDashboard();
 
