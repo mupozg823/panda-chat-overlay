@@ -386,6 +386,11 @@ function updateCSS(v) {
       boxShadowLine,
     );
   }
+  if (v.nickLetterSpacing > 0) {
+    messageNameDecls.push(
+      `letter-spacing: ${v.nickLetterSpacing}px !important;`,
+    );
+  }
   parts.push(buildRule(selectors.messageName, messageNameDecls));
 
   // 구분자 (실제 DOM: 클래스 없는 span — .message__nick > span:not(.message__name):not(.message__text))
@@ -451,6 +456,14 @@ function updateCSS(v) {
       `padding: ${v.textBgPadding}px ${v.textBgPadding + 2}px !important;`,
       `border-radius: ${v.textBgRadius}px !important;`,
       "display: inline-block !important;",
+    );
+  }
+  if (v.textBold) {
+    messageTextDecls.push("font-weight: 700 !important;");
+  }
+  if (v.textLetterSpacing > 0) {
+    messageTextDecls.push(
+      `letter-spacing: ${v.textLetterSpacing}px !important;`,
     );
   }
   parts.push(buildRule(selectors.messageText, messageTextDecls));
@@ -611,9 +624,14 @@ function updateCSS(v) {
       ]),
     );
 
+    const effectiveDonationFontSize =
+      v.donationFontSize > 0
+        ? v.donationFontSize
+        : Math.max(v.fontSize - 1, 11);
     parts.push(
       buildRule(selectors.donationText, [
         `color: ${v.donationTextColor} !important;`,
+        `font-size: ${effectiveDonationFontSize}px !important;`,
       ]),
     );
     parts.push(
@@ -675,9 +693,12 @@ function updateCSS(v) {
       ]),
     );
 
+    const effectiveNoticeFontSize =
+      v.noticeFontSize > 0 ? v.noticeFontSize : Math.max(v.fontSize - 1, 11);
     parts.push(
       buildRule(selectors.noticeText, [
         `color: ${v.noticeTextColor} !important;`,
+        `font-size: ${effectiveNoticeFontSize}px !important;`,
       ]),
     );
   }

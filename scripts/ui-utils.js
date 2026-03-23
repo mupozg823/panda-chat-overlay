@@ -170,6 +170,12 @@ function syncRangeDisplays(v) {
     textBgRadiusVal: `${v.textBgRadius}px`,
     textBgPaddingVal: `${v.textBgPadding}px`,
     rankBadgeSizeVal: `${v.rankBadgeSize}px`,
+    nickLetterSpacingVal: `${v.nickLetterSpacing}px`,
+    textLetterSpacingVal: `${v.textLetterSpacing}px`,
+    donationFontSizeVal:
+      v.donationFontSize === 0 ? "auto" : `${v.donationFontSize}px`,
+    noticeFontSizeVal:
+      v.noticeFontSize === 0 ? "auto" : `${v.noticeFontSize}px`,
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {

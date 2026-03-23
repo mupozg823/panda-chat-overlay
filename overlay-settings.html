@@ -450,6 +450,26 @@
           </div>
         </div>
         <div class="control-row">
+          <span class="control-label">텍스트 굵게</span>
+          <div class="toggle-wrap" onclick="toggleSwitch('textBold')">
+            <div class="toggle-switch" id="textBold"></div>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">닉네임 자간</span>
+          <div class="control-right">
+            <input type="range" id="nickLetterSpacing" min="0" max="5" value="0" step="0.5" oninput="update()">
+            <span class="value-display" id="nickLetterSpacingVal">0px</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <span class="control-label">텍스트 자간</span>
+          <div class="control-right">
+            <input type="range" id="textLetterSpacing" min="0" max="5" value="0" step="0.5" oninput="update()">
+            <span class="value-display" id="textLetterSpacingVal">0px</span>
+          </div>
+        </div>
+        <div class="control-row">
           <span class="control-label">텍스트 그림자</span>
           <div class="toggle-wrap" onclick="toggleSwitch('textShadow')">
             <div class="toggle-switch" id="textShadow"></div>
@@ -744,6 +764,14 @@
       </div>
 
       <div class="control-row">
+        <span class="control-label">후원 글자 크기</span>
+        <div class="control-right">
+          <input type="range" id="donationFontSize" min="0" max="24" value="0" oninput="update()">
+          <span class="value-display" id="donationFontSizeVal">auto</span>
+        </div>
+      </div>
+
+      <div class="control-row">
         <span class="control-label">후원 전체 숨기기</span>
         <div class="toggle-wrap" onclick="toggleSwitch('hideDonation')">
           <div class="toggle-switch" id="hideDonation"></div>
@@ -781,6 +809,14 @@
         <div class="control-right">
           <input type="range" id="noticeRadius" min="0" max="30" value="0" oninput="update()">
           <span class="value-display" id="noticeRadiusVal">auto</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">알림 글자 크기</span>
+        <div class="control-right">
+          <input type="range" id="noticeFontSize" min="0" max="24" value="0" oninput="update()">
+          <span class="value-display" id="noticeFontSizeVal">auto</span>
         </div>
       </div>
 
@@ -1328,7 +1364,11 @@ function syncRangeDisplays(v) {
     textBgOpacityVal: `${v.textBgOpacity}%`,
     textBgRadiusVal: `${v.textBgRadius}px`,
     textBgPaddingVal: `${v.textBgPadding}px`,
-    rankBadgeSizeVal: `${v.rankBadgeSize}px`
+    rankBadgeSizeVal: `${v.rankBadgeSize}px`,
+    nickLetterSpacingVal: `${v.nickLetterSpacing}px`,
+    textLetterSpacingVal: `${v.textLetterSpacing}px`,
+    donationFontSizeVal: v.donationFontSize === 0 ? 'auto' : `${v.donationFontSize}px`,
+    noticeFontSizeVal: v.noticeFontSize === 0 ? 'auto' : `${v.noticeFontSize}px`
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
@@ -1574,6 +1614,12 @@ function applyTheme(name) {
   setRange('textBgOpacity', t.textBgOpacity || 0);
   setRange('textBgRadius', t.textBgRadius !== undefined ? t.textBgRadius : 4);
   setRange('textBgPadding', t.textBgPadding !== undefined ? t.textBgPadding : 2);
+
+  setToggle('textBold', t.textBold);
+  setRange('nickLetterSpacing', t.nickLetterSpacing || 0);
+  setRange('textLetterSpacing', t.textLetterSpacing || 0);
+  setRange('donationFontSize', t.donationFontSize || 0);
+  setRange('noticeFontSize', t.noticeFontSize || 0);
 
   updatePresetHelper();
   syncPhaseDashboard();
@@ -1960,6 +2006,9 @@ function getValues() {
     fontSize: +document.getElementById('fontSize').value,
     textShadow: getToggle('textShadow'),
     nickBold: getToggle('nickBold'),
+    textBold: getToggle('textBold'),
+    nickLetterSpacing: +document.getElementById('nickLetterSpacing').value,
+    textLetterSpacing: +document.getElementById('textLetterSpacing').value,
     hideImg: getToggle('hideImg'),
     hideEnd: getToggle('hideEnd'),
     hideNav: getToggle('hideNav'),
@@ -1990,6 +2039,8 @@ function getValues() {
     gradDirection: document.getElementById('gradDirection').value,
     hideNotice: getToggle('hideNotice'),
     hideDonation: getToggle('hideDonation'),
+    donationFontSize: +document.getElementById('donationFontSize').value,
+    noticeFontSize: +document.getElementById('noticeFontSize').value,
     heartAmountColor: document.getElementById('heartAmountColor').value,
     compatTheme: document.getElementById('compatTheme').value,
     compatMode: 'stable',    // full-injection 고정값
@@ -2140,6 +2191,7 @@ function updatePreview(v) {
     name.style.borderRadius = layeredMode ? `${effectiveCapsuleRadius}px` : '0';
     name.style.background = layeredMode ? nameBubbleBackground : 'transparent';
     name.style.boxShadow = layeredMode ? effectiveBoxShadow : 'none';
+    name.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
 
     separator.textContent = v.separatorText;
     separator.style.display = (layeredMode || v.twoLine || !v.separatorText) ? 'none' : 'inline';
@@ -2176,6 +2228,8 @@ function updatePreview(v) {
       text.style.webkitBackdropFilter = 'none';
     }
     text.style.border = 'none';
+    text.style.fontWeight = v.textBold ? '700' : '';
+    text.style.letterSpacing = v.textLetterSpacing > 0 ? `${v.textLetterSpacing}px` : '';
 
     item.querySelectorAll('div.mr-1').forEach(wrap => {
       const hideBadge = v.hideIcon || (v.nickIcon && v.nickIcon !== '');
@@ -2230,7 +2284,8 @@ function updatePreview(v) {
 
     item.querySelectorAll('.heart__text').forEach(text => {
       text.style.color = v.donationTextColor;
-      text.style.fontSize = `${Math.max(v.fontSize - 1, 11)}px`;
+      const effectiveDonationFontSize = v.donationFontSize > 0 ? v.donationFontSize : Math.max(v.fontSize - 1, 11);
+      text.style.fontSize = `${effectiveDonationFontSize}px`;
       text.style.textShadow = shadow;
       text.style.background = 'transparent';
       text.style.border = 'none';
@@ -2264,7 +2319,8 @@ function updatePreview(v) {
 
     noticeText.style.display = 'inline';
     noticeText.style.color = v.noticeTextColor;
-    noticeText.style.fontSize = `${Math.max(v.fontSize - 1, 11)}px`;
+    const effectiveNoticeFontSize = v.noticeFontSize > 0 ? v.noticeFontSize : Math.max(v.fontSize - 1, 11);
+    noticeText.style.fontSize = `${effectiveNoticeFontSize}px`;
     noticeText.style.textShadow = shadow;
   });
 

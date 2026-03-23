@@ -247,6 +247,8 @@ function updatePreview(v) {
     name.style.borderRadius = layeredMode ? `${effectiveCapsuleRadius}px` : "0";
     name.style.background = layeredMode ? nameBubbleBackground : "transparent";
     name.style.boxShadow = layeredMode ? effectiveBoxShadow : "none";
+    name.style.letterSpacing =
+      v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
 
     separator.textContent = v.separatorText;
     separator.style.display =
@@ -296,6 +298,9 @@ function updatePreview(v) {
       text.style.webkitBackdropFilter = "none";
     }
     text.style.border = "none";
+    text.style.fontWeight = v.textBold ? "700" : "";
+    text.style.letterSpacing =
+      v.textLetterSpacing > 0 ? `${v.textLetterSpacing}px` : "";
 
     item.querySelectorAll("div.mr-1").forEach((wrap) => {
       const hideBadge = v.hideIcon || (v.nickIcon && v.nickIcon !== "");
@@ -352,7 +357,11 @@ function updatePreview(v) {
 
     item.querySelectorAll(".heart__text").forEach((text) => {
       text.style.color = v.donationTextColor;
-      text.style.fontSize = `${Math.max(v.fontSize - 1, 11)}px`;
+      const effectiveDonationFontSize =
+        v.donationFontSize > 0
+          ? v.donationFontSize
+          : Math.max(v.fontSize - 1, 11);
+      text.style.fontSize = `${effectiveDonationFontSize}px`;
       text.style.textShadow = shadow;
       text.style.background = "transparent";
       text.style.border = "none";
@@ -388,7 +397,9 @@ function updatePreview(v) {
 
     noticeText.style.display = "inline";
     noticeText.style.color = v.noticeTextColor;
-    noticeText.style.fontSize = `${Math.max(v.fontSize - 1, 11)}px`;
+    const effectiveNoticeFontSize =
+      v.noticeFontSize > 0 ? v.noticeFontSize : Math.max(v.fontSize - 1, 11);
+    noticeText.style.fontSize = `${effectiveNoticeFontSize}px`;
     noticeText.style.textShadow = shadow;
   });
 

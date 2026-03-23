@@ -150,6 +150,9 @@ function getValues() {
     fontSize: +document.getElementById("fontSize").value,
     textShadow: getToggle("textShadow"),
     nickBold: getToggle("nickBold"),
+    textBold: getToggle("textBold"),
+    nickLetterSpacing: +document.getElementById("nickLetterSpacing").value,
+    textLetterSpacing: +document.getElementById("textLetterSpacing").value,
     hideImg: getToggle("hideImg"),
     hideEnd: getToggle("hideEnd"),
     hideNav: getToggle("hideNav"),
@@ -180,6 +183,8 @@ function getValues() {
     gradDirection: document.getElementById("gradDirection").value,
     hideNotice: getToggle("hideNotice"),
     hideDonation: getToggle("hideDonation"),
+    donationFontSize: +document.getElementById("donationFontSize").value,
+    noticeFontSize: +document.getElementById("noticeFontSize").value,
     heartAmountColor: document.getElementById("heartAmountColor").value,
     compatTheme: document.getElementById("compatTheme").value,
     compatMode: "stable", // full-injection 고정값
