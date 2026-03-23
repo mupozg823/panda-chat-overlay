@@ -1146,23 +1146,11 @@ let rankBadgeIcons = {};
 let previewThemeOverride = 'auto';
 let currentPresetCategory = 'basic';
 let lastSettingsStatus = '텍스트 기본 편집은 팬더HP에서, 이곳은 오버레이 전용 설정 저장/복구를 담당합니다.';
-const phaseOrder = ['design', 'layout', 'detail'];
+const phaseOrder = ['preset', 'design', 'advanced'];
 const phaseMeta = {
-  design: {
-    step: 'STEP 1',
-    title: '프리셋',
-    text: '방송 톤에 맞는 시작 프리셋을 고릅니다. 과한 효과보다 읽힘과 안정성을 우선합니다.'
-  },
-  layout: {
-    step: 'STEP 2',
-    title: '레이아웃',
-    text: '채팅 구조와 아이콘 배치를 조정합니다. 프리셋에서 선택한 스타일을 기반으로 구조를 변경합니다.'
-  },
-  detail: {
-    step: 'STEP 3',
-    title: '오버레이 조정',
-    text: '호환성, 캡슐, 아이콘, 후원/알림처럼 팬더HP에서 제어할 수 없는 항목만 미세 조정합니다.'
-  }
+  preset: { label: '프리셋', icon: '🎨', note: '프리셋을 선택하세요' },
+  design: { label: '디자인', icon: '✏️', note: '말풍선, 레이아웃, 아이콘을 조정합니다' },
+  advanced: { label: '고급', icon: '⚙️', note: '후원, 배지, 표시 설정을 조정합니다' }
 };
 const presetCategoryLabels = {
   all: '전체',
@@ -1278,7 +1266,7 @@ function syncThemeSelectionUI() {
 function syncPhaseDashboard() {
   hydrateDashboardBindings();
   const phase = getCurrentPhase();
-  const meta = phaseMeta[phase] || phaseMeta.layout;
+  const meta = phaseMeta[phase] || phaseMeta.preset;
   const phaseIndex = Math.max(0, phaseOrder.indexOf(phase));
   const v = getValues();
   const preset = themeDescriptions[currentTheme] || { label: currentTheme };
@@ -1292,8 +1280,8 @@ function syncPhaseDashboard() {
   const overviewTitle = document.getElementById('phaseOverviewTitle');
   const overviewText = document.getElementById('phaseOverviewText');
   if (overviewLabel) overviewLabel.textContent = '현재 단계';
-  if (overviewTitle) overviewTitle.textContent = `${meta.step} · ${meta.title}`;
-  if (overviewText) overviewText.textContent = meta.text;
+  if (overviewTitle) overviewTitle.textContent = `${meta.icon} ${meta.label}`;
+  if (overviewText) overviewText.textContent = meta.note;
 
   const prevBtn = document.getElementById('phasePrevBtn');
   const nextBtn = document.getElementById('phaseNextBtn');
@@ -1303,7 +1291,7 @@ function syncPhaseDashboard() {
       nextBtn.textContent = 'CSS 복사하기';
     } else {
       const nextMeta = phaseMeta[phaseOrder[phaseIndex + 1]];
-      nextBtn.textContent = `${nextMeta.step} · ${nextMeta.title}`;
+      nextBtn.textContent = `${nextMeta.icon} ${nextMeta.label}`;
     }
   }
 
@@ -2558,7 +2546,7 @@ const initialTheme = themes[initialPreset] ? initialPreset : 'pink';
 currentTheme = initialTheme;
 syncThemeSelectionUI();
 applyTheme(initialTheme);
-switchPhase('design');
+switchPhase('preset');
 initScrollSpy();
 syncSavedSettingsState();
 syncPhaseDashboard();
