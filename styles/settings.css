@@ -1,17 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap");
 
 :root {
-  --bg-main: #1a1018;
-  --bg-panel: #1e1420;
-  --bg-panel-strong: #261828;
-  --bg-soft: #221626;
-  --line-soft: #3a2640;
-  --text-main: #f8f0f6;
-  --text-muted: #b8a0b4;
-  --accent: #f490c0;
-  --accent-soft: rgba(244, 144, 192, 0.1);
-  --success: #68dda8;
-  --shadow-soft: 0 18px 42px rgba(20, 8, 16, 0.5);
+  --bg-main: #0e0e10;
+  --bg-panel: #141416;
+  --bg-panel-strong: #1a1a1e;
+  --bg-soft: #18181c;
+  --line-soft: #2a2a30;
+  --text-main: #ededef;
+  --text-muted: #9a9aa0;
+  --accent: #e88aaf;
+  --accent-soft: rgba(232, 138, 175, 0.08);
+  --success: #5cc98a;
+  --shadow-soft: 0 18px 42px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -510,7 +510,7 @@ body {
   border-color: var(--accent);
   color: var(--text-main);
   font-weight: 600;
-  background: rgba(244, 144, 192, 0.08);
+  background: var(--accent-soft);
 }
 .theme-btn[data-hidden="true"] {
   display: none;
@@ -601,7 +601,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   background: var(--accent);
   cursor: pointer;
-  box-shadow: 0 0 6px rgba(244, 144, 192, 0.5);
+  box-shadow: 0 0 4px rgba(232, 138, 175, 0.35);
 }
 
 .value-display {
@@ -659,7 +659,7 @@ input[type="color"]::-webkit-color-swatch {
   position: relative;
   width: 40px;
   height: 22px;
-  background: #3a2640;
+  background: #333338;
   border-radius: 11px;
   transition: background 0.2s;
   cursor: pointer;
@@ -680,7 +680,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 .toggle-switch.on::after {
   transform: translateX(18px);
-  background: #1e1420;
+  background: #141416;
 }
 
 /* ──── 오른쪽 미리보기 + CSS 출력 ──── */
