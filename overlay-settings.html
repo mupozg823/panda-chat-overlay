@@ -999,48 +999,71 @@
            실제 default 테마에는 message__box가 없지만, kakaotalk/neon/box 등에서 존재.
            CSS 셀렉터는 대상이 없으면 무시되므로 호환성에 문제 없음. -->
       <ul class="preview-chat default" id="previewChat">
-        <li class="preview-item chat__notice--list chat default hide__opacity" id="pNotice1">
-          <p class="notice__text hide__opacity"><span>쥬쥬님</span>님께서 추천하셨습니다.</p>
+        <li class="preview-item chat__notice--list chat default whitespace-break-spaces hide__opacity"
+            id="pNotice1"
+            style="text-align: left; font-family: 'Jeju Gothic';">
+          <p class="notice__text hide__opacity"
+             style="color: rgb(122, 112, 244); font-size: 16px; text-shadow: -1px 0 #7a70f4, 1px 0 #7a70f4, 0 -1px #7a70f4, 0 1px #7a70f4;">
+            <span>쥬쥬님</span>님께서&nbsp;추천하셨습니다.
+          </p>
         </li>
-        <li class="preview-item message__wrapper chat default" id="pMsg1">
+        <li class="preview-item message__wrapper chat default hide__opacity"
+            id="pMsg1"
+            style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
             <p class="message__nick hide__opacity">
               <div class="mr-1 inline-block w-max align-text-bottom">
-                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                     data-src="/icons/ico_class_g.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#f59e0b"></circle>
               </svg>
               </div>
-              <span class="message__name" id="pNick1">루야♡ai</span>
-              <span class="message__separator">: </span>
-              <span class="message__text" id="pText1">극한의앙카총님 어서오세요~</span>
+              <span class="message__name" id="pNick1"
+                    style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡ai</span>
+              <span class="message__separator"
+                    style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
+              <span class="message__text" id="pText1"
+                    style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">극한의앙카총님 어서오세요~</span>
             </p>
           </div>
         </li>
-        <li class="preview-item message__wrapper chat default" id="pMsg2">
+        <li class="preview-item message__wrapper chat default hide__opacity"
+            id="pMsg2"
+            style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
             <p class="message__nick hide__opacity">
               <div class="mr-1 inline-block w-max align-text-bottom">
-                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                     data-src="/icons/ico_class_s.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#60a5fa"></circle>
               </svg>
               </div>
-              <span class="message__name" id="pNick2">이유♡루야♡김잇콩</span>
-              <span class="message__separator">: </span>
-              <span class="message__text" id="pText2">점검중~</span>
+              <span class="message__name" id="pNick2"
+                    style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">이유♡루야♡김잇콩</span>
+              <span class="message__separator"
+                    style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
+              <span class="message__text" id="pText2"
+                    style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">점검중~</span>
             </p>
           </div>
         </li>
-        <li class="preview-item message__wrapper chat default" id="pMsg3">
+        <li class="preview-item message__wrapper chat default hide__opacity"
+            id="pMsg3"
+            style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
             <p class="message__nick hide__opacity">
               <div class="mr-1 inline-block w-max align-text-bottom">
-                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                     data-src="/icons/ico_class_n.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#34d399"></circle>
               </svg>
               </div>
-              <span class="message__name" id="pNick3">극한의앙카총</span>
-              <span class="message__separator">: </span>
-              <span class="message__text" id="pText3">ㄹㄹㅇ</span>
+              <span class="message__name" id="pNick3"
+                    style="color: rgb(80, 220, 160); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">극한의앙카총</span>
+              <span class="message__separator"
+                    style="color: rgb(80, 220, 160); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
+              <span class="message__text" id="pText3"
+                    style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">ㄹㄹㅇ</span>
             </p>
           </div>
         </li>
@@ -1063,31 +1086,43 @@
             </div>
           </div>
         </li>
-        <li class="preview-item message__wrapper chat default" id="pMsg4">
+        <li class="preview-item message__wrapper chat default hide__opacity"
+            id="pMsg4"
+            style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
             <p class="message__nick hide__opacity">
               <div class="mr-1 inline-block w-max align-text-bottom">
-                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                     data-src="/icons/ico_class_b.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#a78bfa"></circle>
               </svg>
               </div>
-              <span class="message__name" id="pNick4">루야♡잇콩</span>
-              <span class="message__separator">: </span>
-              <span class="message__text" id="pText4">에헤</span>
+              <span class="message__name" id="pNick4"
+                    style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡잇콩</span>
+              <span class="message__separator"
+                    style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
+              <span class="message__text" id="pText4"
+                    style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">에헤</span>
             </p>
           </div>
         </li>
-        <li class="preview-item message__wrapper chat default" id="pMsg5">
+        <li class="preview-item message__wrapper chat default hide__opacity"
+            id="pMsg5"
+            style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
             <p class="message__nick hide__opacity">
               <div class="mr-1 inline-block w-max align-text-bottom">
-                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                     data-src="/icons/ico_class_d.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#f472b6"></circle>
               </svg>
               </div>
-              <span class="message__name" id="pNick5">하루너만의</span>
-              <span class="message__separator">: </span>
-              <span class="message__text" id="pText5">❤️ 침대숙문어 앙카형 ㄹㄹ용</span>
+              <span class="message__name" id="pNick5"
+                    style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">하루너만의</span>
+              <span class="message__separator"
+                    style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
+              <span class="message__text" id="pText5"
+                    style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">❤️ 침대숙문어 앙카형 ㄹㄹ용</span>
             </p>
           </div>
         </li>
