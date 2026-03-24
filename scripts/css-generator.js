@@ -245,6 +245,16 @@ function updateCSS(v) {
       "message__wrapper",
       " .message__nick svg",
     ),
+    messageBadgeWrap: selectorsForThemedListItems(
+      targets,
+      "message__wrapper",
+      " .mr-1",
+    ),
+    messageItemAfter: selectorsForThemedListItems(
+      targets,
+      "message__wrapper",
+      "::after",
+    ),
     donationItem: selectorsForThemedListItems(targets, "heart__wrapper"),
     donationShell: selectorsForThemedListItems(
       targets,
@@ -654,6 +664,55 @@ function updateCSS(v) {
     );
   }
 
+  // 배지 스타일링
+  if (!shouldHideBadge) {
+    const badgeFilters = [];
+    if (v.badgeGrayscale > 0)
+      badgeFilters.push(`grayscale(${v.badgeGrayscale}%)`);
+    if (v.badgeOpacity < 100) badgeFilters.push(`opacity(${v.badgeOpacity}%)`);
+    const badgeDecls = [];
+    if (badgeFilters.length > 0)
+      badgeDecls.push(`filter: ${badgeFilters.join(" ")} !important;`);
+    if (v.badgeScale !== 100)
+      badgeDecls.push(`transform: scale(${v.badgeScale / 100}) !important;`);
+    if (badgeDecls.length > 0) {
+      parts.push(buildRule(selectors.messageBadgeWrap, badgeDecls));
+    }
+  }
+
+  // 말풍선 꼬리
+  if (v.bubbleTail && v.messageStyle === "fullBubble") {
+    const tailSize = v.bubbleTailSize;
+    const bg = hexToRgb(v.bubbleColor);
+    const tailColor = `rgba(${bg.r},${bg.g},${bg.b},${(v.bubbleOpacity / 100).toFixed(2)})`;
+    parts.push(
+      buildRule(selectors.messageItemAfter, [
+        "content: '' !important;",
+        "position: absolute !important;",
+        `bottom: -${tailSize}px !important;`,
+        `${v.chatAlign === "right" ? "right" : "left"}: ${tailSize + 4}px !important;`,
+        "width: 0 !important;",
+        "height: 0 !important;",
+        `border-left: ${tailSize}px solid transparent !important;`,
+        `border-right: ${tailSize}px solid transparent !important;`,
+        `border-top: ${tailSize}px solid ${v.useGradient ? v.gradEnd : tailColor} !important;`,
+        "pointer-events: none !important;",
+      ]),
+    );
+  }
+
+  // 진입 애니메이션
+  if (v.animationType && v.animationType !== "none" && !v.noAnimation) {
+    const keyframes = {
+      fadeIn: `@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`,
+      slideUp: `@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }`,
+      slideLeft: `@keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }`,
+    };
+    if (keyframes[v.animationType]) {
+      parts.push(keyframes[v.animationType] + "\n");
+    }
+  }
+
   parts.push("/* 후원 메시지 */\n");
   if (v.hideDonation) {
     parts.push(
@@ -733,6 +792,19 @@ function updateCSS(v) {
           "object-fit: contain !important;",
           "display: inline-block !important;",
           "vertical-align: middle !important;",
+          ...(v.donationImgRadius > 0
+            ? [`border-radius: ${v.donationImgRadius}px !important;`]
+            : []),
+          ...(v.donationImgBorder > 0
+            ? [
+                `border: ${v.donationImgBorder}px solid rgba(255,255,255,0.3) !important;`,
+              ]
+            : []),
+          ...(v.donationImgShadow > 0
+            ? [
+                `box-shadow: 0 2px ${v.donationImgShadow}px rgba(0,0,0,0.3) !important;`,
+              ]
+            : []),
         ]),
       );
     }

@@ -305,6 +305,15 @@ function updatePreview(v) {
     item.querySelectorAll("div.mr-1").forEach((wrap) => {
       const hideBadge = v.hideIcon || (v.nickIcon && v.nickIcon !== "");
       wrap.style.display = hideBadge ? "none" : "inline-block";
+      if (!hideBadge) {
+        const filters = [];
+        if (v.badgeGrayscale > 0)
+          filters.push(`grayscale(${v.badgeGrayscale}%)`);
+        if (v.badgeOpacity < 100) filters.push(`opacity(${v.badgeOpacity}%)`);
+        wrap.style.filter = filters.length > 0 ? filters.join(" ") : "";
+        wrap.style.transform =
+          v.badgeScale !== 100 ? `scale(${v.badgeScale / 100})` : "";
+      }
     });
 
     syncPreviewAvatarTarget(item, name, v, {
@@ -356,6 +365,16 @@ function updatePreview(v) {
       image.style.display = v.hideImg ? "none" : "block";
       image.style.width = `${v.donationImgSize}px`;
       image.style.height = `${v.donationImgSize}px`;
+      image.style.borderRadius =
+        v.donationImgRadius > 0 ? `${v.donationImgRadius}px` : "";
+      image.style.border =
+        v.donationImgBorder > 0
+          ? `${v.donationImgBorder}px solid rgba(255,255,255,0.3)`
+          : "";
+      image.style.boxShadow =
+        v.donationImgShadow > 0
+          ? `0 2px ${v.donationImgShadow}px rgba(0,0,0,0.3)`
+          : "";
     }
 
     item.querySelectorAll(".heart__text").forEach((text) => {
@@ -544,6 +563,36 @@ function updatePreview(v) {
       z-index: -1;
       pointer-events: none;
     }\n`;
+  }
+  if (v.bubbleTail && v.messageStyle === "fullBubble") {
+    const ts = v.bubbleTailSize;
+    const bg = hexToRgb(v.bubbleColor);
+    const tc = v.useGradient
+      ? v.gradEnd
+      : `rgba(${bg.r},${bg.g},${bg.b},${(v.bubbleOpacity / 100).toFixed(2)})`;
+    const side = v.chatAlign === "right" ? "right" : "left";
+    decoCss += `#previewChat li.message__wrapper::after {
+      content: '' !important;
+      position: absolute;
+      bottom: -${ts}px;
+      ${side}: ${ts + 4}px;
+      width: 0; height: 0;
+      border-left: ${ts}px solid transparent;
+      border-right: ${ts}px solid transparent;
+      border-top: ${ts}px solid ${tc};
+      pointer-events: none;
+    }\n`;
+  }
+  if (v.animationType && v.animationType !== "none" && !v.noAnimation) {
+    const kf = {
+      fadeIn: "from{opacity:0}to{opacity:1}",
+      slideUp:
+        "from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}",
+      slideLeft:
+        "from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}",
+    };
+    if (kf[v.animationType])
+      decoCss += `@keyframes fadeIn{${kf[v.animationType]}}\n`;
   }
   decoStyle.textContent = decoCss;
 }

@@ -908,6 +908,28 @@
       </div>
 
       <div class="control-row">
+        <span class="control-label">이미지 둥글기</span>
+        <div class="control-right">
+          <input type="range" id="donationImgRadius" min="0" max="50" value="0" oninput="update()">
+          <span class="value-display" id="donationImgRadiusVal">0px</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">이미지 테두리</span>
+        <div class="control-right">
+          <input type="range" id="donationImgBorder" min="0" max="4" value="0" oninput="update()">
+          <span class="value-display" id="donationImgBorderVal">0px</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">이미지 그림자</span>
+        <div class="control-right">
+          <input type="range" id="donationImgShadow" min="0" max="20" value="0" oninput="update()">
+          <span class="value-display" id="donationImgShadowVal">0px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
         <span class="control-label">금액 강조색</span>
         <div class="color-input-wrap">
           <input type="color" id="heartAmountColor" value="#ff6b6b" oninput="onColorInput(this, 'heartAmountHex')">
@@ -1154,6 +1176,54 @@
         <span class="control-label">아이콘 숨기기</span>
         <div class="toggle-wrap" onclick="toggleSwitch('hideIcon')">
           <div class="toggle-switch on" id="hideIcon"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">배지 투명도</span>
+        <div class="control-right">
+          <input type="range" id="badgeOpacity" min="0" max="100" value="100" oninput="update()">
+          <span class="value-display" id="badgeOpacityVal">100%</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">배지 크기</span>
+        <div class="control-right">
+          <input type="range" id="badgeScale" min="50" max="150" value="100" oninput="update()">
+          <span class="value-display" id="badgeScaleVal">100%</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">배지 흑백</span>
+        <div class="control-right">
+          <input type="range" id="badgeGrayscale" min="0" max="100" value="0" oninput="update()">
+          <span class="value-display" id="badgeGrayscaleVal">0%</span>
+        </div>
+      </div>
+
+      <div class="sub-divider">말풍선 / 효과</div>
+      <div class="control-row">
+        <span class="control-label">말풍선 꼬리</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('bubbleTail')">
+          <div class="toggle-switch" id="bubbleTail"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">꼬리 크기</span>
+        <div class="control-right">
+          <input type="range" id="bubbleTailSize" min="4" max="12" value="6" oninput="update()">
+          <span class="value-display" id="bubbleTailSizeVal">6px</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">진입 애니메이션</span>
+        <div class="control-right">
+          <select id="animationType" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:13px;padding:4px 8px;">
+            <option value="none">없음</option>
+            <option value="fadeIn" selected>페이드인</option>
+            <option value="slideUp">슬라이드업</option>
+            <option value="slideLeft">슬라이드좌</option>
+          </select>
         </div>
       </div>
 
@@ -1670,7 +1740,14 @@ function syncRangeDisplays(v) {
     textBgBlurVal: `${v.textBgBlur}px`,
     nameFrameOpacityVal: `${v.nameFrameOpacity}%`,
     nameFramePaddingVal: `${v.nameFramePadding}px`,
-    nameFrameRadiusVal: `${v.nameFrameRadius}px`
+    nameFrameRadiusVal: `${v.nameFrameRadius}px`,
+    badgeOpacityVal: `${v.badgeOpacity}%`,
+    badgeScaleVal: `${v.badgeScale}%`,
+    badgeGrayscaleVal: `${v.badgeGrayscale}%`,
+    bubbleTailSizeVal: `${v.bubbleTailSize}px`,
+    donationImgRadiusVal: `${v.donationImgRadius}px`,
+    donationImgBorderVal: `${v.donationImgBorder}px`,
+    donationImgShadowVal: `${v.donationImgShadow}px`
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
@@ -1926,6 +2003,15 @@ function applyTheme(name) {
   setVal('donationGlowColor', t.donationGlowColor || '#ff8c00');
   setVal('donationGlowHex', t.donationGlowColor || '#ff8c00');
   setRange('donationGlowSize', t.donationGlowSize || 12);
+  setRange('donationImgRadius', t.donationImgRadius || 0);
+  setRange('donationImgBorder', t.donationImgBorder || 0);
+  setRange('donationImgShadow', t.donationImgShadow || 0);
+  setRange('badgeOpacity', t.badgeOpacity !== undefined ? t.badgeOpacity : 100);
+  setRange('badgeScale', t.badgeScale !== undefined ? t.badgeScale : 100);
+  setRange('badgeGrayscale', t.badgeGrayscale || 0);
+  setToggle('bubbleTail', t.bubbleTail || false);
+  setRange('bubbleTailSize', t.bubbleTailSize || 6);
+  setSelect('animationType', t.animationType || 'fadeIn');
   setToggle('donationDecoLine', t.donationDecoLine || false);
   setVal('donationDecoColor', t.donationDecoColor || '#ffd700');
   setVal('donationDecoHex', t.donationDecoColor || '#ffd700');
@@ -2342,6 +2428,15 @@ function getValues() {
     hideIcon: getToggle('hideIcon'),
     preventFade: getToggle('preventFade'),
     noAnimation: getToggle('noAnimation'),
+    badgeOpacity: +document.getElementById('badgeOpacity').value,
+    badgeScale: +document.getElementById('badgeScale').value,
+    badgeGrayscale: +document.getElementById('badgeGrayscale').value,
+    bubbleTail: getToggle('bubbleTail'),
+    bubbleTailSize: +document.getElementById('bubbleTailSize').value,
+    animationType: document.getElementById('animationType').value,
+    donationImgRadius: +document.getElementById('donationImgRadius').value,
+    donationImgBorder: +document.getElementById('donationImgBorder').value,
+    donationImgShadow: +document.getElementById('donationImgShadow').value,
     fontFamily: document.getElementById('fontFamily').value,
     messageStyle: document.getElementById('messageStyle').value,
     chatGap: +document.getElementById('chatGap').value,
@@ -2580,6 +2675,13 @@ function updatePreview(v) {
     item.querySelectorAll('div.mr-1').forEach(wrap => {
       const hideBadge = v.hideIcon || (v.nickIcon && v.nickIcon !== '');
       wrap.style.display = hideBadge ? 'none' : 'inline-block';
+      if (!hideBadge) {
+        const filters = [];
+        if (v.badgeGrayscale > 0) filters.push(`grayscale(${v.badgeGrayscale}%)`);
+        if (v.badgeOpacity < 100) filters.push(`opacity(${v.badgeOpacity}%)`);
+        wrap.style.filter = filters.length > 0 ? filters.join(' ') : '';
+        wrap.style.transform = v.badgeScale !== 100 ? `scale(${v.badgeScale / 100})` : '';
+      }
     });
 
     syncPreviewAvatarTarget(item, name, v, {
@@ -2628,6 +2730,9 @@ function updatePreview(v) {
       image.style.display = v.hideImg ? 'none' : 'block';
       image.style.width = `${v.donationImgSize}px`;
       image.style.height = `${v.donationImgSize}px`;
+      image.style.borderRadius = v.donationImgRadius > 0 ? `${v.donationImgRadius}px` : '';
+      image.style.border = v.donationImgBorder > 0 ? `${v.donationImgBorder}px solid rgba(255,255,255,0.3)` : '';
+      image.style.boxShadow = v.donationImgShadow > 0 ? `0 2px ${v.donationImgShadow}px rgba(0,0,0,0.3)` : '';
     }
 
     item.querySelectorAll('.heart__text').forEach(text => {
@@ -2808,6 +2913,27 @@ function updatePreview(v) {
       pointer-events: none;
     }\n`;
   }
+  if (v.bubbleTail && v.messageStyle === 'fullBubble') {
+    const ts = v.bubbleTailSize;
+    const bg = hexToRgb(v.bubbleColor);
+    const tc = v.useGradient ? v.gradEnd : `rgba(${bg.r},${bg.g},${bg.b},${(v.bubbleOpacity / 100).toFixed(2)})`;
+    const side = v.chatAlign === 'right' ? 'right' : 'left';
+    decoCss += `#previewChat li.message__wrapper::after {
+      content: '' !important;
+      position: absolute;
+      bottom: -${ts}px;
+      ${side}: ${ts + 4}px;
+      width: 0; height: 0;
+      border-left: ${ts}px solid transparent;
+      border-right: ${ts}px solid transparent;
+      border-top: ${ts}px solid ${tc};
+      pointer-events: none;
+    }\n`;
+  }
+  if (v.animationType && v.animationType !== 'none' && !v.noAnimation) {
+    const kf = { fadeIn: 'from{opacity:0}to{opacity:1}', slideUp: 'from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}', slideLeft: 'from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}' };
+    if (kf[v.animationType]) decoCss += `@keyframes fadeIn{${kf[v.animationType]}}\n`;
+  }
   decoStyle.textContent = decoCss;
 }
 
@@ -2983,7 +3109,13 @@ function feGetControls(type) {
         { label: '좌우여백', type: 'range', id: 'paddingX', min: 4, max: 30, unit: 'px' },
         { label: '상하여백', type: 'range', id: 'paddingY', min: 0, max: 16, unit: 'px' },
         { label: '메시지간격', type: 'range', id: 'chatGap', min: 0, max: 10, unit: 'px' },
-        { label: '최대너비', type: 'range', id: 'maxWidth', min: 50, max: 100, unit: '%' }
+        { label: '최대너비', type: 'range', id: 'maxWidth', min: 50, max: 100, unit: '%' },
+        { label: '말풍선꼬리', type: 'toggle', id: 'bubbleTail' },
+        { label: '꼬리크기', type: 'range', id: 'bubbleTailSize', min: 4, max: 12, unit: 'px' },
+        { label: '진입효과', type: 'select', id: 'animationType', options: [
+          { value: 'none', text: '없음' }, { value: 'fadeIn', text: '페이드인' },
+          { value: 'slideUp', text: '슬라이드업' }, { value: 'slideLeft', text: '슬라이드좌' }
+        ]}
       ]
     },
     nick: {
@@ -3052,6 +3184,9 @@ function feGetControls(type) {
         { label: '금액색', type: 'color', id: 'heartAmountColor', hex: 'heartAmountHex' },
         { label: '둥글기', type: 'range', id: 'donationRadius', min: 0, max: 30, unit: 'px' },
         { label: '이미지크기', type: 'range', id: 'donationImgSize', min: 0, max: 80, unit: 'px' },
+        { label: '이미지둥글기', type: 'range', id: 'donationImgRadius', min: 0, max: 50, unit: 'px' },
+        { label: '이미지테두리', type: 'range', id: 'donationImgBorder', min: 0, max: 4, unit: 'px' },
+        { label: '이미지그림자', type: 'range', id: 'donationImgShadow', min: 0, max: 20, unit: 'px' },
         { label: '그라데이션', type: 'toggle', id: 'donationUseGradient' },
         { label: '그라데이션시작', type: 'color', id: 'donationGradStart', hex: 'donationGradStartHex' },
         { label: '그라데이션끝', type: 'color', id: 'donationGradEnd', hex: 'donationGradEndHex' },
