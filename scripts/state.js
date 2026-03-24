@@ -186,6 +186,11 @@ function getValues() {
     donationFontSize: +document.getElementById("donationFontSize").value,
     noticeFontSize: +document.getElementById("noticeFontSize").value,
     heartAmountColor: document.getElementById("heartAmountColor").value,
+    donationDecoLine: getToggle("donationDecoLine"),
+    donationDecoColor: document.getElementById("donationDecoColor").value,
+    noticeAccentLine: getToggle("noticeAccentLine"),
+    noticeAccentColor: document.getElementById("noticeAccentColor").value,
+    noticeAccentWidth: +document.getElementById("noticeAccentWidth").value,
     compatTheme: document.getElementById("compatTheme").value,
     compatMode: "stable", // full-injection 고정값
     resetInner: true, // full-injection 고정값

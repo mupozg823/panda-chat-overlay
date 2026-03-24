@@ -903,6 +903,20 @@
         </div>
       </div>
 
+      <div class="control-row">
+        <span class="control-label">후원 장식 라인</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('donationDecoLine')">
+          <div class="toggle-switch" id="donationDecoLine"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">장식 라인 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="donationDecoColor" value="#ffd700" oninput="onColorInput(this, 'donationDecoHex')">
+          <input type="text" class="hex-input" id="donationDecoHex" value="#ffd700" oninput="onHexInput(this, 'donationDecoColor')">
+        </div>
+      </div>
+
       <div class="sub-divider">알림 / 추천</div>
 
       <div class="control-row">
@@ -942,6 +956,27 @@
         <div class="control-right">
           <input type="range" id="noticeFontSize" min="0" max="24" value="0" oninput="update()">
           <span class="value-display" id="noticeFontSizeVal">auto</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">알림 포인트 라인</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('noticeAccentLine')">
+          <div class="toggle-switch" id="noticeAccentLine"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">라인 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="noticeAccentColor" value="#88bbff" oninput="onColorInput(this, 'noticeAccentHex')">
+          <input type="text" class="hex-input" id="noticeAccentHex" value="#88bbff" oninput="onHexInput(this, 'noticeAccentColor')">
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">라인 두께</span>
+        <div class="control-right">
+          <input type="range" id="noticeAccentWidth" min="1" max="5" value="3" oninput="update()">
+          <span class="value-display" id="noticeAccentWidthVal">3px</span>
         </div>
       </div>
 
@@ -1538,7 +1573,8 @@ function syncRangeDisplays(v) {
     nickLetterSpacingVal: `${v.nickLetterSpacing}px`,
     textLetterSpacingVal: `${v.textLetterSpacing}px`,
     donationFontSizeVal: v.donationFontSize === 0 ? 'auto' : `${v.donationFontSize}px`,
-    noticeFontSizeVal: v.noticeFontSize === 0 ? 'auto' : `${v.noticeFontSize}px`
+    noticeFontSizeVal: v.noticeFontSize === 0 ? 'auto' : `${v.noticeFontSize}px`,
+    noticeAccentWidthVal: `${v.noticeAccentWidth}px`
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
@@ -1777,6 +1813,13 @@ function applyTheme(name) {
   setVal('donationTextHex', t.donationTextColor || t.textColor);
   setRange('donationRadius', t.donationRadius || 0);
   setRange('noticeRadius', t.noticeRadius || 0);
+  setToggle('donationDecoLine', t.donationDecoLine || false);
+  setVal('donationDecoColor', t.donationDecoColor || '#ffd700');
+  setVal('donationDecoHex', t.donationDecoColor || '#ffd700');
+  setToggle('noticeAccentLine', t.noticeAccentLine || false);
+  setVal('noticeAccentColor', t.noticeAccentColor || '#88bbff');
+  setVal('noticeAccentHex', t.noticeAccentColor || '#88bbff');
+  setRange('noticeAccentWidth', t.noticeAccentWidth || 3);
   setRange('capsuleRadius', Math.min(t.capsuleRadius !== undefined ? t.capsuleRadius : 50, 50));
 
   setVal('textBgColor', t.textBgColor || '#000000');
@@ -2212,6 +2255,11 @@ function getValues() {
     donationFontSize: +document.getElementById('donationFontSize').value,
     noticeFontSize: +document.getElementById('noticeFontSize').value,
     heartAmountColor: document.getElementById('heartAmountColor').value,
+    donationDecoLine: getToggle('donationDecoLine'),
+    donationDecoColor: document.getElementById('donationDecoColor').value,
+    noticeAccentLine: getToggle('noticeAccentLine'),
+    noticeAccentColor: document.getElementById('noticeAccentColor').value,
+    noticeAccentWidth: +document.getElementById('noticeAccentWidth').value,
     compatTheme: document.getElementById('compatTheme').value,
     compatMode: 'stable',    // full-injection 고정값
     resetInner: true,         // full-injection 고정값
@@ -2435,6 +2483,8 @@ function updatePreview(v) {
     item.style.boxShadow = effectiveBoxShadow;
     item.style.backdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
     item.style.webkitBackdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
+    item.style.position = v.donationDecoLine ? 'relative' : '';
+    item.style.overflow = v.donationDecoLine ? 'hidden' : '';
 
     shell.style.display = 'flex';
     shell.style.flexDirection = 'column';
@@ -2483,6 +2533,7 @@ function updatePreview(v) {
     item.style.width = 'max-content';
     item.style.maxWidth = `${v.maxWidth}%`;
     item.style.border = effectiveBorder;
+    item.style.borderLeft = v.noticeAccentLine ? `${v.noticeAccentWidth}px solid ${v.noticeAccentColor}` : '';
     item.style.boxShadow = effectiveBoxShadow;
     item.style.backdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
     item.style.webkitBackdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
@@ -2590,6 +2641,27 @@ function updatePreview(v) {
   } else {
     iconStyle.textContent = '#previewChat li.message__wrapper::before { content: none !important; } #previewChat .message__nick::before { content: none !important; } #previewChat .message__name::before { content: none !important; }';
   }
+
+  // 후원 장식 라인
+  let decoStyle = document.getElementById('decoStyle');
+  if (!decoStyle) {
+    decoStyle = document.createElement('style');
+    decoStyle.id = 'decoStyle';
+    document.head.appendChild(decoStyle);
+  }
+  let decoCss = '';
+  if (v.donationDecoLine && !v.hideDonation) {
+    decoCss += `#previewChat li.heart__wrapper::before {
+      content: '' !important;
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, ${v.donationDecoColor}, transparent);
+      pointer-events: none;
+      z-index: 1;
+    }\n`;
+  }
+  decoStyle.textContent = decoCss;
 }
 
 
@@ -2775,6 +2847,7 @@ function feGetControls(type) {
           ? '닉네임 글자와 캡슐 영역을 함께 조정합니다.'
           : '팬더HP에서 못 하는 닉네임 캡슐/구분자 중심 조정만 제공합니다.'),
       controls: [
+        { label: '닉네임색', type: 'color', id: 'nickColor', hex: 'nickHex' },
         { label: '구분자', type: 'text', id: 'separatorText' },
         ...(isLayered ? [
           { label: '캡슐배경', type: 'color', id: 'nameBubbleColor', hex: 'nameBubbleHex' },
@@ -2795,6 +2868,7 @@ function feGetControls(type) {
         ? '분리형에서는 본문이 별도 레이어로 렌더링됩니다.'
         : '팬더HP에서 없는 본문 레이어/배경 확장만 조정합니다.',
       controls: [
+        { label: '글자색', type: 'color', id: 'textColor', hex: 'textHex' },
         { label: '2줄모드', type: 'toggle', id: 'twoLine' },
         ...(isSplit ? [
           { label: '본문배경', type: 'color', id: 'bubbleColor', hex: 'bubbleHex' },
@@ -2823,7 +2897,9 @@ function feGetControls(type) {
         { label: '텍스트색', type: 'color', id: 'donationTextColor', hex: 'donationTextHex' },
         { label: '금액색', type: 'color', id: 'heartAmountColor', hex: 'heartAmountHex' },
         { label: '둥글기', type: 'range', id: 'donationRadius', min: 0, max: 30, unit: 'px' },
-        { label: '이미지크기', type: 'range', id: 'donationImgSize', min: 0, max: 80, unit: 'px' }
+        { label: '이미지크기', type: 'range', id: 'donationImgSize', min: 0, max: 80, unit: 'px' },
+        { label: '장식라인', type: 'toggle', id: 'donationDecoLine' },
+        { label: '라인색', type: 'color', id: 'donationDecoColor', hex: 'donationDecoHex' }
       ]
     },
     notice: {
@@ -2834,7 +2910,10 @@ function feGetControls(type) {
         { label: '배경색', type: 'color', id: 'noticeColor', hex: 'noticeHex' },
         { label: '투명도', type: 'range', id: 'noticeOpacity', min: 10, max: 90, unit: '%' },
         { label: '글자색', type: 'color', id: 'noticeTextColor', hex: 'noticeTextHex' },
-        { label: '둥글기', type: 'range', id: 'noticeRadius', min: 0, max: 30, unit: 'px' }
+        { label: '둥글기', type: 'range', id: 'noticeRadius', min: 0, max: 30, unit: 'px' },
+        { label: '포인트라인', type: 'toggle', id: 'noticeAccentLine' },
+        { label: '라인색', type: 'color', id: 'noticeAccentColor', hex: 'noticeAccentHex' },
+        { label: '라인두께', type: 'range', id: 'noticeAccentWidth', min: 1, max: 5, unit: 'px' }
       ]
     },
     avatar: {

@@ -338,6 +338,8 @@ function updatePreview(v) {
       v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : "none";
     item.style.webkitBackdropFilter =
       v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : "none";
+    item.style.position = v.donationDecoLine ? "relative" : "";
+    item.style.overflow = v.donationDecoLine ? "hidden" : "";
 
     shell.style.display = "flex";
     shell.style.flexDirection = "column";
@@ -389,6 +391,9 @@ function updatePreview(v) {
     item.style.width = "max-content";
     item.style.maxWidth = `${v.maxWidth}%`;
     item.style.border = effectiveBorder;
+    item.style.borderLeft = v.noticeAccentLine
+      ? `${v.noticeAccentWidth}px solid ${v.noticeAccentColor}`
+      : "";
     item.style.boxShadow = effectiveBoxShadow;
     item.style.backdropFilter =
       v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : "none";
@@ -500,4 +505,25 @@ function updatePreview(v) {
     iconStyle.textContent =
       "#previewChat li.message__wrapper::before { content: none !important; } #previewChat .message__nick::before { content: none !important; } #previewChat .message__name::before { content: none !important; }";
   }
+
+  // 후원 장식 라인 + 알림 포인트 라인
+  let decoStyle = document.getElementById("decoStyle");
+  if (!decoStyle) {
+    decoStyle = document.createElement("style");
+    decoStyle.id = "decoStyle";
+    document.head.appendChild(decoStyle);
+  }
+  let decoCss = "";
+  if (v.donationDecoLine && !v.hideDonation) {
+    decoCss += `#previewChat li.heart__wrapper::before {
+      content: '' !important;
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, ${v.donationDecoColor}, transparent);
+      pointer-events: none;
+      z-index: 1;
+    }\n`;
+  }
+  decoStyle.textContent = decoCss;
 }

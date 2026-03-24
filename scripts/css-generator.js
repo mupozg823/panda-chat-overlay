@@ -251,6 +251,11 @@ function updateCSS(v) {
       " .heart__text .mx-1",
       " .heart__text span.mx-1",
     ]),
+    donationItemBefore: selectorsForThemedListItems(
+      targets,
+      "heart__wrapper",
+      "::before",
+    ),
     noticeItem: selectorsForThemedListItems(targets, "chat__notice--list"),
     noticeText: selectorsForThemedListItems(
       targets,
@@ -681,6 +686,26 @@ function updateCSS(v) {
     }
   }
 
+  if (v.donationDecoLine && !v.hideDonation) {
+    parts.push(
+      buildRule(selectors.donationItemBefore, [
+        "content: '' !important;",
+        "position: absolute !important;",
+        "top: 0 !important;",
+        "left: 10% !important;",
+        "right: 10% !important;",
+        "height: 2px !important;",
+        `background: linear-gradient(90deg, transparent, ${v.donationDecoColor}, transparent) !important;`,
+        "pointer-events: none !important;",
+        "z-index: 1 !important;",
+      ]),
+    );
+    // donationItem needs position:relative for the ::before
+    parts.push(
+      buildRule(selectors.donationItem, ["position: relative !important;"]),
+    );
+  }
+
   parts.push("/* 알림/추천 */\n");
   if (v.hideNotice) {
     parts.push(buildRule(selectors.noticeItem, ["display: none !important;"]));
@@ -705,6 +730,11 @@ function updateCSS(v) {
         "list-style: none !important;",
         boxShadowLine,
         `align-self: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
+        ...(v.noticeAccentLine
+          ? [
+              `border-left: ${v.noticeAccentWidth}px solid ${v.noticeAccentColor} !important;`,
+            ]
+          : []),
       ]),
     );
 

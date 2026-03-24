@@ -256,6 +256,7 @@ function feGetControls(type) {
           ? "닉네임 글자와 캡슐 영역을 함께 조정합니다."
           : "팬더HP에서 못 하는 닉네임 캡슐/구분자 중심 조정만 제공합니다.",
       controls: [
+        { label: "닉네임색", type: "color", id: "nickColor", hex: "nickHex" },
         { label: "구분자", type: "text", id: "separatorText" },
         ...(isLayered
           ? [
@@ -323,6 +324,7 @@ function feGetControls(type) {
         ? "분리형에서는 본문이 별도 레이어로 렌더링됩니다."
         : "팬더HP에서 없는 본문 레이어/배경 확장만 조정합니다.",
       controls: [
+        { label: "글자색", type: "color", id: "textColor", hex: "textHex" },
         { label: "2줄모드", type: "toggle", id: "twoLine" },
         ...(isSplit
           ? [
@@ -468,6 +470,13 @@ function feGetControls(type) {
           max: 80,
           unit: "px",
         },
+        { label: "장식라인", type: "toggle", id: "donationDecoLine" },
+        {
+          label: "라인색",
+          type: "color",
+          id: "donationDecoColor",
+          hex: "donationDecoHex",
+        },
       ],
     },
     notice: {
@@ -497,6 +506,21 @@ function feGetControls(type) {
           id: "noticeRadius",
           min: 0,
           max: 30,
+          unit: "px",
+        },
+        { label: "포인트라인", type: "toggle", id: "noticeAccentLine" },
+        {
+          label: "라인색",
+          type: "color",
+          id: "noticeAccentColor",
+          hex: "noticeAccentHex",
+        },
+        {
+          label: "라인두께",
+          type: "range",
+          id: "noticeAccentWidth",
+          min: 1,
+          max: 5,
           unit: "px",
         },
       ],
