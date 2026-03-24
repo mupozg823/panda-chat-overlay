@@ -301,7 +301,7 @@ function updateCSS(v) {
       `gap: ${v.chatGap}px !important;`,
       "list-style: none !important;",
       "transition: none !important;",
-      `font-family: '${v.fontFamily}', sans-serif !important;`,
+      `font-family: ${v.fontFamily} !important;`,
     ]),
   );
 
