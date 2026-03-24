@@ -276,7 +276,7 @@
       <div class="control-row">
         <span class="control-label">투명도</span>
         <div class="control-right">
-          <input type="range" id="bubbleOpacity" min="10" max="100" value="55" oninput="update()">
+          <input type="range" id="bubbleOpacity" min="0" max="100" value="55" oninput="update()">
           <span class="value-display" id="bubbleOpacityVal">55%</span>
         </div>
       </div>
@@ -610,7 +610,7 @@
         <div class="control-row">
           <span class="control-label">그림자 크기</span>
           <div class="control-right">
-            <input type="range" id="textShadowSize" min="1" max="5" value="2" oninput="update()">
+            <input type="range" id="textShadowSize" min="0" max="5" value="2" oninput="update()">
             <span class="value-display" id="textShadowSizeVal">2px</span>
           </div>
         </div>
@@ -638,6 +638,8 @@
             <option value="'Dongle', sans-serif">동글</option>
             <option value="'Gowun Dodum', sans-serif">고운 도둠</option>
             <option value="'IBM Plex Sans KR', sans-serif">IBM Plex Sans KR</option>
+            <option value="'Courier New', 'Noto Sans KR', monospace">Courier New (모노)</option>
+            <option value="sans-serif">시스템 기본</option>
           </select>
         </div>
         <div class="control-row">
@@ -786,7 +788,7 @@
       <div class="control-row">
         <span class="control-label">투명도</span>
         <div class="control-right">
-          <input type="range" id="nameBubbleOpacity" min="10" max="100" value="90" oninput="update()">
+          <input type="range" id="nameBubbleOpacity" min="0" max="100" value="90" oninput="update()">
           <span class="value-display" id="nameBubbleOpacityVal">90%</span>
         </div>
       </div>
@@ -894,7 +896,7 @@
       <div class="control-row">
         <span class="control-label">후원 투명도</span>
         <div class="control-right">
-          <input type="range" id="donationOpacity" min="10" max="90" value="60" oninput="update()">
+          <input type="range" id="donationOpacity" min="0" max="90" value="60" oninput="update()">
           <span class="value-display" id="donationOpacityVal">60%</span>
         </div>
       </div>
@@ -1043,7 +1045,7 @@
       <div class="control-row">
         <span class="control-label">알림 투명도</span>
         <div class="control-right">
-          <input type="range" id="noticeOpacity" min="10" max="90" value="50" oninput="update()">
+          <input type="range" id="noticeOpacity" min="0" max="90" value="50" oninput="update()">
           <span class="value-display" id="noticeOpacityVal">50%</span>
         </div>
       </div>
@@ -1969,7 +1971,7 @@ function applyTheme(name) {
   setRange('boxShadowSize', t.boxShadowSize || 0);
   setVal('boxShadowColor', t.boxShadowColor || '#000000');
   setVal('boxShadowColorHex', t.boxShadowColor || '#000000');
-  setRange('textShadowSize', t.textShadowSize || 2);
+  setRange('textShadowSize', t.textShadowSize != null ? t.textShadowSize : 2);
   setVal('textShadowColor', t.textShadowColor || '#000000');
   setVal('textShadowColorHex', t.textShadowColor || '#000000');
   setRange('lineHeight', Math.round((t.lineHeight || 1.45) * 100));
