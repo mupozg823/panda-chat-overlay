@@ -235,7 +235,7 @@ function updateCSS(v) {
     donationImageWrap: selectorsForThemedListItems(
       targets,
       "heart__wrapper",
-      " .haert__image > div",
+      " .haert__image > div:not(:last-child)",
     ),
     donationImage: selectorsForThemedListItems(targets, "heart__wrapper", [
       " .haert__image > img",
@@ -301,6 +301,7 @@ function updateCSS(v) {
       `gap: ${v.chatGap}px !important;`,
       "list-style: none !important;",
       "transition: none !important;",
+      `font-family: '${v.fontFamily}', sans-serif !important;`,
     ]),
   );
 
@@ -350,6 +351,11 @@ function updateCSS(v) {
         `align-self: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
         "transition: none !important;",
       ].filter(Boolean);
+  messageItemDecls.push(
+    `font-size: ${v.fontSize}px !important;`,
+    `color: ${v.textColor} !important;`,
+    buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+  );
   parts.push(buildRule(selectors.messageItem, messageItemDecls));
 
   const messageBoxDecls = [
@@ -385,6 +391,13 @@ function updateCSS(v) {
       `border-radius: ${effectiveCapsuleRadius}px !important;`,
       boxShadowLine,
     );
+  }
+  messageNameDecls.push(
+    `color: ${v.nickColor} !important;`,
+    `font-size: ${effectiveNickFontSize}px !important;`,
+  );
+  if (v.nickBold) {
+    messageNameDecls.push("font-weight: 700 !important;");
   }
   if (v.nickLetterSpacing > 0) {
     messageNameDecls.push(
@@ -427,6 +440,7 @@ function updateCSS(v) {
 
   const messageTextDecls = [
     `display: ${layeredMode || v.twoLine ? "block" : "inline"} !important;`,
+    `color: ${v.textColor} !important;`,
     `margin-top: ${splitMode ? 0 : capsuleMode ? 4 : v.twoLine ? 2 : 0}px !important;`,
     `margin-left: ${layeredMode ? effectiveSplitTextOffsetX : 0}px !important;`,
   ];
@@ -632,6 +646,7 @@ function updateCSS(v) {
       buildRule(selectors.donationText, [
         `color: ${v.donationTextColor} !important;`,
         `font-size: ${effectiveDonationFontSize}px !important;`,
+        buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
       ]),
     );
     parts.push(
@@ -699,6 +714,7 @@ function updateCSS(v) {
       buildRule(selectors.noticeText, [
         `color: ${v.noticeTextColor} !important;`,
         `font-size: ${effectiveNoticeFontSize}px !important;`,
+        buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
       ]),
     );
   }
