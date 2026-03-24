@@ -62,6 +62,22 @@ function buildBubbleBackground(v) {
   return buildAlphaColor(v.bubbleColor, v.bubbleOpacity);
 }
 
+function buildDonationBackground(v) {
+  if (v.donationUseGradient) {
+    const start = hexToRgb(v.donationGradStart);
+    const end = hexToRgb(v.donationGradEnd);
+    const alpha = (v.donationOpacity / 100).toFixed(2);
+    return `linear-gradient(135deg, rgba(${start.r},${start.g},${start.b},${alpha}), rgba(${end.r},${end.g},${end.b},${alpha}))`;
+  }
+  return buildAlphaColor(v.donationColor, v.donationOpacity);
+}
+
+function buildDonationGlow(v) {
+  if (!v.donationGlow || v.donationGlowSize <= 0) return "none";
+  const c = hexToRgb(v.donationGlowColor);
+  return `0 0 ${v.donationGlowSize}px rgba(${c.r},${c.g},${c.b},0.35), 0 0 ${Math.round(v.donationGlowSize * 0.4)}px rgba(${c.r},${c.g},${c.b},0.2)`;
+}
+
 function buildNameBubbleBackground(v) {
   if (v.nameUseGradient) {
     const start = hexToRgb(v.nameGradStart);
@@ -133,10 +149,8 @@ function updateCSS(v) {
   const targets = getTargetThemes(v.compatTheme);
   const bubbleBackground = buildBubbleBackground(v);
   const nameBubbleBackground = buildNameBubbleBackground(v);
-  const donationBackground = buildAlphaColor(
-    v.donationColor,
-    v.donationOpacity,
-  );
+  const donationBackground = buildDonationBackground(v);
+  const donationGlowShadow = buildDonationGlow(v);
   const noticeBackground = buildAlphaColor(v.noticeColor, v.noticeOpacity);
   const effectiveBorderRadius = v.borderRadius >= 50 ? 999 : v.borderRadius;
   const effectiveDonationRadius =
@@ -210,6 +224,11 @@ function updateCSS(v) {
       targets,
       "message__wrapper",
       " .message__name::before",
+    ),
+    messageNameAfter: selectorsForThemedListItems(
+      targets,
+      "message__wrapper",
+      " .message__name::after",
     ),
     messageSeparator: selectorsForThemedListItems(
       targets,
@@ -411,6 +430,31 @@ function updateCSS(v) {
   }
   parts.push(buildRule(selectors.messageName, messageNameDecls));
 
+  // 닉네임 프레임 (::after)
+  if (v.nameFrameEnabled) {
+    const fAlpha = (v.nameFrameOpacity / 100).toFixed(2);
+    const fc1 = hexToRgb(v.nameFrameColor1);
+    const fc2 = hexToRgb(v.nameFrameColor2);
+    const pad = v.nameFramePadding;
+    parts.push(
+      buildRule(selectors.messageName, [
+        "position: relative !important;",
+        "z-index: 1 !important;",
+      ]),
+    );
+    parts.push(
+      buildRule(selectors.messageNameAfter, [
+        "content: '' !important;",
+        "position: absolute !important;",
+        `inset: -${pad}px -${pad + 4}px !important;`,
+        `background: linear-gradient(135deg, rgba(${fc1.r},${fc1.g},${fc1.b},${fAlpha}), rgba(${fc2.r},${fc2.g},${fc2.b},${fAlpha})) !important;`,
+        `border-radius: ${v.nameFrameRadius}px !important;`,
+        "z-index: -1 !important;",
+        "pointer-events: none !important;",
+      ]),
+    );
+  }
+
   // 구분자 (실제 DOM: 클래스 없는 span — .message__nick > span:not(.message__name):not(.message__text))
   const separatorDecls = [
     `display: ${layeredMode || v.twoLine || !v.separatorText ? "none" : "inline"} !important;`,
@@ -475,6 +519,12 @@ function updateCSS(v) {
       `padding: ${v.textBgPadding}px ${v.textBgPadding + 2}px !important;`,
       `border-radius: ${v.textBgRadius}px !important;`,
       "display: inline-block !important;",
+      ...(v.textBgBlur > 0
+        ? [
+            `backdrop-filter: blur(${v.textBgBlur}px) !important;`,
+            `-webkit-backdrop-filter: blur(${v.textBgBlur}px) !important;`,
+          ]
+        : []),
     );
   }
   if (v.textBold) {
@@ -627,7 +677,9 @@ function updateCSS(v) {
       "width: max-content !important;",
       `max-width: ${v.maxWidth}% !important;`,
       "list-style: none !important;",
-      boxShadowLine,
+      donationGlowShadow !== "none"
+        ? `box-shadow: ${donationGlowShadow} !important;`
+        : boxShadowLine,
       `align-self: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
       "transition: none !important;",
     ];

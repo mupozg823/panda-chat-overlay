@@ -506,6 +506,13 @@
           <span class="value-display" id="textBgPaddingVal">2px</span>
         </div>
       </div>
+      <div class="control-row">
+        <span class="control-label">텍스트 배경 블러</span>
+        <div class="control-right">
+          <input type="range" id="textBgBlur" min="0" max="16" value="0" oninput="update()">
+          <span class="value-display" id="textBgBlurVal">0px</span>
+        </div>
+      </div>
 
       <div class="sub-divider">구분자</div>
 
@@ -806,6 +813,49 @@
           <input type="text" class="hex-input" id="nameGradEndHex" value="#ff63b0" oninput="onHexInput(this, 'nameGradEnd')">
         </div>
       </div>
+      <div class="sub-divider">닉네임 프레임</div>
+      <div class="control-row">
+        <span class="control-label">닉네임 프레임</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('nameFrameEnabled')">
+          <div class="toggle-switch" id="nameFrameEnabled"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">프레임 색상1</span>
+        <div class="color-input-wrap">
+          <input type="color" id="nameFrameColor1" value="#e84393" oninput="onColorInput(this, 'nameFrameColor1Hex')">
+          <input type="text" class="hex-input" id="nameFrameColor1Hex" value="#e84393" oninput="onHexInput(this, 'nameFrameColor1')">
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">프레임 색상2</span>
+        <div class="color-input-wrap">
+          <input type="color" id="nameFrameColor2" value="#a855f7" oninput="onColorInput(this, 'nameFrameColor2Hex')">
+          <input type="text" class="hex-input" id="nameFrameColor2Hex" value="#a855f7" oninput="onHexInput(this, 'nameFrameColor2')">
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">프레임 투명도</span>
+        <div class="control-right">
+          <input type="range" id="nameFrameOpacity" min="10" max="100" value="30" oninput="update()">
+          <span class="value-display" id="nameFrameOpacityVal">30%</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">프레임 여백</span>
+        <div class="control-right">
+          <input type="range" id="nameFramePadding" min="0" max="12" value="4" oninput="update()">
+          <span class="value-display" id="nameFramePaddingVal">4px</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">프레임 둥글기</span>
+        <div class="control-right">
+          <input type="range" id="nameFrameRadius" min="0" max="24" value="12" oninput="update()">
+          <span class="value-display" id="nameFrameRadiusVal">12px</span>
+        </div>
+      </div>
+
       <div class="sub-divider">캡슐 둥글기</div>
 
       <div class="control-row">
@@ -900,6 +950,47 @@
         <span class="control-label">후원 전체 숨기기</span>
         <div class="toggle-wrap" onclick="toggleSwitch('hideDonation')">
           <div class="toggle-switch" id="hideDonation"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">후원 그라데이션</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('donationUseGradient')">
+          <div class="toggle-switch" id="donationUseGradient"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">그라데이션 시작</span>
+        <div class="color-input-wrap">
+          <input type="color" id="donationGradStart" value="#ff6b35" oninput="onColorInput(this, 'donationGradStartHex')">
+          <input type="text" class="hex-input" id="donationGradStartHex" value="#ff6b35" oninput="onHexInput(this, 'donationGradStart')">
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">그라데이션 끝</span>
+        <div class="color-input-wrap">
+          <input type="color" id="donationGradEnd" value="#ff2e63" oninput="onColorInput(this, 'donationGradEndHex')">
+          <input type="text" class="hex-input" id="donationGradEndHex" value="#ff2e63" oninput="onHexInput(this, 'donationGradEnd')">
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">후원 글로우</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('donationGlow')">
+          <div class="toggle-switch" id="donationGlow"></div>
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">글로우 색상</span>
+        <div class="color-input-wrap">
+          <input type="color" id="donationGlowColor" value="#ff8c00" oninput="onColorInput(this, 'donationGlowHex')">
+          <input type="text" class="hex-input" id="donationGlowHex" value="#ff8c00" oninput="onHexInput(this, 'donationGlowColor')">
+        </div>
+      </div>
+      <div class="control-row">
+        <span class="control-label">글로우 크기</span>
+        <div class="control-right">
+          <input type="range" id="donationGlowSize" min="0" max="30" value="12" oninput="update()">
+          <span class="value-display" id="donationGlowSizeVal">12px</span>
         </div>
       </div>
 
@@ -1574,7 +1665,12 @@ function syncRangeDisplays(v) {
     textLetterSpacingVal: `${v.textLetterSpacing}px`,
     donationFontSizeVal: v.donationFontSize === 0 ? 'auto' : `${v.donationFontSize}px`,
     noticeFontSizeVal: v.noticeFontSize === 0 ? 'auto' : `${v.noticeFontSize}px`,
-    noticeAccentWidthVal: `${v.noticeAccentWidth}px`
+    noticeAccentWidthVal: `${v.noticeAccentWidth}px`,
+    donationGlowSizeVal: `${v.donationGlowSize}px`,
+    textBgBlurVal: `${v.textBgBlur}px`,
+    nameFrameOpacityVal: `${v.nameFrameOpacity}%`,
+    nameFramePaddingVal: `${v.nameFramePadding}px`,
+    nameFrameRadiusVal: `${v.nameFrameRadius}px`
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
@@ -1813,6 +1909,23 @@ function applyTheme(name) {
   setVal('donationTextHex', t.donationTextColor || t.textColor);
   setRange('donationRadius', t.donationRadius || 0);
   setRange('noticeRadius', t.noticeRadius || 0);
+  setToggle('nameFrameEnabled', t.nameFrameEnabled || false);
+  setVal('nameFrameColor1', t.nameFrameColor1 || '#e84393');
+  setVal('nameFrameColor1Hex', t.nameFrameColor1 || '#e84393');
+  setVal('nameFrameColor2', t.nameFrameColor2 || '#a855f7');
+  setVal('nameFrameColor2Hex', t.nameFrameColor2 || '#a855f7');
+  setRange('nameFrameOpacity', t.nameFrameOpacity || 30);
+  setRange('nameFramePadding', t.nameFramePadding || 4);
+  setRange('nameFrameRadius', t.nameFrameRadius || 12);
+  setToggle('donationUseGradient', t.donationUseGradient || false);
+  setVal('donationGradStart', t.donationGradStart || '#ff6b35');
+  setVal('donationGradStartHex', t.donationGradStart || '#ff6b35');
+  setVal('donationGradEnd', t.donationGradEnd || '#ff2e63');
+  setVal('donationGradEndHex', t.donationGradEnd || '#ff2e63');
+  setToggle('donationGlow', t.donationGlow || false);
+  setVal('donationGlowColor', t.donationGlowColor || '#ff8c00');
+  setVal('donationGlowHex', t.donationGlowColor || '#ff8c00');
+  setRange('donationGlowSize', t.donationGlowSize || 12);
   setToggle('donationDecoLine', t.donationDecoLine || false);
   setVal('donationDecoColor', t.donationDecoColor || '#ffd700');
   setVal('donationDecoHex', t.donationDecoColor || '#ffd700');
@@ -1827,6 +1940,7 @@ function applyTheme(name) {
   setRange('textBgOpacity', t.textBgOpacity || 0);
   setRange('textBgRadius', t.textBgRadius !== undefined ? t.textBgRadius : 4);
   setRange('textBgPadding', t.textBgPadding !== undefined ? t.textBgPadding : 2);
+  setRange('textBgBlur', t.textBgBlur || 0);
 
   setToggle('textBold', t.textBold);
   setRange('nickLetterSpacing', t.nickLetterSpacing || 0);
@@ -2255,6 +2369,18 @@ function getValues() {
     donationFontSize: +document.getElementById('donationFontSize').value,
     noticeFontSize: +document.getElementById('noticeFontSize').value,
     heartAmountColor: document.getElementById('heartAmountColor').value,
+    nameFrameEnabled: getToggle('nameFrameEnabled'),
+    nameFrameColor1: document.getElementById('nameFrameColor1').value,
+    nameFrameColor2: document.getElementById('nameFrameColor2').value,
+    nameFrameOpacity: +document.getElementById('nameFrameOpacity').value,
+    nameFramePadding: +document.getElementById('nameFramePadding').value,
+    nameFrameRadius: +document.getElementById('nameFrameRadius').value,
+    donationUseGradient: getToggle('donationUseGradient'),
+    donationGradStart: document.getElementById('donationGradStart').value,
+    donationGradEnd: document.getElementById('donationGradEnd').value,
+    donationGlow: getToggle('donationGlow'),
+    donationGlowColor: document.getElementById('donationGlowColor').value,
+    donationGlowSize: +document.getElementById('donationGlowSize').value,
     donationDecoLine: getToggle('donationDecoLine'),
     donationDecoColor: document.getElementById('donationDecoColor').value,
     noticeAccentLine: getToggle('noticeAccentLine'),
@@ -2289,6 +2415,7 @@ function getValues() {
     textBgOpacity: +document.getElementById('textBgOpacity').value,
     textBgRadius: +document.getElementById('textBgRadius').value,
     textBgPadding: +document.getElementById('textBgPadding').value,
+    textBgBlur: +document.getElementById('textBgBlur').value,
     customCss: document.getElementById('customCss').value,
     useRankBadge: getToggle('useRankBadge'),
     rankBadgeSize: +document.getElementById('rankBadgeSize').value,
@@ -2307,7 +2434,8 @@ function updatePreview(v) {
   const previewTheme = getActivePreviewTheme(v);
   const bubbleBackground = buildBubbleBackground(v);
   const nameBubbleBackground = buildNameBubbleBackground(v);
-  const donationBackground = buildAlphaColor(v.donationColor, v.donationOpacity);
+  const donationBackground = buildDonationBackground(v);
+  const donationGlowShadow = buildDonationGlow(v);
   const noticeBackground = buildAlphaColor(v.noticeColor, v.noticeOpacity);
   const shadow = buildShadow(v.textShadow, v.textShadowSize, v.textShadowColor);
   const effectiveBorderRadius = v.borderRadius >= 50 ? 999 : v.borderRadius;
@@ -2435,8 +2563,8 @@ function updatePreview(v) {
       text.style.boxShadow = 'none';
       text.style.padding = `${v.textBgPadding}px ${v.textBgPadding + 2}px`;
       text.style.borderRadius = `${v.textBgRadius}px`;
-      text.style.backdropFilter = 'none';
-      text.style.webkitBackdropFilter = 'none';
+      text.style.backdropFilter = v.textBgBlur > 0 ? `blur(${v.textBgBlur}px)` : 'none';
+      text.style.webkitBackdropFilter = v.textBgBlur > 0 ? `blur(${v.textBgBlur}px)` : 'none';
     } else {
       text.style.background = 'transparent';
       text.style.boxShadow = 'none';
@@ -2480,7 +2608,7 @@ function updatePreview(v) {
     item.style.width = 'max-content';
     item.style.maxWidth = `${v.maxWidth}%`;
     item.style.border = effectiveBorder;
-    item.style.boxShadow = effectiveBoxShadow;
+    item.style.boxShadow = donationGlowShadow !== 'none' ? donationGlowShadow : effectiveBoxShadow;
     item.style.backdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
     item.style.webkitBackdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
     item.style.position = v.donationDecoLine ? 'relative' : '';
@@ -2659,6 +2787,25 @@ function updatePreview(v) {
       background: linear-gradient(90deg, transparent, ${v.donationDecoColor}, transparent);
       pointer-events: none;
       z-index: 1;
+    }\n`;
+  }
+  if (v.nameFrameEnabled) {
+    const fAlpha = (v.nameFrameOpacity / 100).toFixed(2);
+    const fc1 = hexToRgb(v.nameFrameColor1);
+    const fc2 = hexToRgb(v.nameFrameColor2);
+    const pad = v.nameFramePadding;
+    decoCss += `#previewChat .message__name {
+      position: relative !important;
+      z-index: 1 !important;
+    }
+    #previewChat .message__name::after {
+      content: '' !important;
+      position: absolute;
+      inset: -${pad}px -${pad + 4}px;
+      background: linear-gradient(135deg, rgba(${fc1.r},${fc1.g},${fc1.b},${fAlpha}), rgba(${fc2.r},${fc2.g},${fc2.b},${fAlpha}));
+      border-radius: ${v.nameFrameRadius}px;
+      z-index: -1;
+      pointer-events: none;
     }\n`;
   }
   decoStyle.textContent = decoCss;
@@ -2859,7 +3006,13 @@ function feGetControls(type) {
           { label: '그라데이션 끝', type: 'color', id: 'nameGradEnd', hex: 'nameGradEndHex' }
         ] : [
           { label: '닉네임 캡슐 배경은 분리형/닉네임 캡슐형에서만 표시됩니다.', type: 'info' }
-        ])
+        ]),
+        { label: '닉프레임', type: 'toggle', id: 'nameFrameEnabled' },
+        { label: '프레임색1', type: 'color', id: 'nameFrameColor1', hex: 'nameFrameColor1Hex' },
+        { label: '프레임색2', type: 'color', id: 'nameFrameColor2', hex: 'nameFrameColor2Hex' },
+        { label: '프레임투명도', type: 'range', id: 'nameFrameOpacity', min: 10, max: 100, unit: '%' },
+        { label: '프레임여백', type: 'range', id: 'nameFramePadding', min: 0, max: 12, unit: 'px' },
+        { label: '프레임둥글기', type: 'range', id: 'nameFrameRadius', min: 0, max: 24, unit: 'px' }
       ]
     },
     text: {
@@ -2882,7 +3035,8 @@ function feGetControls(type) {
           { label: '배경색', type: 'color', id: 'textBgColor', hex: 'textBgHex' },
           { label: '배경투명도', type: 'range', id: 'textBgOpacity', min: 0, max: 100, unit: '%' },
           { label: '배경둥글기', type: 'range', id: 'textBgRadius', min: 0, max: 16, unit: 'px' },
-          { label: '배경패딩', type: 'range', id: 'textBgPadding', min: 0, max: 12, unit: 'px' }
+          { label: '배경패딩', type: 'range', id: 'textBgPadding', min: 0, max: 12, unit: 'px' },
+          { label: '배경블러', type: 'range', id: 'textBgBlur', min: 0, max: 16, unit: 'px' }
         ])
       ]
     },
@@ -2898,6 +3052,12 @@ function feGetControls(type) {
         { label: '금액색', type: 'color', id: 'heartAmountColor', hex: 'heartAmountHex' },
         { label: '둥글기', type: 'range', id: 'donationRadius', min: 0, max: 30, unit: 'px' },
         { label: '이미지크기', type: 'range', id: 'donationImgSize', min: 0, max: 80, unit: 'px' },
+        { label: '그라데이션', type: 'toggle', id: 'donationUseGradient' },
+        { label: '그라데이션시작', type: 'color', id: 'donationGradStart', hex: 'donationGradStartHex' },
+        { label: '그라데이션끝', type: 'color', id: 'donationGradEnd', hex: 'donationGradEndHex' },
+        { label: '글로우', type: 'toggle', id: 'donationGlow' },
+        { label: '글로우색', type: 'color', id: 'donationGlowColor', hex: 'donationGlowHex' },
+        { label: '글로우크기', type: 'range', id: 'donationGlowSize', min: 0, max: 30, unit: 'px' },
         { label: '장식라인', type: 'toggle', id: 'donationDecoLine' },
         { label: '라인색', type: 'color', id: 'donationDecoColor', hex: 'donationDecoHex' }
       ]

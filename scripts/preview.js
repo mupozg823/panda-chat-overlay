@@ -118,10 +118,8 @@ function updatePreview(v) {
   const previewTheme = getActivePreviewTheme(v);
   const bubbleBackground = buildBubbleBackground(v);
   const nameBubbleBackground = buildNameBubbleBackground(v);
-  const donationBackground = buildAlphaColor(
-    v.donationColor,
-    v.donationOpacity,
-  );
+  const donationBackground = buildDonationBackground(v);
+  const donationGlowShadow = buildDonationGlow(v);
   const noticeBackground = buildAlphaColor(v.noticeColor, v.noticeOpacity);
   const shadow = buildShadow(v.textShadow, v.textShadowSize, v.textShadowColor);
   const effectiveBorderRadius = v.borderRadius >= 50 ? 999 : v.borderRadius;
@@ -287,8 +285,10 @@ function updatePreview(v) {
       text.style.boxShadow = "none";
       text.style.padding = `${v.textBgPadding}px ${v.textBgPadding + 2}px`;
       text.style.borderRadius = `${v.textBgRadius}px`;
-      text.style.backdropFilter = "none";
-      text.style.webkitBackdropFilter = "none";
+      text.style.backdropFilter =
+        v.textBgBlur > 0 ? `blur(${v.textBgBlur}px)` : "none";
+      text.style.webkitBackdropFilter =
+        v.textBgBlur > 0 ? `blur(${v.textBgBlur}px)` : "none";
     } else {
       text.style.background = "transparent";
       text.style.boxShadow = "none";
@@ -333,7 +333,8 @@ function updatePreview(v) {
     item.style.width = "max-content";
     item.style.maxWidth = `${v.maxWidth}%`;
     item.style.border = effectiveBorder;
-    item.style.boxShadow = effectiveBoxShadow;
+    item.style.boxShadow =
+      donationGlowShadow !== "none" ? donationGlowShadow : effectiveBoxShadow;
     item.style.backdropFilter =
       v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : "none";
     item.style.webkitBackdropFilter =
@@ -523,6 +524,25 @@ function updatePreview(v) {
       background: linear-gradient(90deg, transparent, ${v.donationDecoColor}, transparent);
       pointer-events: none;
       z-index: 1;
+    }\n`;
+  }
+  if (v.nameFrameEnabled) {
+    const fAlpha = (v.nameFrameOpacity / 100).toFixed(2);
+    const fc1 = hexToRgb(v.nameFrameColor1);
+    const fc2 = hexToRgb(v.nameFrameColor2);
+    const pad = v.nameFramePadding;
+    decoCss += `#previewChat .message__name {
+      position: relative !important;
+      z-index: 1 !important;
+    }
+    #previewChat .message__name::after {
+      content: '' !important;
+      position: absolute;
+      inset: -${pad}px -${pad + 4}px;
+      background: linear-gradient(135deg, rgba(${fc1.r},${fc1.g},${fc1.b},${fAlpha}), rgba(${fc2.r},${fc2.g},${fc2.b},${fAlpha}));
+      border-radius: ${v.nameFrameRadius}px;
+      z-index: -1;
+      pointer-events: none;
     }\n`;
   }
   decoStyle.textContent = decoCss;
