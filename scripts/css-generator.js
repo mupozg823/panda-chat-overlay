@@ -502,7 +502,7 @@ function updateCSS(v) {
         "pointer-events: none !important;",
         `background-color: ${avatarFrame.background} !important;`,
         `background-image: url('${escapeForCssUrl(v.customIconUrl)}') !important;`,
-        `background-size: ${avatarFrame.imageFit} !important;`,
+        `background-size: ${avatarFrame.bare ? "contain" : `${v.iconSize}px ${v.iconSize}px`} !important;`,
         "background-repeat: no-repeat !important;",
         "background-position: center !important;",
         `border-radius: ${avatarFrame.radius} !important;`,

@@ -424,7 +424,7 @@ function updatePreview(v) {
       pointer-events: none;
       background-color: ${avatarFrame.background};
       background-image: url('${escapeForCssUrl(v.customIconUrl)}');
-      background-size: ${avatarFrame.imageFit};
+      background-size: ${avatarFrame.bare ? "contain" : `${v.iconSize}px ${v.iconSize}px`};
       background-repeat: no-repeat;
       background-position: center;
       border-radius: ${avatarFrame.radius};
