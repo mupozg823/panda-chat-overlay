@@ -103,8 +103,6 @@ ul.board > li.message__wrapper .message__nick {
   display: inline !important;
   padding: 0 !important;
   margin: 0 !important;
-  align-items: center !important;
-  gap: 0 !important;
 }
 
 ul.default > li.message__wrapper .message__name,
@@ -547,8 +545,6 @@ ul > li.board.message__wrapper .message__nick {
   display: inline !important;
   padding: 0 !important;
   margin: 0 !important;
-  align-items: center !important;
-  gap: 0 !important;
 }
 
 ul > li.default.message__wrapper .message__name,

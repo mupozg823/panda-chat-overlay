@@ -795,7 +795,7 @@ function updateCSS(v) {
         "height: 0 !important;",
         `border-left: ${tailSize}px solid transparent !important;`,
         `border-right: ${tailSize}px solid transparent !important;`,
-        `border-top: ${tailSize}px solid ${v.useGradient ? v.gradEnd : tailColor} !important;`,
+        `border-top: ${tailSize}px solid ${v.useGradient ? buildAlphaColor(v.gradEnd, v.bubbleOpacity) : tailColor} !important;`,
         "pointer-events: none !important;",
       ]),
     );

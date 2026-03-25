@@ -1594,7 +1594,7 @@ function hydrateDashboardBindings() {
 }
 
 function getCurrentPhase() {
-  return document.querySelector('.phase-btn.active')?.dataset.phase || 'layout';
+  return document.querySelector('.phase-btn.active')?.dataset.phase || 'preset';
 }
 
 function getSelectText(id) {
@@ -1797,7 +1797,8 @@ function syncRangeDisplays(v) {
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
-    document.getElementById(id).textContent = text;
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
   });
 
   // 배경 흐림 CPU 부하 경고
@@ -2080,6 +2081,9 @@ function applyTheme(name) {
   setRange('textLetterSpacing', t.textLetterSpacing || 0);
   setRange('donationFontSize', t.donationFontSize || 0);
   setRange('noticeFontSize', t.noticeFontSize || 0);
+
+  // 등급별 배지
+  setToggle('useRankBadge', t.useRankBadge || false);
 
   // 직급별 아바타
   setToggle('useRankAvatar', t.useRankAvatar || false);
@@ -2882,6 +2886,7 @@ function updatePreview(v) {
     item.style.display = v.hideDonation ? 'none' : 'block';
     if (v.hideDonation) return;
 
+    item.style.marginTop = v.donationGap > 0 ? `${v.donationGap}px` : '';
     item.style.alignSelf = alignVal;
     item.style.background = donationBackground;
     item.style.borderRadius = `${effectiveDonationRadius}px`;
@@ -3147,7 +3152,9 @@ function saveSettings() {
   const now = new Date();
   const ts = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
   a.download = `panda_chat_overlay_${ts}.json`;
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
   URL.revokeObjectURL(url);
   setSettingsStatus(`파일 저장 완료 · ${ts}`);
 }
