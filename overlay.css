@@ -128,31 +128,31 @@ ul.board > li.message__wrapper .message__name {
 ul.default
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul.kakaotalk
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul.neon
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul.box
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul.roundbox
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul.balloon
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul.board
   > li.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text) {
+  > span:not(.message__name):not(.message__text):not(.message__id) {
   display: inline !important;
   color: #3a2a2e !important;
   text-shadow: none !important;
@@ -572,31 +572,31 @@ ul > li.board.message__wrapper .message__name {
 ul
   > li.default.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul
   > li.kakaotalk.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul
   > li.neon.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul
   > li.box.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul
   > li.roundbox.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul
   > li.balloon.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text),
+  > span:not(.message__name):not(.message__text):not(.message__id),
 ul
   > li.board.message__wrapper
   .message__nick
-  > span:not(.message__name):not(.message__text) {
+  > span:not(.message__name):not(.message__text):not(.message__id) {
   display: inline !important;
   color: #3a2a2e !important;
   text-shadow: none !important;

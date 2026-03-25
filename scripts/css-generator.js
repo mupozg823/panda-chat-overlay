@@ -41,9 +41,20 @@ function buildFontImport(fontFamilyValue) {
 
 function ensureKoreanFallback(fontFamilyValue) {
   if (fontFamilyValue.includes("Malgun Gothic")) return fontFamilyValue;
-  return fontFamilyValue.replace(
+  const replaced = fontFamilyValue.replace(
     /,\s*sans-serif/,
     ", 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif",
+  );
+  if (replaced !== fontFamilyValue) return replaced;
+  if (/^\s*sans-serif\s*$/.test(fontFamilyValue))
+    return "'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif";
+  if (/,\s*serif\s*$/.test(fontFamilyValue))
+    return fontFamilyValue.replace(
+      /,\s*serif\s*$/,
+      ", 'Malgun Gothic', 'Apple SD Gothic Neo', serif",
+    );
+  return (
+    fontFamilyValue + ", 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif"
   );
 }
 
@@ -185,11 +196,20 @@ function buildAvatarFrameTokens(v, frameSize) {
 }
 
 function escapeForCssContent(value) {
-  return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  return String(value)
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, "\\A ")
+    .replace(/\r/g, "");
 }
 
 function escapeForCssUrl(value) {
-  return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  return String(value)
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, "")
+    .replace(/\r/g, "")
+    .replace(/\)/g, "\\)");
 }
 
 // ──── CSS 출력 및 복사 ────
@@ -430,7 +450,7 @@ function updateCSS(v) {
         avatarAsLeft
           ? `padding: ${v.paddingY}px ${v.paddingX}px ${v.paddingY}px ${avatarInset + v.paddingX}px !important;`
           : `padding: ${v.paddingY}px ${v.paddingX}px !important;`,
-        avatarAsLeft ? "position: relative !important;" : "",
+        avatarAsLeft || v.bubbleTail ? "position: relative !important;" : "",
         "width: max-content !important;",
         `max-width: ${v.maxWidth}% !important;`,
         "list-style: none !important;",
@@ -443,6 +463,7 @@ function updateCSS(v) {
   messageItemDecls.push(
     `font-size: ${v.fontSize}px !important;`,
     `color: ${v.textColor} !important;`,
+    "font-family: inherit !important;",
     buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
   );
   parts.push(buildRule(selectors.messageItem, messageItemDecls));
@@ -562,6 +583,7 @@ function updateCSS(v) {
   const messageTextDecls = [
     `display: ${layeredMode || v.twoLine ? "block" : "inline"} !important;`,
     `color: ${v.textColor} !important;`,
+    "font-family: inherit !important;",
     `margin-top: ${splitMode ? 0 : capsuleMode ? 4 : v.twoLine ? 2 : 0}px !important;`,
     `margin-left: ${layeredMode ? effectiveSplitTextOffsetX : 0}px !important;`,
   ];

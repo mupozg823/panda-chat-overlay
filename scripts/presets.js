@@ -9,7 +9,14 @@ const widgetThemes = [
   "balloon",
   "board",
 ];
-const innerShellThemes = ["kakaotalk", "neon", "box", "roundbox", "balloon"];
+const innerShellThemes = [
+  "kakaotalk",
+  "neon",
+  "box",
+  "roundbox",
+  "balloon",
+  "board",
+];
 const themeLabels = {
   all: "전체 테마",
   default: "default",
