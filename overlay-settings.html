@@ -1104,6 +1104,32 @@
       </div>
     </div>
 
+    <!-- 직급별 아바타 이미지 -->
+    <div class="section collapsed" id="sec-rankavatar">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">직급별 아바타</span>
+        </span>
+      </div>
+      <div class="section-body">
+      <div class="section-note" style="margin-bottom:12px;color:#9eacd8;font-size:11px;line-height:1.5;">
+        BJ·매니저·VIP 등 직급에 따라 다른 아바타 이미지를 표시합니다. 아바타(닉네임 아이콘) 사용 시에만 동작하며, <code>:has()</code> 셀렉터를 사용하므로 <strong>OBS v29+</strong> 필요합니다.
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">직급별 아바타 사용</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('useRankAvatar')">
+          <div class="toggle-switch" id="useRankAvatar"></div>
+        </div>
+      </div>
+
+      <div id="rankAvatarPanel" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;" id="rankAvatarGrid">
+        </div>
+      </div>
+      </div>
+    </div>
+
     <!-- 등급별 배지 설정 -->
     <div class="section collapsed" id="sec-rankbadge">
       <div class="section-title" onclick="toggleSection(this)">
@@ -1487,6 +1513,7 @@ function toggleSection(titleEl) {
 let currentTheme = 'pink';
 let customIconDataUrl = '';
 let rankBadgeIcons = {};
+let rankAvatarImages = {};
 let previewThemeOverride = 'auto';
 let currentPresetCategory = 'basic';
 let lastSettingsStatus = '텍스트 기본 편집은 팬더HP에서, 이곳은 오버레이 전용 설정 저장/복구를 담당합니다.';
@@ -2036,6 +2063,13 @@ function applyTheme(name) {
   setRange('donationFontSize', t.donationFontSize || 0);
   setRange('noticeFontSize', t.noticeFontSize || 0);
 
+  // 직급별 아바타
+  setToggle('useRankAvatar', t.useRankAvatar || false);
+  rankAvatarImages = t.rankAvatarImages ? JSON.parse(JSON.stringify(t.rankAvatarImages)) : {};
+  const rankAvatarOn = document.getElementById('useRankAvatar').classList.contains('on');
+  document.getElementById('rankAvatarPanel').style.display = rankAvatarOn ? 'block' : 'none';
+  if (rankAvatarOn) initRankAvatarUI();
+
   updatePresetHelper();
   syncPhaseDashboard();
   update();
@@ -2201,6 +2235,90 @@ function onRankBadgeToggle() {
   update();
 }
 
+// === 직급별 아바타 ===
+function initRankAvatarUI() {
+  const grid = document.getElementById('rankAvatarGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  RANK_BADGES.forEach(rank => {
+    const saved = rankAvatarImages[rank.key] || '';
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 8px;background:#1a1a2e;border-radius:8px;';
+
+    const badge = document.createElement('span');
+    badge.style.cssText = 'width:18px;height:18px;border-radius:50%;background:' + rank.color + ';display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:bold;flex-shrink:0;';
+    badge.textContent = rank.key.toUpperCase().charAt(0);
+    row.appendChild(badge);
+
+    const label = document.createElement('span');
+    label.style.cssText = 'width:52px;font-size:12px;color:#ccc;flex-shrink:0;';
+    label.textContent = rank.label;
+    row.appendChild(label);
+
+    const preview = document.createElement('img');
+    preview.id = 'rankAvatarPreview_' + rank.key;
+    preview.style.cssText = 'width:24px;height:24px;border-radius:50%;object-fit:cover;border:1px solid #555;flex-shrink:0;' + (saved ? '' : 'display:none;');
+    if (saved) preview.src = saved;
+    row.appendChild(preview);
+
+    const urlInput = document.createElement('input');
+    urlInput.type = 'text';
+    urlInput.id = 'rankAvatarUrl_' + rank.key;
+    urlInput.placeholder = '이미지 URL (비우면 기본 아바타)';
+    urlInput.value = saved;
+    urlInput.style.cssText = 'flex:1;min-width:0;background:#2a2a4a;border:1px solid #3a3a5a;border-radius:5px;color:#ddd;font-size:11px;padding:2px 6px;';
+    urlInput.addEventListener('change', function() { onRankAvatarChange(rank.key); });
+    row.appendChild(urlInput);
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        urlInput.value = ev.target.result;
+        onRankAvatarChange(rank.key);
+      };
+      reader.readAsDataURL(file);
+    });
+    row.appendChild(fileInput);
+
+    const fileBtn = document.createElement('button');
+    fileBtn.textContent = '파일';
+    fileBtn.style.cssText = 'background:#3a5a7a;color:#ddd;border:none;border-radius:5px;padding:2px 8px;font-size:11px;cursor:pointer;flex-shrink:0;';
+    fileBtn.addEventListener('click', function() { fileInput.click(); });
+    row.appendChild(fileBtn);
+
+    grid.appendChild(row);
+  });
+}
+
+function onRankAvatarChange(key) {
+  const urlInput = document.getElementById('rankAvatarUrl_' + key);
+  const preview = document.getElementById('rankAvatarPreview_' + key);
+  const url = urlInput.value.trim();
+  rankAvatarImages[key] = url;
+  if (url) {
+    preview.src = url;
+    preview.style.display = '';
+  } else {
+    preview.style.display = 'none';
+  }
+  update();
+}
+
+function onRankAvatarToggle() {
+  const on = document.getElementById('useRankAvatar').classList.contains('on');
+  document.getElementById('rankAvatarPanel').style.display = on ? 'block' : 'none';
+  if (on && !document.getElementById('rankAvatarGrid').children.length) {
+    initRankAvatarUI();
+  }
+  update();
+}
+
 function setVal(id, val) {
   document.getElementById(id).value = val;
 }
@@ -2228,6 +2346,7 @@ function setToggle(id, val) {
 function toggleSwitch(id) {
   document.getElementById(id).classList.toggle('on');
   if (id === 'useRankBadge') onRankBadgeToggle();
+  else if (id === 'useRankAvatar') onRankAvatarToggle();
   else update();
 }
 
@@ -2286,6 +2405,7 @@ function _captureState() {
   inputs['__currentTheme'] = currentTheme;
   inputs['__customIconDataUrl'] = customIconDataUrl;
   inputs['__rankBadgeIcons'] = JSON.stringify(rankBadgeIcons);
+  inputs['__rankAvatarImages'] = JSON.stringify(rankAvatarImages);
   return JSON.stringify(inputs);
 }
 
@@ -2299,6 +2419,10 @@ function _restoreState(json) {
     }
     if (key === '__rankBadgeIcons') {
       try { rankBadgeIcons = JSON.parse(val); } catch(e) {}
+      return;
+    }
+    if (key === '__rankAvatarImages') {
+      try { rankAvatarImages = JSON.parse(val); } catch(e) {}
       return;
     }
     if (key === '__currentTheme') {
@@ -2330,6 +2454,10 @@ function _restoreState(json) {
   const rankOn = document.getElementById('useRankBadge').classList.contains('on');
   document.getElementById('rankBadgePanel').style.display = rankOn ? 'block' : 'none';
   if (rankOn) initRankBadgeUI();
+  // 직급별 아바타 패널 동기화
+  const rankAvatarOn = document.getElementById('useRankAvatar').classList.contains('on');
+  document.getElementById('rankAvatarPanel').style.display = rankAvatarOn ? 'block' : 'none';
+  if (rankAvatarOn) initRankAvatarUI();
   const v = getValues();
   syncThemeSelectionUI();
   syncPhaseDashboard();
@@ -2516,7 +2644,9 @@ function getValues() {
     customCss: document.getElementById('customCss').value,
     useRankBadge: getToggle('useRankBadge'),
     rankBadgeSize: +document.getElementById('rankBadgeSize').value,
-    rankBadgeIcons: JSON.parse(JSON.stringify(rankBadgeIcons))
+    rankBadgeIcons: JSON.parse(JSON.stringify(rankBadgeIcons)),
+    useRankAvatar: getToggle('useRankAvatar'),
+    rankAvatarImages: JSON.parse(JSON.stringify(rankAvatarImages))
   };
   if (v.nickIcon === '__local_character__') {
     v.nickIcon = '__custom_img__';

@@ -1,4 +1,44 @@
 "use strict";
+
+// ──── Google Fonts @import 매핑 ────
+const GOOGLE_FONT_IMPORTS = {
+  "Noto Sans KR":
+    "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap",
+  "Jeju Gothic":
+    "https://fonts.googleapis.com/css2?family=Jeju+Gothic&display=swap",
+  "Nanum Gothic":
+    "https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap",
+  "Nanum Myeongjo":
+    "https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&display=swap",
+  "Black Han Sans":
+    "https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap",
+  "Do Hyeon": "https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap",
+  Jua: "https://fonts.googleapis.com/css2?family=Jua&display=swap",
+  Gaegu:
+    "https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap",
+  "Hi Melody":
+    "https://fonts.googleapis.com/css2?family=Hi+Melody&display=swap",
+  "Gamja Flower":
+    "https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap",
+  "Single Day":
+    "https://fonts.googleapis.com/css2?family=Single+Day&display=swap",
+  Dongle:
+    "https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&display=swap",
+  "Gowun Dodum":
+    "https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap",
+  "IBM Plex Sans KR":
+    "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap",
+};
+
+function buildFontImport(fontFamilyValue) {
+  for (const [name, url] of Object.entries(GOOGLE_FONT_IMPORTS)) {
+    if (fontFamilyValue.includes(name)) {
+      return `@import url('${url}');\n`;
+    }
+  }
+  return "";
+}
+
 // ──── CSS 생성 헬퍼 ────
 function selectorsFor(themeNames, builders) {
   const builderList = Array.isArray(builders) ? builders : [builders];
@@ -308,6 +348,10 @@ function updateCSS(v) {
 
   const parts = [];
 
+  const fontImport = buildFontImport(v.fontFamily);
+  if (fontImport) {
+    parts.push(fontImport + "\n");
+  }
   parts.push("/* PandaTV Chat Overlay - full-injection output */\n\n");
   parts.push(
     buildRule("body, html", [
@@ -328,7 +372,8 @@ function updateCSS(v) {
       "flex-direction: column !important;",
       "justify-content: flex-end !important;",
       `align-items: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
-      "min-height: 100vh !important;",
+      "height: 100vh !important;",
+      "overflow: hidden !important;",
       "width: 100% !important;",
       "box-sizing: border-box !important;",
       `padding: ${v.containerPadding}px !important;`,
@@ -938,6 +983,30 @@ function updateCSS(v) {
     if (badgeParts.length) {
       parts.push("/* 등급별 배지 커스터마이즈 (:has() 필요 - OBS v29+) */\n");
       badgeParts.forEach((p) => parts.push(p));
+    }
+  }
+
+  // 직급별 아바타 이미지
+  if (v.useRankAvatar && v.rankAvatarImages && hasAvatar) {
+    const avatarParts = [];
+    RANK_BADGES.forEach((rank) => {
+      const url = v.rankAvatarImages[rank.key];
+      if (!url) return;
+      const rankHas = `:has(.mr-1 svg[data-src*="${rank.dataSrc}"])`;
+      const sel = selectorsForThemedListItems(
+        targets,
+        `message__wrapper${rankHas}`,
+        avatarAsLeft ? "::before" : " .message__name::before",
+      );
+      avatarParts.push(
+        buildRule(sel, [
+          `background-image: url('${escapeForCssUrl(url)}') !important;`,
+        ]),
+      );
+    });
+    if (avatarParts.length) {
+      parts.push("/* 직급별 아바타 이미지 (:has() 필요 - OBS v29+) */\n");
+      avatarParts.forEach((p) => parts.push(p));
     }
   }
 

@@ -31,11 +31,16 @@ ul.board {
   flex-direction: column !important;
   justify-content: flex-end !important;
   align-items: flex-start !important;
-  min-height: 100vh !important;
+  height: 100vh !important;
+  overflow: hidden !important;
   padding: 8px 10px !important;
   gap: 3px !important;
   list-style: none !important;
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-family:
+    "Noto Sans KR",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif !important;
   transition: none !important;
 }
 
@@ -118,13 +123,34 @@ ul.board > li.message__wrapper .message__name {
   text-shadow: none !important;
 }
 
-ul.default > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul.kakaotalk > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul.neon > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul.box > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul.roundbox > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul.balloon > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul.board > li.message__wrapper .message__nick > span:not(.message__name):not(.message__text) {
+ul.default
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul.kakaotalk
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul.neon
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul.box
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul.roundbox
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul.balloon
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul.board
+  > li.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text) {
   display: inline !important;
   color: #3a2a2e !important;
   text-shadow: none !important;
@@ -180,7 +206,7 @@ ul.roundbox > li.heart__wrapper,
 ul.balloon > li.heart__wrapper,
 ul.board > li.heart__wrapper {
   display: block !important;
-  background: rgba(255, 220, 235, 0.60) !important;
+  background: rgba(255, 220, 235, 0.6) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
   border: none !important;
@@ -315,7 +341,7 @@ ul.box > li.chat__notice--list,
 ul.roundbox > li.chat__notice--list,
 ul.balloon > li.chat__notice--list,
 ul.board > li.chat__notice--list {
-  background: rgba(255, 235, 245, 0.50) !important;
+  background: rgba(255, 235, 245, 0.5) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
   border: none !important;
@@ -536,13 +562,34 @@ ul > li.board.message__wrapper .message__name {
   text-shadow: none !important;
 }
 
-ul > li.default.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul > li.kakaotalk.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul > li.neon.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul > li.box.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul > li.roundbox.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul > li.balloon.message__wrapper .message__nick > span:not(.message__name):not(.message__text),
-ul > li.board.message__wrapper .message__nick > span:not(.message__name):not(.message__text) {
+ul
+  > li.default.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul
+  > li.kakaotalk.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul
+  > li.neon.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul
+  > li.box.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul
+  > li.roundbox.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul
+  > li.balloon.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text),
+ul
+  > li.board.message__wrapper
+  .message__nick
+  > span:not(.message__name):not(.message__text) {
   display: inline !important;
   color: #3a2a2e !important;
   text-shadow: none !important;
@@ -597,7 +644,7 @@ ul > li.roundbox.heart__wrapper,
 ul > li.balloon.heart__wrapper,
 ul > li.board.heart__wrapper {
   display: block !important;
-  background: rgba(255, 220, 235, 0.60) !important;
+  background: rgba(255, 220, 235, 0.6) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
   border: none !important;
@@ -731,7 +778,7 @@ ul > li.box.chat__notice--list,
 ul > li.roundbox.chat__notice--list,
 ul > li.balloon.chat__notice--list,
 ul > li.board.chat__notice--list {
-  background: rgba(255, 235, 245, 0.50) !important;
+  background: rgba(255, 235, 245, 0.5) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
   border: none !important;
