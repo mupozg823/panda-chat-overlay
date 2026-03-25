@@ -37,10 +37,7 @@ ul.board {
   gap: 3px !important;
   list-style: none !important;
   font-family:
-    "Noto Sans KR",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif !important;
+    "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif !important;
   transition: none !important;
 }
 
@@ -53,7 +50,8 @@ ul.roundbox > li.message__wrapper,
 ul.balloon > li.message__wrapper,
 ul.board > li.message__wrapper {
   display: block !important;
-  overflow: visible !important;
+  overflow: hidden !important;
+  word-break: break-word !important;
   background: rgba(255, 240, 245, 0.55) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
@@ -121,6 +119,10 @@ ul.board > li.message__wrapper .message__name {
   font-size: 13px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 ul.default
@@ -492,7 +494,8 @@ ul > li.roundbox.message__wrapper,
 ul > li.balloon.message__wrapper,
 ul > li.board.message__wrapper {
   display: block !important;
-  overflow: visible !important;
+  overflow: hidden !important;
+  word-break: break-word !important;
   background: rgba(255, 240, 245, 0.55) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
@@ -560,6 +563,10 @@ ul > li.board.message__wrapper .message__name {
   font-size: 13px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 ul

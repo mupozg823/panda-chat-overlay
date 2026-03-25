@@ -886,6 +886,14 @@
       <div class="section-body">
 
       <div class="control-row">
+        <span class="control-label">후원 상하 간격</span>
+        <div class="control-right">
+          <input type="range" id="donationGap" min="0" max="20" value="0" oninput="update()">
+          <span class="value-display" id="donationGapVal">0px</span>
+        </div>
+      </div>
+
+      <div class="control-row">
         <span class="control-label">후원 배경색</span>
         <div class="color-input-wrap">
           <input type="color" id="donationColor" value="#ffdceb" oninput="onColorInput(this, 'donationHex')">
@@ -1770,6 +1778,7 @@ function syncRangeDisplays(v) {
     rankBadgeSizeVal: `${v.rankBadgeSize}px`,
     nickLetterSpacingVal: `${v.nickLetterSpacing}px`,
     textLetterSpacingVal: `${v.textLetterSpacing}px`,
+    donationGapVal: `${v.donationGap}px`,
     donationFontSizeVal: v.donationFontSize === 0 ? 'auto' : `${v.donationFontSize}px`,
     noticeFontSizeVal: v.noticeFontSize === 0 ? 'auto' : `${v.noticeFontSize}px`,
     noticeAccentWidthVal: `${v.noticeAccentWidth}px`,
@@ -2040,6 +2049,7 @@ function applyTheme(name) {
   setVal('donationGlowColor', t.donationGlowColor || '#ff8c00');
   setVal('donationGlowHex', t.donationGlowColor || '#ff8c00');
   setRange('donationGlowSize', t.donationGlowSize || 12);
+  setRange('donationGap', t.donationGap || 0);
   setRange('donationImgRadius', t.donationImgRadius || 0);
   setRange('donationImgBorder', t.donationImgBorder || 0);
   setRange('donationImgShadow', t.donationImgShadow || 0);
@@ -2599,6 +2609,7 @@ function getValues() {
     gradDirection: document.getElementById('gradDirection').value,
     hideNotice: getToggle('hideNotice'),
     hideDonation: getToggle('hideDonation'),
+    donationGap: +document.getElementById('donationGap').value,
     donationFontSize: +document.getElementById('donationFontSize').value,
     noticeFontSize: +document.getElementById('noticeFontSize').value,
     heartAmountColor: document.getElementById('heartAmountColor').value,

@@ -39,6 +39,14 @@ function buildFontImport(fontFamilyValue) {
   return "";
 }
 
+function ensureKoreanFallback(fontFamilyValue) {
+  if (fontFamilyValue.includes("Malgun Gothic")) return fontFamilyValue;
+  return fontFamilyValue.replace(
+    /,\s*sans-serif/,
+    ", 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif",
+  );
+}
+
 // ──── CSS 생성 헬퍼 ────
 function selectorsFor(themeNames, builders) {
   const builderList = Array.isArray(builders) ? builders : [builders];
@@ -380,7 +388,7 @@ function updateCSS(v) {
       `gap: ${v.chatGap}px !important;`,
       "list-style: none !important;",
       "transition: none !important;",
-      `font-family: ${v.fontFamily} !important;`,
+      `font-family: ${ensureKoreanFallback(v.fontFamily)} !important;`,
     ]),
   );
 
@@ -390,8 +398,9 @@ function updateCSS(v) {
         "all: unset !important;",
         "display: block !important;",
         "position: relative !important;",
-        "overflow: visible !important;",
+        "overflow: hidden !important;",
         "box-sizing: border-box !important;",
+        "word-break: break-word !important;",
         "background: transparent !important;",
         "backdrop-filter: none !important;",
         "-webkit-backdrop-filter: none !important;",
@@ -406,8 +415,9 @@ function updateCSS(v) {
     : [
         "all: unset !important;",
         "display: block !important;",
-        "overflow: visible !important;",
+        "overflow: hidden !important;",
         "box-sizing: border-box !important;",
+        "word-break: break-word !important;",
         `background: ${bubbleBackground} !important;`,
         v.blurAmount > 0
           ? `backdrop-filter: blur(${v.blurAmount}px) !important;`
@@ -474,6 +484,10 @@ function updateCSS(v) {
   messageNameDecls.push(
     `color: ${v.nickColor} !important;`,
     `font-size: ${effectiveNickFontSize}px !important;`,
+    "max-width: 100% !important;",
+    "overflow: hidden !important;",
+    "text-overflow: ellipsis !important;",
+    "white-space: nowrap !important;",
   );
   if (v.nickBold) {
     messageNameDecls.push("font-weight: 700 !important;");
@@ -501,7 +515,10 @@ function updateCSS(v) {
       buildRule(selectors.messageNameAfter, [
         "content: '' !important;",
         "position: absolute !important;",
-        `inset: -${pad}px -${pad + 4}px !important;`,
+        `top: -${pad}px !important;`,
+        `right: -${pad + 4}px !important;`,
+        `bottom: -${pad}px !important;`,
+        `left: -${pad + 4}px !important;`,
         `background: linear-gradient(135deg, rgba(${fc1.r},${fc1.g},${fc1.b},${fAlpha}), rgba(${fc2.r},${fc2.g},${fc2.b},${fAlpha})) !important;`,
         `border-radius: ${v.nameFrameRadius}px !important;`,
         "z-index: -1 !important;",
@@ -786,7 +803,11 @@ function updateCSS(v) {
         : boxShadowLine,
       `align-self: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
       "transition: none !important;",
+      "word-break: break-word !important;",
     ];
+    if (v.donationGap > 0) {
+      donationDecls.push(`margin-top: ${v.donationGap}px !important;`);
+    }
     parts.push(buildRule(selectors.donationItem, donationDecls));
 
     parts.push(
