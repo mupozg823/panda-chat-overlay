@@ -672,12 +672,12 @@ function updateCSS(v) {
     parts.push(
       buildRule(selectors.messageNameBefore, [
         "content: '' !important;",
-        "display: inline-flex !important;",
-        "align-items: center !important;",
-        "justify-content: center !important;",
+        "display: inline-block !important;",
         "box-sizing: border-box !important;",
         `width: ${v.iconSize}px !important;`,
         `height: ${v.iconSize}px !important;`,
+        `min-width: ${v.iconSize}px !important;`,
+        `min-height: ${v.iconSize}px !important;`,
         `background-color: ${avatarFrame.background} !important;`,
         `background-image: url('${escapeForCssUrl(v.customIconUrl)}') !important;`,
         `background-size: ${avatarFrame.imageFit} !important;`,
@@ -694,14 +694,15 @@ function updateCSS(v) {
     parts.push(
       buildRule(selectors.messageNameBefore, [
         `content: '${escapeForCssContent(v.nickIcon)}' !important;`,
-        "display: inline-flex !important;",
-        "align-items: center !important;",
-        "justify-content: center !important;",
+        "display: inline-block !important;",
         "box-sizing: border-box !important;",
         `width: ${v.iconSize}px !important;`,
         `height: ${v.iconSize}px !important;`,
+        `min-width: ${v.iconSize}px !important;`,
+        `min-height: ${v.iconSize}px !important;`,
         `font-size: ${v.iconSize}px !important;`,
         "line-height: 1 !important;",
+        "text-align: center !important;",
         "margin-right: 4px !important;",
         "vertical-align: -2px !important;",
         `background: ${avatarFrame.background} !important;`,
@@ -732,13 +733,28 @@ function updateCSS(v) {
     if (v.badgeGrayscale > 0)
       badgeFilters.push(`grayscale(${v.badgeGrayscale}%)`);
     if (v.badgeOpacity < 100) badgeFilters.push(`opacity(${v.badgeOpacity}%)`);
-    const badgeDecls = [];
+    const badgeWrapDecls = [];
     if (badgeFilters.length > 0)
-      badgeDecls.push(`filter: ${badgeFilters.join(" ")} !important;`);
-    if (v.badgeScale !== 100)
-      badgeDecls.push(`transform: scale(${v.badgeScale / 100}) !important;`);
-    if (badgeDecls.length > 0) {
-      parts.push(buildRule(selectors.messageBadgeWrap, badgeDecls));
+      badgeWrapDecls.push(`filter: ${badgeFilters.join(" ")} !important;`);
+    if (v.badgeScale !== 100) {
+      const badgePixel = Math.round((16 * v.badgeScale) / 100);
+      badgeWrapDecls.push(
+        `width: ${badgePixel}px !important;`,
+        `height: ${badgePixel}px !important;`,
+        "display: inline-flex !important;",
+        "align-items: center !important;",
+        "justify-content: center !important;",
+        "overflow: hidden !important;",
+      );
+      parts.push(
+        buildRule(selectors.messageBadge, [
+          `width: ${badgePixel}px !important;`,
+          `height: ${badgePixel}px !important;`,
+        ]),
+      );
+    }
+    if (badgeWrapDecls.length > 0) {
+      parts.push(buildRule(selectors.messageBadgeWrap, badgeWrapDecls));
     }
   }
 
