@@ -79,7 +79,7 @@
             <span class="tutorial-index">C</span>
             <div class="tutorial-copy">
               <strong>크기 설정</strong>
-              <p>너비 <em>500</em>, 높이 <em>800</em> 권장 (방송 레이아웃에 맞게 조정)</p>
+              <p>미리보기 아래 <em>OBS 브라우저 소스 크기</em> 가이드를 참고하세요 — 설정에 맞는 최적 크기가 자동 계산됩니다.</p>
             </div>
           </div>
           <div class="tutorial-step">
@@ -1303,6 +1303,7 @@
     <div class="preview-header">
       <div class="preview-header-left">
         <span class="preview-label">미리보기</span>
+        <span id="obsSizeHint" style="font-size:10px;color:#8a9cc9;margin-left:6px;background:rgba(100,120,180,0.15);padding:2px 8px;border-radius:10px;white-space:nowrap;">OBS 권장: 400×700</span>
         <div class="preview-theme-picker">
           <select id="previewThemeSelect" class="preview-theme-select" onchange="setPreviewThemeOverride(this.value)">
             <option value="auto">자동</option>
@@ -1476,6 +1477,13 @@
           </div>
         </li>
       </ul>
+    </div>
+
+    <!-- OBS 소스 크기 가이드 -->
+    <div id="obsSizeGuide" style="display:flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(80,100,160,0.12);border-radius:8px;margin:0 12px 6px 12px;font-size:11px;color:#9eacd8;">
+      <span style="font-weight:600;">OBS 브라우저 소스 크기</span>
+      <span id="obsSizeGuideValue" style="color:#c4d0f0;font-weight:700;">너비 400, 높이 700</span>
+      <span style="color:#6a7aaa;font-size:10px;">(현재 설정 기준 추천)</span>
     </div>
 
     <!-- CSS 출력 -->
@@ -2655,8 +2663,36 @@ function getValues() {
   return v;
 }
 
+function getRecommendedObsSize(v) {
+  // 기본 사이즈
+  let w = 400, h = 700;
+  // 큰 폰트 → 넓은 영역
+  if (v.fontSize >= 16) { w += 50; h += 50; }
+  if (v.fontSize >= 20) { w += 50; h += 50; }
+  // 아바타(좌측) 사용 시 너비 확보
+  const hasAvatar = (v.nickIcon === '__custom_img__' && v.customIconUrl) || (v.nickIcon && v.nickIcon !== '__custom_img__');
+  if (hasAvatar && v.iconPlacement === 'messageAvatar') { w += 50; }
+  // 2줄 모드(splitLayers/nameCapsule) → 높이 확보
+  if (v.messageStyle !== 'fullBubble') { h += 50; }
+  // 최대너비 넉넉 → 더 넓은 소스
+  if (v.maxWidth > 85) { w += 30; }
+  // 50단위로 반올림
+  w = Math.round(w / 50) * 50;
+  h = Math.round(h / 50) * 50;
+  return { w: Math.max(350, Math.min(w, 600)), h: Math.max(600, Math.min(h, 1000)) };
+}
+
+function updateObsSizeHint(v) {
+  const size = getRecommendedObsSize(v);
+  const hint = document.getElementById('obsSizeHint');
+  if (hint) hint.textContent = 'OBS 권장: ' + size.w + '×' + size.h;
+  const guide = document.getElementById('obsSizeGuideValue');
+  if (guide) guide.textContent = '너비 ' + size.w + ', 높이 ' + size.h;
+}
+
 function updatePreview(v) {
   syncRangeDisplays(v);
+  updateObsSizeHint(v);
 
   const previewTheme = getActivePreviewTheme(v);
   const bubbleBackground = buildBubbleBackground(v);
