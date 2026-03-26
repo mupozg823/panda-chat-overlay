@@ -1257,3 +1257,46 @@ function onCopyFailed() {
     }
   }, 4000);
 }
+
+function copyWrapperUrl() {
+  const chatUrl = prompt(
+    "PandaTV 채팅 URL을 입력하세요:\n예: https://p.pandahp.kr/chat/xxxx",
+  );
+  if (!chatUrl || !chatUrl.includes("/chat/")) {
+    alert("올바른 PandaTV 채팅 URL을 입력해주세요.");
+    return;
+  }
+
+  const css = document.getElementById("cssOutput").textContent;
+  const b64 = btoa(unescape(encodeURIComponent(css)));
+  const wrapperBase =
+    window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
+  const url = `${wrapperBase}live-wrapper.html?target=${encodeURIComponent(chatUrl)}&css=${b64}`;
+
+  const btn = document.getElementById("wrapperUrlBtn");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        if (btn) {
+          btn.textContent = "URL 복사됨!";
+          setTimeout(() => {
+            btn.textContent = "Wrapper URL";
+          }, 3000);
+        }
+      })
+      .catch(() => {
+        if (fallbackCopy(url) && btn) {
+          btn.textContent = "URL 복사됨!";
+          setTimeout(() => {
+            btn.textContent = "Wrapper URL";
+          }, 3000);
+        }
+      });
+  } else if (fallbackCopy(url) && btn) {
+    btn.textContent = "URL 복사됨!";
+    setTimeout(() => {
+      btn.textContent = "Wrapper URL";
+    }, 3000);
+  }
+}

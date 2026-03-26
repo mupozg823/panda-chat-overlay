@@ -1369,6 +1369,7 @@
       </div>
       <div class="preview-header-right">
         <button class="copy-btn-primary" id="copyBtn" onclick="copyCSS()">CSS 복사</button>
+        <button class="copy-btn" style="background:#2a6a4a;" id="wrapperUrlBtn" onclick="copyWrapperUrl()">Wrapper URL</button>
         <div style="position:relative;display:inline-block;">
           <button class="copy-btn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
           <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:130px;">
@@ -1405,60 +1406,64 @@
             id="pMsg1"
             style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
-            <p class="message__nick hide__opacity">
-              <div class="mr-1 inline-block w-max align-text-bottom">
+            <div class="message__nick hide__opacity">
+              <span class="mr-1 inline-block w-max align-text-bottom">
                 <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
                      data-src="/icons/ico_class_g.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#f59e0b"></circle>
               </svg>
-              </div>
+              </span>
               <span class="message__name" id="pNick1"
                     style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡ai</span>
+              <span class="message__id"
+                    style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(ram***)</span>
               <span class="message__separator"
                     style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText1"
                     style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">극한의앙카총님 어서오세요~</span>
-            </p>
+            </div>
           </div>
         </li>
         <li class="preview-item message__wrapper chat default hide__opacity"
             id="pMsg2"
             style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
-            <p class="message__nick hide__opacity">
-              <div class="mr-1 inline-block w-max align-text-bottom">
+            <div class="message__nick hide__opacity">
+              <span class="mr-1 inline-block w-max align-text-bottom">
                 <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
                      data-src="/icons/ico_class_s.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#60a5fa"></circle>
               </svg>
-              </div>
+              </span>
               <span class="message__name" id="pNick2"
                     style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">이유♡루야♡김잇콩</span>
+              <span class="message__id"
+                    style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(happy***)</span>
               <span class="message__separator"
                     style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText2"
                     style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">점검중~</span>
-            </p>
+            </div>
           </div>
         </li>
         <li class="preview-item message__wrapper chat default hide__opacity"
             id="pMsg3"
             style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
-            <p class="message__nick hide__opacity">
-              <div class="mr-1 inline-block w-max align-text-bottom">
+            <div class="message__nick hide__opacity">
+              <span class="mr-1 inline-block w-max align-text-bottom">
                 <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
                      data-src="/icons/ico_class_n.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#34d399"></circle>
               </svg>
-              </div>
+              </span>
               <span class="message__name" id="pNick3"
                     style="color: rgb(80, 220, 160); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">극한의앙카총</span>
               <span class="message__separator"
                     style="color: rgb(80, 220, 160); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText3"
                     style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">ㄹㄹㅇ</span>
-            </p>
+            </div>
           </div>
         </li>
         <li class="preview-item heart__wrapper chat default animated hide__opacity min-h-max w-max fadeIn break-keep"
@@ -1484,40 +1489,44 @@
             id="pMsg4"
             style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
-            <p class="message__nick hide__opacity">
-              <div class="mr-1 inline-block w-max align-text-bottom">
+            <div class="message__nick hide__opacity">
+              <span class="mr-1 inline-block w-max align-text-bottom">
                 <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
                      data-src="/icons/ico_class_b.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#a78bfa"></circle>
               </svg>
-              </div>
+              </span>
               <span class="message__name" id="pNick4"
                     style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡잇콩</span>
+              <span class="message__id"
+                    style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(sun***)</span>
               <span class="message__separator"
                     style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText4"
                     style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">에헤</span>
-            </p>
+            </div>
           </div>
         </li>
         <li class="preview-item message__wrapper chat default hide__opacity"
             id="pMsg5"
             style="text-align: left; font-family: 'Jeju Gothic';">
           <div class="message__box">
-            <p class="message__nick hide__opacity">
-              <div class="mr-1 inline-block w-max align-text-bottom">
+            <div class="message__nick hide__opacity">
+              <span class="mr-1 inline-block w-max align-text-bottom">
                 <svg class="preview-badge" viewBox="0 0 24 24" fill="none" aria-hidden="true"
                      data-src="/icons/ico_class_d.svg" style="width: 16px; height: 16px;">
                 <circle cx="12" cy="12" r="10" fill="#f472b6"></circle>
               </svg>
-              </div>
+              </span>
               <span class="message__name" id="pNick5"
                     style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">하루너만의</span>
+              <span class="message__id"
+                    style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(rui***)</span>
               <span class="message__separator"
                     style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText5"
                     style="color: rgb(255, 255, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">❤️ 침대숙문어 앙카형 ㄹㄹ용</span>
-            </p>
+            </div>
           </div>
         </li>
       </ul>
@@ -2819,6 +2828,7 @@ function updatePreview(v) {
     const box = item.querySelector('.message__box');
     const nick = item.querySelector('.message__nick');
     const name = item.querySelector('.message__name');
+    const messageIds = item.querySelectorAll('.message__id');
     const separator = item.querySelector('.message__separator');
     const text = item.querySelector('.message__text');
 
@@ -2831,8 +2841,9 @@ function updatePreview(v) {
     item.style.padding = layeredMode
       ? `0 0 0 ${avatarInset}px`
       : (fullBubbleAvatar ? `${v.paddingY}px ${v.paddingX}px ${v.paddingY}px ${avatarInset + v.paddingX}px` : `${v.paddingY}px ${v.paddingX}px`);
-    item.style.width = layeredMode ? 'auto' : 'max-content';
+    item.style.width = layeredMode ? 'auto' : 'fit-content';
     item.style.maxWidth = `${v.maxWidth}%`;
+    item.style.minWidth = '0';
     item.style.border = layeredMode ? 'none' : effectiveBorder;
     item.style.boxShadow = layeredMode ? 'none' : effectiveBoxShadow;
     item.style.backdropFilter = layeredMode ? 'none' : (v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none');
@@ -2861,6 +2872,8 @@ function updatePreview(v) {
     nick.style.color = v.textColor;
     nick.style.textShadow = shadow;
     nick.style.lineHeight = `${v.lineHeight}`;
+    nick.style.maxWidth = '100%';
+    nick.style.minWidth = '0';
 
     name.style.color = v.nickColor;
     name.style.fontSize = `${effectiveNickFontSize}px`;
@@ -2875,6 +2888,20 @@ function updatePreview(v) {
     name.style.background = layeredMode ? nameBubbleBackground : 'transparent';
     name.style.boxShadow = layeredMode ? effectiveBoxShadow : 'none';
     name.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
+    name.style.maxWidth = '100%';
+    name.style.minWidth = '0';
+
+    messageIds.forEach(messageId => {
+      messageId.style.display = 'inline';
+      messageId.style.color = v.nickColor;
+      messageId.style.fontSize = `${effectiveNickFontSize}px`;
+      messageId.style.fontWeight = v.nickBold ? '700' : '400';
+      messageId.style.textShadow = shadow;
+      messageId.style.fontFamily = 'inherit';
+      messageId.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
+      messageId.style.maxWidth = '100%';
+      messageId.style.minWidth = '0';
+    });
 
     separator.textContent = v.separatorText;
     separator.style.display = (layeredMode || v.twoLine || !v.separatorText) ? 'none' : 'inline';
@@ -2889,6 +2916,10 @@ function updatePreview(v) {
     text.style.marginLeft = layeredMode ? `${effectiveSplitTextOffsetX}px` : '0';
     text.style.color = v.textColor;
     text.style.textShadow = shadow;
+    text.style.maxWidth = '100%';
+    text.style.minWidth = '0';
+    text.style.wordBreak = 'break-word';
+    text.style.overflowWrap = 'anywhere';
     const hasTextBg = v.textBgOpacity > 0 && !splitMode;
     const textBg = hasTextBg ? buildAlphaColor(v.textBgColor, v.textBgOpacity) : 'transparent';
     if (splitMode) {
@@ -2917,7 +2948,7 @@ function updatePreview(v) {
     text.style.fontWeight = v.textBold ? '700' : '400';
     text.style.letterSpacing = v.textLetterSpacing > 0 ? `${v.textLetterSpacing}px` : '';
 
-    item.querySelectorAll('div.mr-1').forEach(wrap => {
+    item.querySelectorAll('.mr-1').forEach(wrap => {
       const hideBadge = v.hideIcon || (v.nickIcon && v.nickIcon !== '');
       wrap.style.display = hideBadge ? 'none' : 'inline-block';
       if (!hideBadge) {
@@ -2953,8 +2984,9 @@ function updatePreview(v) {
     item.style.background = donationBackground;
     item.style.borderRadius = `${effectiveDonationRadius}px`;
     item.style.padding = `${v.paddingY}px ${v.paddingX}px`;
-    item.style.width = 'max-content';
+    item.style.width = 'fit-content';
     item.style.maxWidth = `${v.maxWidth}%`;
+    item.style.minWidth = '0';
     item.style.border = effectiveBorder;
     item.style.boxShadow = donationGlowShadow !== 'none' ? donationGlowShadow : effectiveBoxShadow;
     item.style.backdropFilter = v.blurAmount > 0 ? `blur(${v.blurAmount}px)` : 'none';
@@ -2971,6 +3003,8 @@ function updatePreview(v) {
     shell.style.boxShadow = 'none';
     shell.style.padding = '0';
     shell.style.margin = '0';
+    shell.style.maxWidth = '100%';
+    shell.style.minWidth = '0';
 
     if (image) {
       image.style.display = v.hideImg ? 'none' : 'block';
@@ -2990,6 +3024,10 @@ function updatePreview(v) {
       text.style.border = 'none';
       text.style.boxShadow = 'none';
       text.style.padding = '0';
+      text.style.maxWidth = '100%';
+      text.style.minWidth = '0';
+      text.style.wordBreak = 'break-word';
+      text.style.overflowWrap = 'anywhere';
     });
 
     const amount = item.querySelector('.mx-1');
@@ -3009,8 +3047,9 @@ function updatePreview(v) {
     item.style.background = noticeBackground;
     item.style.borderRadius = `${effectiveNoticeRadius}px`;
     item.style.padding = `${v.paddingY}px ${v.paddingX}px`;
-    item.style.width = 'max-content';
+    item.style.width = 'fit-content';
     item.style.maxWidth = `${v.maxWidth}%`;
+    item.style.minWidth = '0';
     item.style.border = effectiveBorder;
     item.style.borderLeft = v.noticeAccentLine ? `${v.noticeAccentWidth}px solid ${v.noticeAccentColor}` : '';
     item.style.boxShadow = effectiveBoxShadow;
@@ -3022,6 +3061,10 @@ function updatePreview(v) {
     const effectiveNoticeFontSize = v.noticeFontSize > 0 ? v.noticeFontSize : Math.max(v.fontSize - 1, 11);
     noticeText.style.fontSize = `${effectiveNoticeFontSize}px`;
     noticeText.style.textShadow = shadow;
+    noticeText.style.maxWidth = '100%';
+    noticeText.style.minWidth = '0';
+    noticeText.style.wordBreak = 'break-word';
+    noticeText.style.overflowWrap = 'anywhere';
   });
 
   let iconStyle = document.getElementById('nickIconStyle');
