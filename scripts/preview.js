@@ -42,6 +42,28 @@ function setPreviewThemeClass(previewChat, theme) {
   });
 }
 
+const RUNTIME_LINE_BREAK_THEMES = [
+  "kakaotalk",
+  "box",
+  "roundbox",
+  "neon",
+  "board",
+  "balloon",
+];
+
+function resolveRuntimeWidgetLayout(theme, runtimeLayout) {
+  if (
+    runtimeLayout === "chatInline" ||
+    runtimeLayout === "chatLineBreak" ||
+    runtimeLayout === "chatIndentation"
+  ) {
+    return runtimeLayout;
+  }
+  return RUNTIME_LINE_BREAK_THEMES.includes(theme)
+    ? "chatLineBreak"
+    : "chatInline";
+}
+
 function clearPreviewClickTargets(root) {
   if (!root) return;
   root.querySelectorAll(".preview-click-target").forEach((el) => el.remove());
@@ -136,9 +158,19 @@ function updatePreview(v) {
     v.boxShadowSize > 0
       ? `0 ${Math.ceil(v.boxShadowSize / 2)}px ${v.boxShadowSize}px ${buildAlphaColor(v.boxShadowColor, 40)}`
       : "none";
-  const layeredMode = v.messageStyle !== "fullBubble";
-  const capsuleMode = v.messageStyle === "nameCapsule";
-  const splitMode = v.messageStyle === "splitLayers";
+  const runtimeMode = v.messageStyle === "runtimeAuto";
+  const runtimeLayout = runtimeMode
+    ? resolveRuntimeWidgetLayout(v.compatTheme, v.runtimeLayout)
+    : "";
+  const indentationMode = runtimeLayout === "chatIndentation";
+  const layeredMode = runtimeMode
+    ? runtimeLayout !== "chatInline"
+    : v.messageStyle !== "fullBubble";
+  const capsuleMode = !runtimeMode && v.messageStyle === "nameCapsule";
+  const splitMode =
+    (!runtimeMode && v.messageStyle === "splitLayers") ||
+    runtimeLayout === "chatLineBreak" ||
+    indentationMode;
   const effectiveNamePaddingX =
     v.namePaddingX > 0 ? v.namePaddingX : Math.max(v.paddingX - 1, 8);
   const effectiveSplitTextPaddingX =
@@ -146,7 +178,11 @@ function updatePreview(v) {
   const effectiveSplitTextPaddingY =
     v.splitTextPaddingY > 0 ? v.splitTextPaddingY : v.twoLine ? 6 : 5;
   const effectiveSplitTextOffsetX =
-    v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : layeredMode ? 2 : 0;
+    v.splitTextOffsetX >= 0
+      ? v.splitTextOffsetX
+      : !runtimeMode && layeredMode
+        ? 2
+        : 0;
   const hasCustomAvatar = v.nickIcon === "__custom_img__" && v.customIconUrl;
   const hasEmojiAvatar = v.nickIcon && v.nickIcon !== "__custom_img__";
   const hasAvatar = hasActiveNickIcon(v);
@@ -216,7 +252,11 @@ function updatePreview(v) {
     item.style.alignSelf = alignVal;
     item.style.textAlign = v.chatAlign === "right" ? "right" : "left";
 
-    box.style.display = "block";
+    box.style.display = indentationMode ? "flex" : "block";
+    box.style.justifyContent =
+      indentationMode && v.chatAlign === "right" ? "end" : "";
+    box.style.alignItems = indentationMode ? "flex-start" : "";
+    box.style.gap = indentationMode ? "0" : "";
     box.style.position = "relative";
     box.style.zIndex = avatarAsLeft && layeredMode ? "1" : "";
     box.style.background = "transparent";
@@ -236,19 +276,26 @@ function updatePreview(v) {
     nick.style.lineHeight = `${v.lineHeight}`;
     nick.style.maxWidth = "100%";
     nick.style.minWidth = "0";
+    nick.style.whiteSpace = indentationMode ? "nowrap" : "";
+    nick.style.paddingRight = indentationMode ? "0" : "";
+    nick.style.flexShrink = indentationMode ? "0" : "";
 
     name.style.color = v.nickColor;
     name.style.fontSize = `${effectiveNickFontSize}px`;
     name.style.fontWeight = v.nickBold ? "700" : "400";
     name.style.textShadow = shadow;
     name.style.marginRight = "0";
-    name.style.display = layeredMode ? "inline-flex" : "inline";
-    name.style.alignItems = layeredMode ? "center" : "";
-    name.style.minHeight = layeredMode ? `${avatarSize}px` : "";
-    name.style.padding = layeredMode ? `0 ${effectiveNamePaddingX}px` : "0";
-    name.style.borderRadius = layeredMode ? `${effectiveCapsuleRadius}px` : "0";
-    name.style.background = layeredMode ? nameBubbleBackground : "transparent";
-    name.style.boxShadow = layeredMode ? effectiveBoxShadow : "none";
+    name.style.display = capsuleMode ? "inline-flex" : "inline";
+    name.style.alignItems = capsuleMode ? "center" : "";
+    name.style.minHeight = capsuleMode ? `${avatarSize}px` : "";
+    name.style.padding = capsuleMode ? `0 ${effectiveNamePaddingX}px` : "0";
+    name.style.borderRadius = capsuleMode
+      ? `${effectiveCapsuleRadius}px`
+      : "0";
+    name.style.background = capsuleMode
+      ? nameBubbleBackground
+      : "transparent";
+    name.style.boxShadow = capsuleMode ? effectiveBoxShadow : "none";
     name.style.letterSpacing =
       v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
     name.style.maxWidth = "100%";
@@ -269,7 +316,9 @@ function updatePreview(v) {
 
     separator.textContent = v.separatorText;
     separator.style.display =
-      layeredMode || v.twoLine || !v.separatorText ? "none" : "inline";
+      (capsuleMode || (!runtimeMode && splitMode)) || v.twoLine || !v.separatorText
+        ? "none"
+        : "inline";
     separator.style.color = v.nickColor;
     separator.style.fontSize = `${effectiveNickFontSize}px`;
     separator.style.fontWeight = v.nickBold ? "700" : "400";
@@ -284,7 +333,7 @@ function updatePreview(v) {
         : v.twoLine
           ? "2px"
           : "0";
-    text.style.marginLeft = layeredMode
+    text.style.marginLeft = !runtimeMode && layeredMode
       ? `${effectiveSplitTextOffsetX}px`
       : "0";
     text.style.color = v.textColor;
@@ -293,7 +342,7 @@ function updatePreview(v) {
     text.style.minWidth = "0";
     text.style.wordBreak = "break-word";
     text.style.overflowWrap = "anywhere";
-    const hasTextBg = v.textBgOpacity > 0;
+    const hasTextBg = v.textBgOpacity > 0 && !splitMode;
     const textBg = hasTextBg
       ? buildAlphaColor(v.textBgColor, v.textBgOpacity)
       : "transparent";

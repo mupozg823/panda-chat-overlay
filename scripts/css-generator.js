@@ -125,6 +125,15 @@ const FALLBACK_WIDGET_THEMES = [
   "board",
 ];
 
+const RUNTIME_LINE_BREAK_THEMES = [
+  "kakaotalk",
+  "box",
+  "roundbox",
+  "neon",
+  "board",
+  "balloon",
+];
+
 function resolveTargetThemes(compatTheme) {
   if (typeof getTargetThemes === "function") {
     return getTargetThemes(compatTheme);
@@ -132,6 +141,21 @@ function resolveTargetThemes(compatTheme) {
   return compatTheme === "all"
     ? FALLBACK_WIDGET_THEMES.slice()
     : [compatTheme || "default"];
+}
+
+function resolveRuntimeWidgetLayout(theme, runtimeLayout) {
+  if (
+    runtimeLayout === "chatInline" ||
+    runtimeLayout === "chatLineBreak" ||
+    runtimeLayout === "chatIndentation"
+  ) {
+    return runtimeLayout;
+  }
+  const targetTheme =
+    theme && theme !== "all" ? theme : FALLBACK_WIDGET_THEMES[0];
+  return RUNTIME_LINE_BREAK_THEMES.includes(targetTheme)
+    ? "chatLineBreak"
+    : "chatInline";
 }
 
 function resolveRankBadges() {
@@ -274,6 +298,19 @@ function generateCssText(v) {
   const effectiveNickFontSize =
     v.nickFontSize > 0 ? v.nickFontSize : v.fontSize;
   const effectiveCapsuleRadius = v.capsuleRadius >= 50 ? 999 : v.capsuleRadius;
+  const runtimeMode = v.messageStyle === "runtimeAuto";
+  const runtimeLayout = runtimeMode
+    ? resolveRuntimeWidgetLayout(v.compatTheme, v.runtimeLayout)
+    : "";
+  const indentationMode = runtimeLayout === "chatIndentation";
+  const layeredMode = runtimeMode
+    ? runtimeLayout !== "chatInline"
+    : v.messageStyle !== "fullBubble";
+  const capsuleMode = !runtimeMode && v.messageStyle === "nameCapsule";
+  const splitMode =
+    (!runtimeMode && v.messageStyle === "splitLayers") ||
+    runtimeLayout === "chatLineBreak" ||
+    indentationMode;
   const borderLine =
     v.borderWidth > 0
       ? `border: ${v.borderWidth}px solid ${v.borderColor} !important;`
@@ -282,9 +319,6 @@ function generateCssText(v) {
     v.boxShadowSize > 0
       ? `box-shadow: 0 ${Math.ceil(v.boxShadowSize / 2)}px ${v.boxShadowSize}px ${buildAlphaColor(v.boxShadowColor, 40)} !important;`
       : "box-shadow: none !important;";
-  const layeredMode = v.messageStyle !== "fullBubble";
-  const capsuleMode = v.messageStyle === "nameCapsule";
-  const splitMode = v.messageStyle === "splitLayers";
   const effectiveNamePaddingX =
     v.namePaddingX > 0 ? v.namePaddingX : Math.max(v.paddingX - 1, 8);
   const effectiveSplitTextPaddingX =
@@ -292,7 +326,11 @@ function generateCssText(v) {
   const effectiveSplitTextPaddingY =
     v.splitTextPaddingY > 0 ? v.splitTextPaddingY : v.twoLine ? 6 : 5;
   const effectiveSplitTextOffsetX =
-    v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : layeredMode ? 2 : 0;
+    v.splitTextOffsetX >= 0
+      ? v.splitTextOffsetX
+      : !runtimeMode && layeredMode
+        ? 2
+        : 0;
   const hasCustomAvatar = v.nickIcon === "__custom_img__" && v.customIconUrl;
   const hasEmojiAvatar = v.nickIcon && v.nickIcon !== "__custom_img__";
   const hasAvatar = hasActiveNickIcon(v);
@@ -526,9 +564,16 @@ function generateCssText(v) {
   const messageBoxDecls = [
     "all: unset !important;",
     "font-family: inherit !important;",
-    "display: block !important;",
+    `display: ${indentationMode ? "flex" : "block"} !important;`,
     "max-width: 100% !important;",
   ];
+  if (indentationMode) {
+    messageBoxDecls.push(
+      `justify-content: ${v.chatAlign === "right" ? "end" : "unset"} !important;`,
+      "align-items: flex-start !important;",
+      "gap: 0 !important;",
+    );
+  }
   if (avatarAsLeft && layeredMode) {
     messageBoxDecls.push(
       "position: relative !important;",
@@ -544,11 +589,18 @@ function generateCssText(v) {
       "font-family: inherit !important;",
       `display: ${layeredMode || v.twoLine ? "block" : "inline"} !important;`,
       "position: relative !important;",
+      ...(indentationMode
+        ? [
+            "white-space: nowrap !important;",
+            "padding-right: 0 !important;",
+            "flex-shrink: 0 !important;",
+          ]
+        : []),
     ]),
   );
 
   const messageNameDecls = [];
-  if (layeredMode) {
+  if (capsuleMode) {
     messageNameDecls.push(
       "display: inline-flex !important;",
       "align-items: center !important;",
@@ -619,13 +671,17 @@ function generateCssText(v) {
 
   // 구분자 (실제 DOM: 클래스 없는 span — .message__nick > span:not(.message__name):not(.message__text))
   const separatorDecls = [
-    `display: ${layeredMode || v.twoLine || !v.separatorText ? "none" : "inline"} !important;`,
+    `display: ${((capsuleMode || (!runtimeMode && splitMode)) || v.twoLine || !v.separatorText) ? "none" : "inline"} !important;`,
     buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+    `color: ${v.nickColor} !important;`,
+    `font-size: ${effectiveNickFontSize}px !important;`,
+    `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
+    "font-family: inherit !important;",
   ];
   if (
     v.separatorText &&
     v.separatorText !== ": " &&
-    !layeredMode &&
+    !(capsuleMode || (!runtimeMode && splitMode)) &&
     !v.twoLine
   ) {
     separatorDecls.push("font-size: 0 !important;");
@@ -635,7 +691,7 @@ function generateCssText(v) {
   if (
     v.separatorText &&
     v.separatorText !== ": " &&
-    !layeredMode &&
+    !(capsuleMode || (!runtimeMode && splitMode)) &&
     !v.twoLine
   ) {
     const separatorAfterSelectors = selectorsForThemedListItems(
@@ -660,7 +716,7 @@ function generateCssText(v) {
     "word-break: break-word !important;",
     "overflow-wrap: anywhere !important;",
     `margin-top: ${splitMode ? 0 : capsuleMode ? 4 : v.twoLine ? 2 : 0}px !important;`,
-    `margin-left: ${layeredMode ? effectiveSplitTextOffsetX : 0}px !important;`,
+    `margin-left: ${!runtimeMode && layeredMode ? effectiveSplitTextOffsetX : 0}px !important;`,
   ];
   const hasTextBg = v.textBgOpacity > 0 && !splitMode;
   if (splitMode) {
@@ -1232,6 +1288,7 @@ function updateCSS(v) {
 function copyCSS() {
   const css = document.getElementById("cssOutput").textContent;
   const iconDataUrl = resolveCustomIconDataUrl();
+  const defaultText = "바로 붙여넣기용 CSS 복사";
 
   function onCopied() {
     const btn = document.getElementById("copyBtn");
@@ -1259,7 +1316,7 @@ function copyCSS() {
     }
     setTimeout(() => {
       if (btn) {
-        btn.textContent = "CSS 복사";
+        btn.textContent = defaultText;
         btn.classList.remove("copied");
       }
     }, 3000);
@@ -1293,13 +1350,13 @@ function fallbackCopy(text) {
 
 function onCopyFailed() {
   const btn = document.getElementById("copyBtn");
-  if (btn) {
-    btn.textContent = "복사 실패 — 수동 복사해주세요";
-    btn.classList.add("copied");
+    if (btn) {
+      btn.textContent = "복사 실패 — 수동 복사해주세요";
+      btn.classList.add("copied");
   }
   setTimeout(() => {
     if (btn) {
-      btn.textContent = "CSS 복사";
+      btn.textContent = defaultText;
       btn.classList.remove("copied");
     }
   }, 4000);
@@ -1321,10 +1378,18 @@ function buildWrapperUrl(chatUrl, configValue) {
   return `${wrapperBase}live-wrapper.html?${params.toString()}`;
 }
 
+function resolveWrapperTargetUrl() {
+  const input = document.getElementById("wrapperTargetUrl");
+  if (input && typeof input.value === "string" && input.value.trim()) {
+    return input.value.trim();
+  }
+  return "";
+}
+
 function copyWrapperUrl() {
-  const chatUrl = prompt(
-    "PandaTV 채팅 URL을 입력하세요:\n예: https://p.pandahp.kr/chat/xxxx",
-  );
+  const chatUrl =
+    resolveWrapperTargetUrl() ||
+    prompt("PandaTV 채팅 URL을 입력하세요:\n예: https://p.pandahp.kr/chat/xxxx");
   if (!chatUrl || !chatUrl.includes("/chat/")) {
     alert("올바른 PandaTV 채팅 URL을 입력해주세요.");
     return;
@@ -1334,6 +1399,7 @@ function copyWrapperUrl() {
   const url = buildWrapperUrl(chatUrl, configValue);
 
   const btn = document.getElementById("wrapperUrlBtn");
+  const defaultText = "방송용 URL 복사";
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard
       .writeText(url)
@@ -1341,7 +1407,7 @@ function copyWrapperUrl() {
         if (btn) {
           btn.textContent = "URL 복사됨!";
           setTimeout(() => {
-            btn.textContent = "Wrapper URL";
+            btn.textContent = defaultText;
           }, 3000);
         }
       })
@@ -1349,14 +1415,14 @@ function copyWrapperUrl() {
         if (fallbackCopy(url) && btn) {
           btn.textContent = "URL 복사됨!";
           setTimeout(() => {
-            btn.textContent = "Wrapper URL";
+            btn.textContent = defaultText;
           }, 3000);
         }
       });
   } else if (fallbackCopy(url) && btn) {
     btn.textContent = "URL 복사됨!";
     setTimeout(() => {
-      btn.textContent = "Wrapper URL";
+      btn.textContent = defaultText;
     }, 3000);
   }
 }

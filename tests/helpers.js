@@ -118,6 +118,7 @@ function createSampleValues(overrides = {}) {
     donationImgShadow: 0,
     fontFamily: "'Jeju Gothic', sans-serif",
     messageStyle: "fullBubble",
+    runtimeLayout: "auto",
     chatGap: 3,
     paddingX: 12,
     twoLine: false,

@@ -150,8 +150,8 @@
             <p><strong>안정형</strong>: 원본 효과를 깔끔하게 정리 (추천). <strong>균형형</strong>: 원본 느낌 일부 유지. <strong>원형 유지</strong>: 원본 구조 최대한 보존 (고급).</p>
           </details>
           <details class="glossary-item">
-            <summary>전체 말풍선 / 캡슐형 / 분리형</summary>
-            <p><strong>전체 말풍선</strong>: 닉+메시지를 하나의 버블로 감쌈 (가장 안정적). <strong>캡슐형</strong>: 닉네임만 별도 캡슐로 강조. <strong>분리형</strong>: 닉과 메시지를 분리 배치 (디자인 효과 큼).</p>
+            <summary>전체 말풍선 / 캡슐형 / 카드형</summary>
+            <p><strong>전체 말풍선</strong>: 닉+메시지를 하나의 버블로 감쌈 (가장 안정적). <strong>캡슐형</strong>: 닉네임만 별도 캡슐로 강조. <strong>카드형</strong>: 실제 위젯 흐름은 유지하고 본문만 카드처럼 강조.</p>
           </details>
           <details class="glossary-item">
             <summary>호환 테마</summary>
@@ -206,12 +206,15 @@
     </div>
     <div class="theme-presets">
       <button class="theme-btn active" data-cat="basic" onclick="applyTheme('pink')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff8fbc,#ffb0d0)"></div><div class="preset-label">핑크 말풍선</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('reference')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e07aad,#f5a0c8)"></div><div class="preset-label">아바타 캡슐</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('character')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc6699,#e088aa)"></div><div class="preset-label">아이콘 2줄</div></button>
       <button class="theme-btn" data-cat="basic" onclick="applyTheme('studioFlat')"><div class="preset-swatch" style="background:linear-gradient(90deg,#5577bb,#7799cc)"></div><div class="preset-label">스튜디오</div></button>
       <button class="theme-btn" data-cat="basic" onclick="applyTheme('naturalSoft')"><div class="preset-swatch" style="background:linear-gradient(90deg,#88aa66,#aacc88)"></div><div class="preset-label">내추럴</div></button>
       <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#5566aa,#7788cc)"></div><div class="preset-label">클린 카드</div></button>
       <button class="theme-btn" data-cat="basic" onclick="applyTheme('minimal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#888,#aaa)"></div><div class="preset-label">텍스트만</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('character')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc6699,#e088aa)"></div><div class="preset-label">아이콘 2줄</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('streamCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a7ad5,#5a9ae5)"></div><div class="preset-label">스트림 카드</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#4477cc,#88aadd)"></div><div class="preset-label">클린 카드형</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('reference')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e07aad,#f5a0c8)"></div><div class="preset-label">아바타 캡슐</div></button>
+      <button class="theme-btn" data-cat="basic" onclick="applyTheme('darkCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#bb3333,#dd5555)"></div><div class="preset-label">다크 캡슐</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('cherryblossom')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff8faa,#ffb0c0)"></div><div class="preset-label">🌸 벚꽃</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('lavenderDream')"><div class="preset-swatch" style="background:linear-gradient(90deg,#a080cc,#c8a0e8)"></div><div class="preset-label">💜 라벤더 드림</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('mintChoco')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6bbaa0,#a0d8c4)"></div><div class="preset-label">🍫 민트초코</div></button>
@@ -223,25 +226,22 @@
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('rosegold')"><div class="preset-swatch" style="background:linear-gradient(90deg,#cc8870,#ddaa90)"></div><div class="preset-label">✨ 로즈골드</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('lilacBubble')"><div class="preset-swatch" style="background:linear-gradient(90deg,#b088dd,#d0b8e8)"></div><div class="preset-label">💐 라일락 버블</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('softGradient')"><div class="preset-swatch" style="background:linear-gradient(90deg,#c090e0,#f0a0c0)"></div><div class="preset-label">🌷 소프트 그라데이션</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e5579d 0%,#ff85b8 46%,#f5eff2 46%,#f5eff2 100%)"></div><div class="preset-label">👑 공주</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess2')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e84880 0%,#ff6aa0 46%,#484850 46%,#484850 100%)"></div><div class="preset-label">👑 공주2</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('whiteMinimal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#f0f0f5,#ffffff)"></div><div class="preset-label">🤍 화이트 미니멀</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('autumnMaple')"><div class="preset-swatch" style="background:linear-gradient(90deg,#c87137,#e8943a)"></div><div class="preset-label">🍂 가을 단풍</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('oceanBreeze')"><div class="preset-swatch" style="background:linear-gradient(90deg,#1890c0,#20b8e8)"></div><div class="preset-label">🌊 오션 브리즈</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('whiteMinimal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#f0f0f5,#ffffff)"></div><div class="preset-label">🤍 화이트 미니멀</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('sunsetGlow')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e85050,#ff8840)"></div><div class="preset-label">🌅 선셋 글로우</div></button>
       <button class="theme-btn" data-cat="cute" onclick="applyTheme('midnightAurora')"><div class="preset-swatch" style="background:linear-gradient(90deg,#2a8a6a,#6a44bb)"></div><div class="preset-label">🌌 미드나잇 오로라</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('twilightCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6633aa,#8855cc)"></div><div class="preset-label">🌙 트와일라잇</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e5579d 0%,#ff85b8 46%,#f5eff2 46%,#f5eff2 100%)"></div><div class="preset-label">👑 공주</div></button>
+      <button class="theme-btn" data-cat="cute" onclick="applyTheme('princess2')"><div class="preset-swatch" style="background:linear-gradient(90deg,#e84880 0%,#ff6aa0 46%,#484850 46%,#484850 100%)"></div><div class="preset-label">👑 공주2</div></button>
       <button class="theme-btn" data-cat="dark" onclick="applyTheme('dark')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a3a5a,#5a5a7a)"></div><div class="preset-label">어두운 유리</div></button>
       <button class="theme-btn" data-cat="dark" onclick="applyTheme('neon')"><div class="preset-swatch" style="background:linear-gradient(90deg,#ff44cc,#aa44ff)"></div><div class="preset-label">네온</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('glass')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.15),rgba(255,255,255,0.3))"></div><div class="preset-label">투명 유리</div></button>
       <button class="theme-btn" data-cat="dark" onclick="applyTheme('glassLite')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.2),rgba(255,255,255,0.4))"></div><div class="preset-label">라이트 유리</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('glass')"><div class="preset-swatch" style="background:linear-gradient(90deg,rgba(255,255,255,0.15),rgba(255,255,255,0.3))"></div><div class="preset-label">투명 유리</div></button>
       <button class="theme-btn" data-cat="dark" onclick="applyTheme('cyberOutline')"><div class="preset-swatch" style="background:linear-gradient(90deg,#00ccff,#0088ff)"></div><div class="preset-label">사이버</div></button>
       <button class="theme-btn" data-cat="dark" onclick="applyTheme('gradientNeon')"><div class="preset-swatch" style="background:linear-gradient(135deg,#ff00aa,#00ffff)"></div><div class="preset-label">그라데이션 네온</div></button>
       <button class="theme-btn" data-cat="dark" onclick="applyTheme('retroTerminal')"><div class="preset-swatch" style="background:linear-gradient(90deg,#00aa00,#00ff00)"></div><div class="preset-label">레트로 터미널</div></button>
-      <button class="theme-btn" data-cat="dark" onclick="applyTheme('gamingSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#0d1117,#00cc66)"></div><div class="preset-label">게이밍 분리형</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('streamCard')"><div class="preset-swatch" style="background:linear-gradient(90deg,#3a7ad5,#5a9ae5)"></div><div class="preset-label">스트림 카드</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('darkCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#bb3333,#dd5555)"></div><div class="preset-label">다크 캡슐</div></button>
-      <button class="theme-btn" data-cat="cute" onclick="applyTheme('twilightCapsule')"><div class="preset-swatch" style="background:linear-gradient(90deg,#6633aa,#8855cc)"></div><div class="preset-label">🌙 트와일라잇</div></button>
-      <button class="theme-btn" data-cat="basic" onclick="applyTheme('cleanSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#4477cc,#88aadd)"></div><div class="preset-label">클린 분리형</div></button>
+      <button class="theme-btn" data-cat="dark" onclick="applyTheme('gamingSplit')"><div class="preset-swatch" style="background:linear-gradient(90deg,#0d1117,#00cc66)"></div><div class="preset-label">게이밍 카드형</div></button>
     </div>
     <div class="preset-helper">
       <div class="preset-helper-box">
@@ -423,8 +423,8 @@
         </div>
         <div class="layout-card" data-style="splitLayers" onclick="selectLayout('splitLayers')">
           <span class="layout-card-icon">📑</span>
-          <span class="layout-card-name">분리형</span>
-          <span class="layout-card-desc">닉/메시지 분리 레이어</span>
+          <span class="layout-card-name">카드형</span>
+          <span class="layout-card-desc">본문 카드 강조</span>
         </div>
       </div>
 
@@ -446,7 +446,19 @@
           <select id="messageStyle" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
             <option value="fullBubble">전체 말풍선</option>
             <option value="nameCapsule">닉네임 캡슐형</option>
-            <option value="splitLayers">닉/본문 분리형</option>
+            <option value="splitLayers">본문 카드형</option>
+            <option value="runtimeAuto" hidden>실제 위젯 기준</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-row" id="runtimeLayoutRow" style="display:none !important;" hidden>
+        <span class="control-label">실제 위젯 레이아웃</span>
+        <div class="control-right">
+          <select id="runtimeLayout" onchange="update()" style="background:#2a2a4a;border:1px solid #3a3a5a;border-radius:6px;color:#ddd;font-size:12px;padding:4px 8px;font-family:inherit;">
+            <option value="auto">테마 기준 자동</option>
+            <option value="chatInline">인라인형</option>
+            <option value="chatLineBreak">줄바꿈형</option>
+            <option value="chatIndentation">들여쓰기형</option>
           </select>
         </div>
       </div>
@@ -1368,8 +1380,8 @@
         </div>
       </div>
       <div class="preview-header-right">
-        <button class="copy-btn-primary" id="copyBtn" onclick="copyCSS()">CSS 복사</button>
-        <button class="copy-btn" style="background:#2a6a4a;" id="wrapperUrlBtn" onclick="copyWrapperUrl()">Wrapper URL</button>
+        <button class="copy-btn-primary" id="copyBtn" onclick="copyCSS()">바로 붙여넣기용 CSS 복사</button>
+        <button class="copy-btn" style="background:#2a6a4a;" id="wrapperUrlBtn" onclick="copyWrapperUrl()">방송용 URL 복사</button>
         <div style="position:relative;display:inline-block;">
           <button class="copy-btn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
           <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:130px;">
@@ -1380,6 +1392,18 @@
           </div>
         </div>
         <input type="file" id="loadSettingsFile" accept=".json" style="display:none" onchange="loadSettings(event)">
+      </div>
+      <div class="preview-header-controls" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 12px 0 12px;padding:8px 10px;background:rgba(58,74,106,0.18);border:1px solid rgba(255,255,255,0.08);border-radius:10px;">
+        <label for="obsApplyMode" style="font-size:11px;color:#c6d3f5;font-weight:700;white-space:nowrap;">적용 방법</label>
+        <select id="obsApplyMode" onchange="syncApplyModeUI()" style="background:#1e2440;color:#f4f7ff;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;font-size:11px;">
+          <option value="css">1. CSS 복사해서 붙여넣기</option>
+          <option value="wrapper">2. 방송용 URL 쓰기 (더 안정적)</option>
+        </select>
+        <div id="wrapperTargetRow" style="display:none;flex:1 1 420px;align-items:center;gap:8px;min-width:260px;">
+          <input id="wrapperTargetUrl" type="url" placeholder="팬더TV 채팅 주소를 붙여넣으세요 (https://p.pandahp.kr/chat/...)" oninput="syncApplyModeUI()" style="flex:1 1 auto;min-width:220px;background:#141a31;color:#f4f7ff;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;font-size:11px;">
+          <button class="copy-btn" type="button" style="background:#275872;font-size:11px;padding:6px 10px;white-space:nowrap;" onclick="document.getElementById('wrapperUrlBtn').click()">주소 복사</button>
+        </div>
+        <span id="wrapperModeHint" style="font-size:11px;color:#9eacd8;line-height:1.4;">가장 쉬운 방법은 CSS 복사입니다. 후원/추천/일반채팅이 많이 섞여서 겹치는 방송이면 방송용 URL 방식이 더 안정적입니다.</span>
       </div>
       <div class="preview-quick-dock" id="previewQuickDock">
         <div class="preview-quick-buttons" id="previewQuickButtons">
@@ -1590,6 +1614,20 @@ const presetCategoryLabels = {
   cute: '귀여운 & 감성',
   dark: '다크 & 특수'
 };
+const tunedPresetNames = new Set([
+  'reference',
+  'princess',
+  'princess2',
+  'streamCard',
+  'darkCapsule',
+  'twilightCapsule',
+  'cleanSplit',
+  'gamingSplit',
+  'autumnMaple',
+  'oceanBreeze',
+  'sunsetGlow',
+  'midnightAurora'
+]);
 
 function updatePresetHelper() {
   const preset = themeDescriptions[currentTheme] || {
@@ -1599,8 +1637,40 @@ function updatePresetHelper() {
   };
   const loadLabels = { light: '', medium: ' · 부하 중간', heavy: ' · 부하 높음 (blur)' };
   const loadSuffix = loadLabels[preset.load] || '';
+  const stabilitySuffix = tunedPresetNames.has(currentTheme) ? ' · 방송용 튜닝형' : ' · 바로 사용 추천';
   document.getElementById('presetHelperTitle').textContent = preset.label;
-  document.getElementById('presetHelperText').textContent = preset.text + loadSuffix;
+  document.getElementById('presetHelperText').textContent = preset.text + stabilitySuffix + loadSuffix;
+}
+
+function syncApplyModeUI() {
+  const mode = document.getElementById('obsApplyMode')?.value || 'css';
+  const row = document.getElementById('wrapperTargetRow');
+  const hint = document.getElementById('wrapperModeHint');
+  const copyBtn = document.getElementById('copyBtn');
+  const wrapperBtn = document.getElementById('wrapperUrlBtn');
+  const targetInput = document.getElementById('wrapperTargetUrl');
+
+  if (row) row.style.display = mode === 'wrapper' ? 'flex' : 'none';
+  if (copyBtn) {
+    copyBtn.style.opacity = mode === 'css' ? '1' : '0.72';
+    copyBtn.style.filter = mode === 'css' ? '' : 'saturate(0.8)';
+    copyBtn.textContent = mode === 'css' ? '바로 붙여넣기용 CSS 복사' : '간편 CSS 복사';
+  }
+  if (wrapperBtn) {
+    wrapperBtn.style.opacity = mode === 'wrapper' ? '1' : '0.82';
+    wrapperBtn.style.filter = mode === 'wrapper' ? '' : 'saturate(0.9)';
+    wrapperBtn.textContent = mode === 'wrapper' ? '방송용 URL 복사' : 'URL 방식 사용';
+  }
+
+  if (hint) {
+    if (mode === 'wrapper') {
+      hint.textContent = targetInput?.value
+        ? '이제 주소 복사만 누르면 됩니다. 복사된 값을 OBS 브라우저 소스 URL 칸에 넣으면 현재 설정이 그대로 적용됩니다.'
+        : '팬더TV 채팅 주소를 한 번만 넣어두면 저장/불러오기에도 같이 따라갑니다. 후원/추천이 많이 섞이는 방송이면 이 방식이 더 안정적입니다.';
+    } else {
+      hint.textContent = '가장 쉬운 방법입니다. 복사한 CSS를 OBS 브라우저 소스의 사용자 지정 CSS 칸에 붙여넣으면 됩니다.';
+    }
+  }
 }
 
 function getTargetThemes(compatTheme) {
@@ -1648,12 +1718,52 @@ function getSelectText(id) {
   return el.options?.[el.selectedIndex]?.textContent || el.value || '';
 }
 
+const INLINE_RUNTIME_LINE_BREAK_THEMES = ['kakaotalk', 'box', 'roundbox', 'neon', 'board', 'balloon'];
+
+function getResolvedRuntimeLayout(v) {
+  if (typeof resolveRuntimeWidgetLayout === 'function') {
+    return resolveRuntimeWidgetLayout(v.compatTheme, v.runtimeLayout);
+  }
+  if (v.runtimeLayout === 'chatInline' || v.runtimeLayout === 'chatLineBreak' || v.runtimeLayout === 'chatIndentation') {
+    return v.runtimeLayout;
+  }
+  return INLINE_RUNTIME_LINE_BREAK_THEMES.includes(v.compatTheme) ? 'chatLineBreak' : 'chatInline';
+}
+
+function getMessageLayoutState(v = getValues()) {
+  const runtimeMode = v.messageStyle === 'runtimeAuto';
+  const runtimeLayout = runtimeMode ? getResolvedRuntimeLayout(v) : '';
+  const indentationMode = runtimeLayout === 'chatIndentation';
+  const layeredMode = runtimeMode ? runtimeLayout !== 'chatInline' : v.messageStyle !== 'fullBubble';
+  const capsuleMode = !runtimeMode && v.messageStyle === 'nameCapsule';
+  const splitMode = (!runtimeMode && v.messageStyle === 'splitLayers') || runtimeLayout === 'chatLineBreak' || indentationMode;
+  return { runtimeMode, runtimeLayout, indentationMode, layeredMode, capsuleMode, splitMode };
+}
+
+function getRuntimeLayoutLabel(layout) {
+  return ({
+    chatInline: '실제 위젯 · 인라인형',
+    chatLineBreak: '실제 위젯 · 줄바꿈형',
+    chatIndentation: '실제 위젯 · 들여쓰기형'
+  })[layout] || layout;
+}
+
 function getLayoutLabel(style) {
   return ({
     fullBubble: '전체 말풍선',
     nameCapsule: '캡슐형',
-    splitLayers: '분리형'
+    splitLayers: '카드형',
+    runtimeAuto: '실제 위젯 기준'
   })[style] || style;
+}
+
+function syncMessageStyleUI() {
+  const style = document.getElementById('messageStyle')?.value || 'fullBubble';
+  const runtimeRow = document.getElementById('runtimeLayoutRow');
+  if (runtimeRow) runtimeRow.style.display = 'none';
+  document.querySelectorAll('.layout-card').forEach(card => {
+    card.classList.toggle('active', card.dataset.style === style);
+  });
 }
 
 function getIconPlacementLabel(value) {
@@ -1677,6 +1787,10 @@ function getSavedSettingsLabel() {
 }
 
 function getLayoutSummary(v = getValues()) {
+  const state = getMessageLayoutState(v);
+  if (state.runtimeMode) {
+    return `${getRuntimeLayoutLabel(state.runtimeLayout)} · ${v.twoLine ? '2줄 보조' : '1줄 보조'}`;
+  }
   return `${getLayoutLabel(v.messageStyle)} · ${v.twoLine ? '2줄' : '1줄'}`;
 }
 
@@ -1693,6 +1807,7 @@ function syncThemeSelectionUI() {
     btn.classList.toggle('active', btn.dataset.theme === currentTheme);
     btn.setAttribute('data-hidden', currentPresetCategory === 'all' ? 'false' : btn.getAttribute('data-cat') !== currentPresetCategory ? 'true' : 'false');
   });
+  syncMessageStyleUI();
 }
 
 function syncPhaseDashboard() {
@@ -1957,9 +2072,7 @@ function goPhase(direction) {
 
 function selectLayout(style) {
   document.getElementById('messageStyle').value = style;
-  document.querySelectorAll('.layout-card').forEach(card => {
-    card.classList.toggle('active', card.dataset.style === style);
-  });
+  syncMessageStyleUI();
   update();
 }
 
@@ -2029,6 +2142,8 @@ function applyTheme(name) {
   setVal('textStrokeHex', t.textStrokeColor || '#000000');
   setSelect('fontFamily', t.fontFamily);
   setSelect('messageStyle', t.messageStyle || 'fullBubble');
+  setSelect('runtimeLayout', t.runtimeLayout || 'auto');
+  syncMessageStyleUI();
   setRange('chatGap', t.chatGap);
   setRange('paddingX', t.paddingX);
   setToggle('twoLine', t.twoLine);
@@ -2476,7 +2591,7 @@ const LOCAL_SETTINGS_META_KEY = 'panda_chat_overlay_saved_meta_v1';
 
 function _captureState() {
   const inputs = {};
-  document.querySelectorAll('.settings-panel input, .settings-panel select, .settings-panel textarea, .css-output-area textarea').forEach(el => {
+  document.querySelectorAll('.settings-panel input, .settings-panel select, .settings-panel textarea, .css-output-area textarea, .preview-header-controls input, .preview-header-controls select, .preview-header-controls textarea').forEach(el => {
     if (el.type === 'file') return;
     if (!el.id) return;
     inputs[el.id] = el.type === 'checkbox' ? el.checked : el.value;
@@ -2543,8 +2658,10 @@ function _restoreState(json) {
     if (rankAvatarOn) initRankAvatarUI();
     const v = getValues();
     syncThemeSelectionUI();
+    syncMessageStyleUI();
     syncPhaseDashboard();
     updatePresetHelper();
+    syncApplyModeUI();
     updatePreview(v);
     clearTimeout(_updateCssTimer);
     _updateCssTimer = setTimeout(() => updateCSS(v), 80);
@@ -2600,6 +2717,7 @@ document.addEventListener('keydown', (e) => {
 
 function update() {
   const v = getValues();
+  syncMessageStyleUI();
   // 미리보기는 즉시 반영 (인라인 스타일 — 가벼움)
   updatePreview(v);
 
@@ -2659,6 +2777,7 @@ function getValues() {
     donationImgShadow: +document.getElementById('donationImgShadow').value,
     fontFamily: document.getElementById('fontFamily').value,
     messageStyle: document.getElementById('messageStyle').value,
+    runtimeLayout: document.getElementById('runtimeLayout').value,
     chatGap: +document.getElementById('chatGap').value,
     paddingX: +document.getElementById('paddingX').value,
     twoLine: getToggle('twoLine'),
@@ -2755,8 +2874,8 @@ function getRecommendedObsSize(v) {
   // 아바타(좌측) 사용 시 너비 확보
   const hasAvatar = (v.nickIcon === '__custom_img__' && v.customIconUrl) || (v.nickIcon && v.nickIcon !== '__custom_img__');
   if (hasAvatar && v.iconPlacement === 'messageAvatar') { w += 50; }
-  // 2줄 모드(splitLayers/nameCapsule) → 높이 확보
-  if (v.messageStyle !== 'fullBubble') { h += 50; }
+  // 카드형/캡슐형처럼 레이어가 생기는 경우 → 높이 확보
+  if (getMessageLayoutState(v).layeredMode) { h += 50; }
   // 최대너비 넉넉 → 더 넓은 소스
   if (v.maxWidth > 85) { w += 30; }
   // 50단위로 반올림
@@ -2793,13 +2912,11 @@ function updatePreview(v) {
   const effectiveBoxShadow = v.boxShadowSize > 0
     ? `0 ${Math.ceil(v.boxShadowSize / 2)}px ${v.boxShadowSize}px ${buildAlphaColor(v.boxShadowColor, 40)}`
     : 'none';
-  const layeredMode = v.messageStyle !== 'fullBubble';
-  const capsuleMode = v.messageStyle === 'nameCapsule';
-  const splitMode = v.messageStyle === 'splitLayers';
+  const { runtimeMode, runtimeLayout, indentationMode, layeredMode, capsuleMode, splitMode } = getMessageLayoutState(v);
   const effectiveNamePaddingX = v.namePaddingX > 0 ? v.namePaddingX : Math.max(v.paddingX - 1, 8);
   const effectiveSplitTextPaddingX = v.splitTextPaddingX > 0 ? v.splitTextPaddingX : v.paddingX;
   const effectiveSplitTextPaddingY = v.splitTextPaddingY > 0 ? v.splitTextPaddingY : (v.twoLine ? 6 : 5);
-  const effectiveSplitTextOffsetX = v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : (layeredMode ? 2 : 0);
+  const effectiveSplitTextOffsetX = v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : (!runtimeMode && layeredMode ? 2 : 0);
   const hasCustomAvatar = v.nickIcon === '__custom_img__' && v.customIconUrl;
   const hasEmojiAvatar = v.nickIcon && v.nickIcon !== '__custom_img__';
   const hasAvatar = hasActiveNickIcon(v);
@@ -2854,7 +2971,10 @@ function updatePreview(v) {
     item.style.alignSelf = alignVal;
     item.style.textAlign = v.chatAlign === 'right' ? 'right' : 'left';
 
-    box.style.display = 'block';
+    box.style.display = indentationMode ? 'flex' : 'block';
+    box.style.justifyContent = (indentationMode && v.chatAlign === 'right') ? 'end' : '';
+    box.style.alignItems = indentationMode ? 'flex-start' : '';
+    box.style.gap = indentationMode ? '0' : '';
     box.style.position = 'relative';
     box.style.zIndex = avatarAsLeft && layeredMode ? '1' : '';
     box.style.background = 'transparent';
@@ -2874,19 +2994,22 @@ function updatePreview(v) {
     nick.style.lineHeight = `${v.lineHeight}`;
     nick.style.maxWidth = '100%';
     nick.style.minWidth = '0';
+    nick.style.whiteSpace = indentationMode ? 'nowrap' : '';
+    nick.style.paddingRight = indentationMode ? '0' : '';
+    nick.style.flexShrink = indentationMode ? '0' : '';
 
     name.style.color = v.nickColor;
     name.style.fontSize = `${effectiveNickFontSize}px`;
     name.style.fontWeight = v.nickBold ? '700' : '400';
     name.style.textShadow = shadow;
     name.style.marginRight = '0';
-    name.style.display = layeredMode ? 'inline-flex' : 'inline';
-    name.style.alignItems = layeredMode ? 'center' : '';
-    name.style.minHeight = layeredMode ? `${avatarSize}px` : '';
-    name.style.padding = layeredMode ? `0 ${effectiveNamePaddingX}px` : '0';
-    name.style.borderRadius = layeredMode ? `${effectiveCapsuleRadius}px` : '0';
-    name.style.background = layeredMode ? nameBubbleBackground : 'transparent';
-    name.style.boxShadow = layeredMode ? effectiveBoxShadow : 'none';
+    name.style.display = capsuleMode ? 'inline-flex' : 'inline';
+    name.style.alignItems = capsuleMode ? 'center' : '';
+    name.style.minHeight = capsuleMode ? `${avatarSize}px` : '';
+    name.style.padding = capsuleMode ? `0 ${effectiveNamePaddingX}px` : '0';
+    name.style.borderRadius = capsuleMode ? `${effectiveCapsuleRadius}px` : '0';
+    name.style.background = capsuleMode ? nameBubbleBackground : 'transparent';
+    name.style.boxShadow = capsuleMode ? effectiveBoxShadow : 'none';
     name.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
     name.style.maxWidth = '100%';
     name.style.minWidth = '0';
@@ -2904,7 +3027,7 @@ function updatePreview(v) {
     });
 
     separator.textContent = v.separatorText;
-    separator.style.display = (layeredMode || v.twoLine || !v.separatorText) ? 'none' : 'inline';
+    separator.style.display = ((capsuleMode || (!runtimeMode && splitMode)) || v.twoLine || !v.separatorText) ? 'none' : 'inline';
     separator.style.color = v.nickColor;
     separator.style.fontSize = `${effectiveNickFontSize}px`;
     separator.style.fontWeight = v.nickBold ? '700' : '400';
@@ -2913,7 +3036,7 @@ function updatePreview(v) {
 
     text.style.display = layeredMode || v.twoLine ? 'block' : 'inline';
     text.style.marginTop = splitMode ? '0px' : (capsuleMode ? '4px' : (v.twoLine ? '2px' : '0'));
-    text.style.marginLeft = layeredMode ? `${effectiveSplitTextOffsetX}px` : '0';
+    text.style.marginLeft = (!runtimeMode && layeredMode) ? `${effectiveSplitTextOffsetX}px` : '0';
     text.style.color = v.textColor;
     text.style.textShadow = shadow;
     text.style.maxWidth = '100%';
@@ -3368,21 +3491,31 @@ function getAvatarEditorControls() {
 }
 
 function feGetControls(type) {
-  const style = document.getElementById('messageStyle').value;
-  const isCapsule = style === 'nameCapsule';
-  const isSplit = style === 'splitLayers';
-  const isLayered = style !== 'fullBubble';
+  const v = getValues();
+  const style = v.messageStyle;
+  const { runtimeMode, runtimeLayout, capsuleMode, splitMode, layeredMode } = getMessageLayoutState(v);
+  const isCapsule = capsuleMode;
+  const isSplit = splitMode;
+  const isLayered = layeredMode;
   const configs = {
     bubble: {
       title: '말풍선 / 레이아웃',
-      context: isSplit
-        ? '현재는 닉네임과 본문이 분리형으로 렌더링됩니다. 팬더HP에서 가능한 텍스트 색/크기 대신 레이어와 배치만 조정합니다.'
+      context: runtimeMode
+        ? `현재는 ${getRuntimeLayoutLabel(runtimeLayout)} 구조를 기준으로 렌더링됩니다. 실제 위젯 줄 구조는 유지하고 안전한 꾸미기 값만 조정합니다.`
+        : isSplit
+        ? '현재는 실제 위젯 흐름 위에 본문 카드가 강조되는 형태로 렌더링됩니다. 텍스트 색/크기보다 카드 분위기와 간격을 조정합니다.'
         : '말풍선 외곽과 메시지 배치를 조정합니다. 팬더HP에서 가능한 텍스트 편집은 이곳에서 제외합니다.',
       controls: [
         { label: '스타일', type: 'select', id: 'messageStyle', options: () => {
           const sel = document.getElementById('messageStyle');
           return [...sel.options].map(o => ({ value: o.value, text: o.textContent }));
         }},
+        ...(runtimeMode ? [{
+          label: '실제 레이아웃', type: 'select', id: 'runtimeLayout', options: () => {
+            const sel = document.getElementById('runtimeLayout');
+            return [...sel.options].map(o => ({ value: o.value, text: o.textContent }));
+          }
+        }] : []),
         { label: '2줄모드', type: 'toggle', id: 'twoLine' },
         { label: '정렬', type: 'select', id: 'chatAlign', options: () => {
           const sel = document.getElementById('chatAlign');
@@ -3412,7 +3545,7 @@ function feGetControls(type) {
     nick: {
       title: '닉네임',
       context: isSplit
-        ? '분리형에서는 닉네임 캡슐이 별도 레이어로 렌더링됩니다.'
+        ? '카드형에서는 닉네임 캡슐과 본문 카드가 시각적으로 분리되어 보입니다.'
         : (isCapsule
           ? '닉네임 글자와 캡슐 영역을 함께 조정합니다.'
           : '팬더HP에서 못 하는 닉네임 캡슐/구분자 중심 조정만 제공합니다.'),
@@ -3428,7 +3561,7 @@ function feGetControls(type) {
           { label: '그라데이션 시작', type: 'color', id: 'nameGradStart', hex: 'nameGradStartHex' },
           { label: '그라데이션 끝', type: 'color', id: 'nameGradEnd', hex: 'nameGradEndHex' }
         ] : [
-          { label: '닉네임 캡슐 배경은 분리형/닉네임 캡슐형에서만 표시됩니다.', type: 'info' }
+          { label: '닉네임 캡슐 배경은 카드형/닉네임 캡슐형에서만 표시됩니다.', type: 'info' }
         ]),
         { label: '닉프레임', type: 'toggle', id: 'nameFrameEnabled' },
         { label: '프레임색1', type: 'color', id: 'nameFrameColor1', hex: 'nameFrameColor1Hex' },
@@ -3441,7 +3574,7 @@ function feGetControls(type) {
     text: {
       title: '본문 텍스트',
       context: isSplit
-        ? '분리형에서는 본문이 별도 레이어로 렌더링됩니다.'
+        ? '카드형에서는 본문이 별도 카드처럼 강조됩니다.'
         : '팬더HP에서 없는 본문 레이어/배경 확장만 조정합니다.',
       controls: [
         { label: '글자색', type: 'color', id: 'textColor', hex: 'textHex' },
@@ -3528,7 +3661,7 @@ function feIdentify(el, e) {
       const clickY = e.clientY - liRect.top;
 
       if (v.iconPlacement === 'messageAvatar') {
-        const layeredMode = v.messageStyle !== 'fullBubble';
+        const { layeredMode } = getMessageLayoutState(v);
         const avatarSize = v.avatarFrameSize > 0 ? v.avatarFrameSize : Math.max(v.iconSize + 2, 18);
         const avatarLeft = (layeredMode ? 0 : v.paddingX) + (v.avatarOffsetX || 0);
         const avatarTop = (layeredMode ? 0 : v.paddingY) + (v.avatarOffsetY || 0);
@@ -4020,7 +4153,10 @@ function dragGetEffectiveValue(prop, v = getValues()) {
   if (prop === 'namePaddingX') return v.namePaddingX > 0 ? v.namePaddingX : Math.max(v.paddingX - 1, 8);
   if (prop === 'splitTextPaddingX') return v.splitTextPaddingX > 0 ? v.splitTextPaddingX : v.paddingX;
   if (prop === 'splitTextPaddingY') return v.splitTextPaddingY > 0 ? v.splitTextPaddingY : (v.twoLine ? 6 : 5);
-  if (prop === 'splitTextOffsetX') return v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : (v.messageStyle !== 'fullBubble' ? 2 : 0);
+  if (prop === 'splitTextOffsetX') {
+    const { runtimeMode, layeredMode } = getMessageLayoutState(v);
+    return v.splitTextOffsetX >= 0 ? v.splitTextOffsetX : (!runtimeMode && layeredMode ? 2 : 0);
+  }
   if (prop === 'avatarFrameSize') return v.avatarFrameSize > 0 ? v.avatarFrameSize : Math.max(v.iconSize + 2, 18);
   return +document.getElementById(prop).value;
 }
@@ -4042,8 +4178,7 @@ function dragCursorForProp(prop) {
 function dragInjectHandles() {
   const chat = document.getElementById('previewChat');
   const v = getValues();
-  const layeredMode = v.messageStyle !== 'fullBubble';
-  const splitMode = v.messageStyle === 'splitLayers';
+  const { layeredMode, splitMode } = getMessageLayoutState(v);
   const hasIcon = hasActiveNickIcon(v);
   const avatarAsLeft = hasIcon && v.iconPlacement === 'messageAvatar';
   const avatarSize = dragGetEffectiveValue('avatarFrameSize', v);
@@ -4298,6 +4433,7 @@ if (_origUpdate) {
 setTimeout(() => {
   dragInjectHandles();
   syncPreviewQuickDock(document.querySelector('#previewChat li.message__wrapper'));
+  syncApplyModeUI();
 }, 200);
 </script>
 

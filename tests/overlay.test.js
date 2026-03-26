@@ -2,6 +2,7 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const vm = require("node:vm");
 const {
   createCssGeneratorSandbox,
   createSampleValues,
@@ -25,6 +26,28 @@ test("updateCSS emits message ID selectors for both widget DOM shapes", () => {
     "message text should emit an explicit non-bold default",
   );
   assert.equal(outputs.cssOutput.textContent, css);
+});
+
+test("runtime widget mode keeps separator visible for live line-break layouts", () => {
+  const { sandbox } = createCssGeneratorSandbox();
+  const values = createSampleValues({
+    compatTheme: "box",
+    messageStyle: "runtimeAuto",
+    runtimeLayout: "chatLineBreak",
+  });
+  const css = sandbox.generateCssText(values);
+
+  assert.match(css, /justify-content: flex-end !important;|justify-content: flex-start !important;|justify-content: unset !important;/);
+  assert.match(
+    css,
+    /\.message__nick > span:not\(\.message__name\):not\(\.message__text\):not\(\.message__id\)[\s\S]*?display: inline !important;/,
+    "runtime line-break layouts should keep the separator visible like the live widget",
+  );
+  assert.match(
+    css,
+    /\.message__text[\s\S]*?margin-left: 0px !important;/,
+    "runtime mode should not apply custom split offset",
+  );
 });
 
 test("buildWrapperUrl serializes current values as config payload", () => {
@@ -56,16 +79,132 @@ test("buildWrapperUrl serializes current values as config payload", () => {
   assert.equal(decoded.customCss, ".demo { color: red; }");
 });
 
+test("overlay settings exposes wrapper workflow controls and persists them with saved state", () => {
+  const settingsHtml = read("overlay-settings.html");
+
+  assert.match(settingsHtml, /id="obsApplyMode"/);
+  assert.match(settingsHtml, /id="wrapperTargetUrl"/);
+  assert.match(settingsHtml, /가장 쉬운 방법은 CSS 복사입니다\./);
+  assert.match(settingsHtml, /방송용 URL 복사/);
+  assert.match(settingsHtml, /function syncApplyModeUI\(\)/);
+  assert.match(settingsHtml, /\.preview-header-controls input/);
+  assert.match(settingsHtml, /syncApplyModeUI\(\);/);
+});
+
+test("overlay settings keeps runtime widget parity controls internal", () => {
+  const settingsHtml = read("overlay-settings.html");
+
+  assert.doesNotMatch(settingsHtml, /data-style="runtimeAuto"/);
+  assert.match(settingsHtml, /option value="runtimeAuto" hidden/);
+  assert.match(settingsHtml, /id="runtimeLayoutRow" style="display:none !important;" hidden/);
+  assert.match(settingsHtml, /id="runtimeLayout"/);
+  assert.match(settingsHtml, /function getMessageLayoutState\(v = getValues\(\)\)/);
+  assert.match(settingsHtml, /function syncMessageStyleUI\(\)/);
+  assert.match(settingsHtml, /실제 위젯 기준/);
+});
+
+test("overlay settings presents splitLayers as card styling in user-facing copy", () => {
+  const settingsHtml = read("overlay-settings.html");
+  const presetSource = read("scripts/presets.js");
+
+  assert.match(settingsHtml, /전체 말풍선 \/ 캡슐형 \/ 카드형/);
+  assert.match(settingsHtml, /layout-card-name">카드형</);
+  assert.match(settingsHtml, /option value="splitLayers">본문 카드형</);
+  assert.match(settingsHtml, /게이밍 카드형/);
+  assert.match(settingsHtml, /클린 카드형/);
+  assert.match(presetSource, /splitLayers: "본문 카드형"/);
+});
+
+test("overlay settings surfaces recommended presets before tuned variants", () => {
+  const settingsHtml = read("overlay-settings.html");
+
+  assert.match(settingsHtml, /const tunedPresetNames = new Set\(\[/);
+  assert.match(settingsHtml, /방송용 튜닝형/);
+  assert.match(settingsHtml, /바로 사용 추천/);
+
+  const basicSafeIndex = settingsHtml.indexOf("applyTheme('studioFlat')");
+  const basicTunedIndex = settingsHtml.indexOf("applyTheme('reference')");
+  assert.ok(
+    basicSafeIndex >= 0 && basicTunedIndex >= 0 && basicSafeIndex < basicTunedIndex,
+    "basic safe presets should appear before tuned presets",
+  );
+
+  const cuteSafeIndex = settingsHtml.indexOf("applyTheme('whiteMinimal')");
+  const cuteTunedIndex = settingsHtml.indexOf("applyTheme('princess')");
+  assert.ok(
+    cuteSafeIndex >= 0 && cuteTunedIndex >= 0 && cuteSafeIndex < cuteTunedIndex,
+    "cute safe presets should appear before tuned presets",
+  );
+});
+
+test("split-layer presets are redesigned as widget-safe card variants", () => {
+  const sandbox = { console };
+  vm.createContext(sandbox);
+  vm.runInContext(
+    `${read("scripts/presets.js")}\nthis.__themes = themes;`,
+    sandbox,
+    { filename: "scripts/presets.js" },
+  );
+  const themes = sandbox.__themes;
+
+  for (const name of ["princess", "princess2", "cleanSplit", "gamingSplit"]) {
+    const preset = themes[name];
+    assert.ok(preset, `${name} preset should exist`);
+    assert.equal(
+      preset.messageStyle,
+      "nameCapsule",
+      `${name} should no longer depend on splitLayers`,
+    );
+    assert.equal(
+      preset.splitTextOffsetX,
+      -1,
+      `${name} should not rely on custom split offset`,
+    );
+    assert.ok(
+      preset.textBgOpacity > 0,
+      `${name} should use body card styling instead of structural split layout`,
+    );
+  }
+});
+
+test("dense capsule presets are tuned for broadcast readability", () => {
+  const sandbox = { console };
+  vm.createContext(sandbox);
+  vm.runInContext(
+    `${read("scripts/presets.js")}\nthis.__themes = themes;`,
+    sandbox,
+    { filename: "scripts/presets.js" },
+  );
+  const themes = sandbox.__themes;
+
+  assert.ok(themes.reference.maxWidth <= 84);
+  assert.ok(themes.reference.paddingX <= 14);
+  assert.ok(themes.reference.chatGap <= 6);
+
+  assert.ok(themes.princess.maxWidth >= 76);
+  assert.ok(themes.princess.textBgPadding <= 5);
+  assert.ok(themes.princess.namePaddingX <= 9);
+
+  assert.ok(themes.princess2.avatarFrameSize <= 40);
+  assert.ok(themes.princess2.lineHeight >= 1.4);
+  assert.ok(themes.princess2.textBgPadding <= 5);
+});
+
 test("preview source and inline duplicate both keep nick/id/separator styling aligned", () => {
   const previewSource = read("scripts/preview.js");
   const settingsHtml = read("overlay-settings.html");
 
   for (const source of [previewSource, settingsHtml]) {
+    assert.match(source, /resolveRuntimeWidgetLayout/);
+    assert.match(source, /runtimeMode/);
+    assert.match(source, /indentationMode/);
     assert.match(source, /querySelectorAll\(["']\.message__id["']\)/);
     assert.match(source, /querySelectorAll\(["']\.mr-1["']\)/);
     assert.match(source, /separator\.style\.color = .*nickColor/);
     assert.match(source, /separator\.style\.fontWeight = .*["']400["']/);
+    assert.match(source, /separator\.style\.display =[\s\S]*runtimeMode/);
     assert.match(source, /text\.style\.fontWeight = .*["']400["']/);
+    assert.match(source, /text\.style\.marginLeft =[\s\S]*runtimeMode/);
     assert.match(source, /style\.width = .*["']fit-content["']/);
   }
 });
@@ -109,4 +248,6 @@ test("live wrapper proxies the widget into a same-origin iframe and installs DOM
   assert.match(wrapperScript, /MutationObserver/);
   assert.match(wrapperScript, /fixNickElement/);
   assert.match(wrapperScript, /querySelectorAll\(":scope > li\.message__wrapper"\)/);
+  assert.match(read("scripts/css-generator.js"), /resolveWrapperTargetUrl/);
+  assert.match(read("scripts/css-generator.js"), /const defaultText = "방송용 URL 복사"/);
 });
