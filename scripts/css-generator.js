@@ -430,11 +430,12 @@ function updateCSS(v) {
         "overflow: hidden !important;",
         "box-sizing: border-box !important;",
         "word-break: break-word !important;",
-        "overflow-wrap: break-word !important;",
+        "overflow-wrap: anywhere !important;",
         "background: transparent !important;",
         "backdrop-filter: none !important;",
         "-webkit-backdrop-filter: none !important;",
         `padding: 0 0 0 ${avatarInset}px !important;`,
+        "min-width: 0 !important;",
         `max-width: ${v.maxWidth}% !important;`,
         "list-style: none !important;",
         `line-height: ${v.lineHeight} !important;`,
@@ -448,7 +449,7 @@ function updateCSS(v) {
         "overflow: hidden !important;",
         "box-sizing: border-box !important;",
         "word-break: break-word !important;",
-        "overflow-wrap: break-word !important;",
+        "overflow-wrap: anywhere !important;",
         `background: ${bubbleBackground} !important;`,
         v.blurAmount > 0
           ? `backdrop-filter: blur(${v.blurAmount}px) !important;`
@@ -462,7 +463,8 @@ function updateCSS(v) {
           ? `padding: ${v.paddingY}px ${v.paddingX}px ${v.paddingY}px ${avatarInset + v.paddingX}px !important;`
           : `padding: ${v.paddingY}px ${v.paddingX}px !important;`,
         avatarAsLeft || v.bubbleTail ? "position: relative !important;" : "",
-        "width: max-content !important;",
+        "width: fit-content !important;",
+        "min-width: 0 !important;",
         `max-width: ${v.maxWidth}% !important;`,
         "list-style: none !important;",
         `line-height: ${v.lineHeight} !important;`,
@@ -520,6 +522,7 @@ function updateCSS(v) {
     `font-size: ${effectiveNickFontSize}px !important;`,
     buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
     `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
+    "min-width: 0 !important;",
     "max-width: 100% !important;",
     "overflow: hidden !important;",
     "text-overflow: ellipsis !important;",
@@ -536,6 +539,8 @@ function updateCSS(v) {
   const messageIdDecls = [
     buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
     `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
+    "min-width: 0 !important;",
+    "max-width: 100% !important;",
   ];
   if (v.hideId) {
     messageIdDecls.push("display: none !important;");
@@ -608,6 +613,10 @@ function updateCSS(v) {
     `color: ${v.textColor} !important;`,
     "font-family: inherit !important;",
     buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+    "min-width: 0 !important;",
+    "max-width: 100% !important;",
+    "word-break: break-word !important;",
+    "overflow-wrap: anywhere !important;",
     `margin-top: ${splitMode ? 0 : capsuleMode ? 4 : v.twoLine ? 2 : 0}px !important;`,
     `margin-left: ${layeredMode ? effectiveSplitTextOffsetX : 0}px !important;`,
   ];
@@ -873,7 +882,8 @@ function updateCSS(v) {
       borderLine,
       `border-radius: ${effectiveDonationRadius}px !important;`,
       `padding: ${v.paddingY}px ${v.paddingX}px !important;`,
-      "width: max-content !important;",
+      "width: fit-content !important;",
+      "min-width: 0 !important;",
       `max-width: ${v.maxWidth}% !important;`,
       "list-style: none !important;",
       donationGlowShadow !== "none"
@@ -882,7 +892,8 @@ function updateCSS(v) {
       `align-self: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
       "transition: none !important;",
       "word-break: break-word !important;",
-      "overflow-wrap: break-word !important;",
+      "overflow-wrap: anywhere !important;",
+      "overflow: hidden !important;",
     ];
     if (v.donationGap > 0) {
       donationDecls.push(`margin-top: ${v.donationGap}px !important;`);
@@ -896,6 +907,9 @@ function updateCSS(v) {
         "flex-direction: column !important;",
         "align-items: flex-start !important;",
         "gap: 8px !important;",
+        "min-width: 0 !important;",
+        "max-width: 100% !important;",
+        "overflow: hidden !important;",
       ]),
     );
 
@@ -908,6 +922,10 @@ function updateCSS(v) {
         `color: ${v.donationTextColor} !important;`,
         `font-size: ${effectiveDonationFontSize}px !important;`,
         buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+        "min-width: 0 !important;",
+        "max-width: 100% !important;",
+        "word-break: break-word !important;",
+        "overflow-wrap: anywhere !important;",
       ]),
     );
     parts.push(
@@ -926,13 +944,17 @@ function updateCSS(v) {
       );
     } else {
       parts.push(
-        buildRule(selectors.donationImageWrap, ["display: block !important;"]),
+        buildRule(selectors.donationImageWrap, [
+          "display: block !important;",
+          "max-width: 100% !important;",
+          "overflow: hidden !important;",
+        ]),
       );
       parts.push(
         buildRule(selectors.donationImage, [
           `width: ${v.donationImgSize}px !important;`,
-          `height: ${v.donationImgSize}px !important;`,
-          `max-width: ${v.donationImgSize}px !important;`,
+          `height: auto !important;`,
+          `max-width: 100% !important;`,
           `max-height: ${v.donationImgSize}px !important;`,
           "object-fit: contain !important;",
           "display: inline-block !important;",
@@ -994,7 +1016,8 @@ function updateCSS(v) {
         borderLine,
         `border-radius: ${effectiveNoticeRadius}px !important;`,
         `padding: ${v.paddingY}px ${v.paddingX}px !important;`,
-        "width: max-content !important;",
+        "width: fit-content !important;",
+        "min-width: 0 !important;",
         `max-width: ${v.maxWidth}% !important;`,
         "list-style: none !important;",
         boxShadowLine,
@@ -1014,6 +1037,10 @@ function updateCSS(v) {
         `color: ${v.noticeTextColor} !important;`,
         `font-size: ${effectiveNoticeFontSize}px !important;`,
         buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+        "min-width: 0 !important;",
+        "max-width: 100% !important;",
+        "word-break: break-word !important;",
+        "overflow-wrap: anywhere !important;",
       ]),
     );
   }
