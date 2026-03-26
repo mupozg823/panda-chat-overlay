@@ -1283,6 +1283,35 @@
           <div class="toggle-switch on" id="noAnimation"></div>
         </div>
       </div>
+
+      <div class="control-row">
+        <span class="control-label">최대 메시지 수</span>
+        <div class="control-right">
+          <input type="range" id="maxMessages" min="0" max="50" value="0" oninput="update()">
+          <span class="value-display" id="maxMessagesVal">무제한</span>
+        </div>
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">텍스트 외곽선</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('textStroke')">
+          <div class="toggle-switch" id="textStroke"></div>
+        </div>
+      </div>
+      <div class="control-row" id="textStrokeOptions" style="display:none">
+        <span class="control-label">외곽선 두께</span>
+        <div class="control-right">
+          <input type="range" id="textStrokeSize" min="1" max="5" value="1" oninput="update()">
+          <span class="value-display" id="textStrokeSizeVal">1px</span>
+        </div>
+      </div>
+      <div class="control-row" id="textStrokeColorRow" style="display:none">
+        <span class="control-label">외곽선 색상</span>
+        <div class="control-right">
+          <input type="color" id="textStrokeColor" value="#000000" oninput="syncColor('textStrokeColor','textStrokeHex'); update()">
+          <input type="text" class="hex-input" id="textStrokeHex" value="#000000" oninput="onHexInput('textStrokeColor','textStrokeHex')">
+        </div>
+      </div>
       </div>
     </div>
 
@@ -1800,7 +1829,9 @@ function syncRangeDisplays(v) {
     bubbleTailSizeVal: `${v.bubbleTailSize}px`,
     donationImgRadiusVal: `${v.donationImgRadius}px`,
     donationImgBorderVal: `${v.donationImgBorder}px`,
-    donationImgShadowVal: `${v.donationImgShadow}px`
+    donationImgShadowVal: `${v.donationImgShadow}px`,
+    maxMessagesVal: v.maxMessages === 0 ? '무제한' : `${v.maxMessages}개`,
+    textStrokeSizeVal: `${v.textStrokeSize}px`
   };
 
   Object.entries(valueMap).forEach(([id, text]) => {
@@ -1815,6 +1846,12 @@ function syncRangeDisplays(v) {
   // 구분자 커스텀 안내
   const sepNote = document.getElementById('separatorNote');
   if (sepNote) sepNote.style.display = (v.separatorText !== ': ' && v.separatorText !== '') ? '' : 'none';
+
+  // 텍스트 외곽선 옵션 표시
+  const strokeOpts = document.getElementById('textStrokeOptions');
+  const strokeColorRow = document.getElementById('textStrokeColorRow');
+  if (strokeOpts) strokeOpts.style.display = v.textStroke ? '' : 'none';
+  if (strokeColorRow) strokeColorRow.style.display = v.textStroke ? '' : 'none';
 }
 
 function setPreviewThemeClass(previewChat, theme) {
@@ -1976,6 +2013,11 @@ function applyTheme(name) {
   setToggle('hideId', t.hideId !== undefined ? t.hideId : true);
   setToggle('preventFade', t.preventFade);
   setToggle('noAnimation', t.noAnimation);
+  setRange('maxMessages', t.maxMessages || 0);
+  setToggle('textStroke', t.textStroke || false);
+  setRange('textStrokeSize', t.textStrokeSize || 1);
+  setVal('textStrokeColor', t.textStrokeColor || '#000000');
+  setVal('textStrokeHex', t.textStrokeColor || '#000000');
   setSelect('fontFamily', t.fontFamily);
   setSelect('messageStyle', t.messageStyle || 'fullBubble');
   setRange('chatGap', t.chatGap);
@@ -2593,6 +2635,10 @@ function getValues() {
     hideId: getToggle('hideId'),
     preventFade: getToggle('preventFade'),
     noAnimation: getToggle('noAnimation'),
+    maxMessages: +document.getElementById('maxMessages').value,
+    textStroke: getToggle('textStroke'),
+    textStrokeSize: +document.getElementById('textStrokeSize').value,
+    textStrokeColor: document.getElementById('textStrokeColor').value,
     badgeOpacity: +document.getElementById('badgeOpacity').value,
     badgeScale: +document.getElementById('badgeScale').value,
     badgeGrayscale: +document.getElementById('badgeGrayscale').value,

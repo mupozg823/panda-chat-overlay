@@ -1110,6 +1110,35 @@ function updateCSS(v) {
     }
   }
 
+  // 메시지 수 제한 (nth-last-child)
+  if (v.maxMessages > 0) {
+    const maxSel = selectorsFor(targets, (theme) => [
+      `ul.${theme} > li:nth-last-child(n+${v.maxMessages + 1})`,
+      `ul > li.${theme}:nth-last-child(n+${v.maxMessages + 1})`,
+    ]);
+    parts.push(buildRule(maxSel, ["display: none !important;"]));
+  }
+
+  // 텍스트 외곽선 (-webkit-text-stroke)
+  if (v.textStroke) {
+    const strokeVal = `${v.textStrokeSize || 1}px ${v.textStrokeColor || "#000000"}`;
+    parts.push(
+      buildRule(selectors.messageName, [
+        `-webkit-text-stroke: ${strokeVal} !important;`,
+      ]),
+    );
+    parts.push(
+      buildRule(selectors.messageText, [
+        `-webkit-text-stroke: ${strokeVal} !important;`,
+      ]),
+    );
+    parts.push(
+      buildRule(selectors.messageSeparator, [
+        `-webkit-text-stroke: ${strokeVal} !important;`,
+      ]),
+    );
+  }
+
   const customCss = normalizeCustomCss(v.customCss);
   if (customCss) {
     parts.push("/* 사용자 추가 커스텀 CSS */\n");
