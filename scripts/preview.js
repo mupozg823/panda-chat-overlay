@@ -179,6 +179,7 @@ function updatePreview(v) {
     const box = item.querySelector(".message__box");
     const nick = item.querySelector(".message__nick");
     const name = item.querySelector(".message__name");
+    const messageIds = item.querySelectorAll(".message__id");
     const separator = item.querySelector(".message__separator");
     const text = item.querySelector(".message__text");
 
@@ -248,10 +249,24 @@ function updatePreview(v) {
     name.style.letterSpacing =
       v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
 
+    messageIds.forEach((messageId) => {
+      messageId.style.display = "inline";
+      messageId.style.color = v.nickColor;
+      messageId.style.fontSize = `${effectiveNickFontSize}px`;
+      messageId.style.fontWeight = v.nickBold ? "700" : "400";
+      messageId.style.textShadow = shadow;
+      messageId.style.fontFamily = "inherit";
+      messageId.style.letterSpacing =
+        v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
+    });
+
     separator.textContent = v.separatorText;
     separator.style.display =
       layeredMode || v.twoLine || !v.separatorText ? "none" : "inline";
-    separator.style.color = v.textColor;
+    separator.style.color = v.nickColor;
+    separator.style.fontSize = `${effectiveNickFontSize}px`;
+    separator.style.fontWeight = v.nickBold ? "700" : "400";
+    separator.style.fontFamily = "inherit";
     separator.style.textShadow = shadow;
 
     text.style.display = layeredMode || v.twoLine ? "block" : "inline";
@@ -298,7 +313,7 @@ function updatePreview(v) {
       text.style.webkitBackdropFilter = "none";
     }
     text.style.border = "none";
-    text.style.fontWeight = v.textBold ? "700" : "";
+    text.style.fontWeight = v.textBold ? "700" : "400";
     text.style.letterSpacing =
       v.textLetterSpacing > 0 ? `${v.textLetterSpacing}px` : "";
 

@@ -1378,6 +1378,8 @@
               </div>
               <span class="message__name" id="pNick1"
                     style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡ai</span>
+              <span class="message__id"
+                    style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(happy***)</span>
               <span class="message__separator"
                     style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText1"
@@ -1398,6 +1400,8 @@
               </div>
               <span class="message__name" id="pNick2"
                     style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">이유♡루야♡김잇콩</span>
+              <span class="message__id"
+                    style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(rui***)</span>
               <span class="message__separator"
                     style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText2"
@@ -1477,6 +1481,8 @@
               </div>
               <span class="message__name" id="pNick5"
                     style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">하루너만의</span>
+              <span class="message__id"
+                    style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(ram***)</span>
               <span class="message__separator"
                     style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText5"
@@ -2760,6 +2766,7 @@ function updatePreview(v) {
     const box = item.querySelector('.message__box');
     const nick = item.querySelector('.message__nick');
     const name = item.querySelector('.message__name');
+    const messageIds = item.querySelectorAll('.message__id');
     const separator = item.querySelector('.message__separator');
     const text = item.querySelector('.message__text');
 
@@ -2817,9 +2824,22 @@ function updatePreview(v) {
     name.style.boxShadow = layeredMode ? effectiveBoxShadow : 'none';
     name.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
 
+    messageIds.forEach(messageId => {
+      messageId.style.display = 'inline';
+      messageId.style.color = v.nickColor;
+      messageId.style.fontSize = `${effectiveNickFontSize}px`;
+      messageId.style.fontWeight = v.nickBold ? '700' : '400';
+      messageId.style.textShadow = shadow;
+      messageId.style.fontFamily = 'inherit';
+      messageId.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
+    });
+
     separator.textContent = v.separatorText;
     separator.style.display = (layeredMode || v.twoLine || !v.separatorText) ? 'none' : 'inline';
-    separator.style.color = v.textColor;
+    separator.style.color = v.nickColor;
+    separator.style.fontSize = `${effectiveNickFontSize}px`;
+    separator.style.fontWeight = v.nickBold ? '700' : '400';
+    separator.style.fontFamily = 'inherit';
     separator.style.textShadow = shadow;
 
     text.style.display = layeredMode || v.twoLine ? 'block' : 'inline';
@@ -2852,7 +2872,7 @@ function updatePreview(v) {
       text.style.webkitBackdropFilter = 'none';
     }
     text.style.border = 'none';
-    text.style.fontWeight = v.textBold ? '700' : '';
+    text.style.fontWeight = v.textBold ? '700' : '400';
     text.style.letterSpacing = v.textLetterSpacing > 0 ? `${v.textLetterSpacing}px` : '';
 
     item.querySelectorAll('div.mr-1').forEach(wrap => {

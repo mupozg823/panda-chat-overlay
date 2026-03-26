@@ -4,6 +4,9 @@
   "version": "0.2.0",
   "description": "PandaTV chat overlay generator and compatibility-first CSS tool",
   "scripts": {
+    "lint": "node scripts/lint.js",
+    "test": "node --test tests/overlay.test.js",
+    "check": "npm run lint && npm run test",
     "start": "node scripts/serve.js",
     "serve": "node scripts/serve.js"
   }
