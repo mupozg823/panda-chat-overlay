@@ -525,12 +525,14 @@ function updateCSS(v) {
   parts.push(buildRule(selectors.messageName, messageNameDecls));
 
   // .message__id (PandaTV가 인라인 text-shadow를 주입하므로 직접 타겟 필요)
-  parts.push(
-    buildRule(selectors.messageId, [
-      buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
-      `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
-    ]),
-  );
+  const messageIdDecls = [
+    buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+    `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
+  ];
+  if (v.hideId) {
+    messageIdDecls.push("display: none !important;");
+  }
+  parts.push(buildRule(selectors.messageId, messageIdDecls));
 
   // 닉네임 프레임 (::after)
   if (v.nameFrameEnabled) {

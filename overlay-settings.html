@@ -1216,6 +1216,13 @@
       </div>
 
       <div class="control-row">
+        <span class="control-label">아이디 숨기기</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('hideId')">
+          <div class="toggle-switch on" id="hideId"></div>
+        </div>
+      </div>
+
+      <div class="control-row">
         <span class="control-label">배지 투명도</span>
         <div class="control-right">
           <input type="range" id="badgeOpacity" min="0" max="100" value="100" oninput="update()">
@@ -1966,6 +1973,7 @@ function applyTheme(name) {
   setToggle('hideEnd', t.hideEnd);
   setToggle('hideNav', t.hideNav);
   setToggle('hideIcon', t.hideIcon);
+  setToggle('hideId', t.hideId !== undefined ? t.hideId : true);
   setToggle('preventFade', t.preventFade);
   setToggle('noAnimation', t.noAnimation);
   setSelect('fontFamily', t.fontFamily);
@@ -2578,6 +2586,7 @@ function getValues() {
     hideEnd: getToggle('hideEnd'),
     hideNav: getToggle('hideNav'),
     hideIcon: getToggle('hideIcon'),
+    hideId: getToggle('hideId'),
     preventFade: getToggle('preventFade'),
     noAnimation: getToggle('noAnimation'),
     badgeOpacity: +document.getElementById('badgeOpacity').value,
