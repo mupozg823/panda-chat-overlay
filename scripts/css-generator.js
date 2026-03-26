@@ -115,6 +115,48 @@ function normalizeCustomCss(value) {
   return text ? `${text}\n` : "";
 }
 
+const FALLBACK_WIDGET_THEMES = [
+  "default",
+  "kakaotalk",
+  "neon",
+  "box",
+  "roundbox",
+  "balloon",
+  "board",
+];
+
+function resolveTargetThemes(compatTheme) {
+  if (typeof getTargetThemes === "function") {
+    return getTargetThemes(compatTheme);
+  }
+  return compatTheme === "all"
+    ? FALLBACK_WIDGET_THEMES.slice()
+    : [compatTheme || "default"];
+}
+
+function resolveRankBadges() {
+  return Array.isArray(globalThis.RANK_BADGES) ? globalThis.RANK_BADGES : [];
+}
+
+function resolveCustomIconDataUrl() {
+  return typeof globalThis.customIconDataUrl === "string"
+    ? globalThis.customIconDataUrl
+    : "";
+}
+
+function encodeBase64Utf8(text) {
+  return btoa(unescape(encodeURIComponent(String(text || ""))));
+}
+
+function decodeBase64Utf8(value) {
+  if (!value) return "";
+  try {
+    return decodeURIComponent(escape(atob(value)));
+  } catch {
+    return "";
+  }
+}
+
 function buildBubbleBackground(v) {
   if (v.useGradient) {
     const start = hexToRgb(v.gradStart);
@@ -217,8 +259,8 @@ function escapeForCssUrl(value) {
 }
 
 // ──── CSS 출력 및 복사 ────
-function updateCSS(v) {
-  const targets = getTargetThemes(v.compatTheme);
+function generateCssText(v) {
+  const targets = resolveTargetThemes(v.compatTheme);
   const bubbleBackground = buildBubbleBackground(v);
   const nameBubbleBackground = buildNameBubbleBackground(v);
   const donationBackground = buildDonationBackground(v);
@@ -1074,7 +1116,7 @@ function updateCSS(v) {
   if (v.useRankBadge && v.rankBadgeIcons) {
     const badgeSize = v.rankBadgeSize || 16;
     const badgeParts = [];
-    RANK_BADGES.forEach((rank) => {
+    resolveRankBadges().forEach((rank) => {
       const cfg = v.rankBadgeIcons[rank.key];
       if (!cfg || cfg.type === "default") return;
       const sel = `div.mr-1:has(svg[data-src*="${rank.dataSrc}"])`;
@@ -1116,7 +1158,7 @@ function updateCSS(v) {
   // 직급별 아바타 이미지
   if (v.useRankAvatar && v.rankAvatarImages && hasAvatar) {
     const avatarParts = [];
-    RANK_BADGES.forEach((rank) => {
+    resolveRankBadges().forEach((rank) => {
       const url = v.rankAvatarImages[rank.key];
       if (!url) return;
       const rankHas = `:has(.mr-1 svg[data-src*="${rank.dataSrc}"])`;
@@ -1173,7 +1215,11 @@ function updateCSS(v) {
     parts.push("\n");
   }
 
-  const cssText = parts.filter(Boolean).join("");
+  return parts.filter(Boolean).join("");
+}
+
+function updateCSS(v) {
+  const cssText = generateCssText(v);
   document.getElementById("cssOutput").textContent = cssText;
   const preview = document.getElementById("cssOutputPreview");
   if (preview) {
@@ -1185,21 +1231,22 @@ function updateCSS(v) {
 
 function copyCSS() {
   const css = document.getElementById("cssOutput").textContent;
+  const iconDataUrl = resolveCustomIconDataUrl();
 
   function onCopied() {
     const btn = document.getElementById("copyBtn");
     let msg = "복사 완료!";
-    if (customIconDataUrl) {
-      if (customIconDataUrl.startsWith("data:")) {
-        const sizeKB = Math.round(customIconDataUrl.length / 1024);
+    if (iconDataUrl) {
+      if (iconDataUrl.startsWith("data:")) {
+        const sizeKB = Math.round(iconDataUrl.length / 1024);
         if (sizeKB > 200) {
           msg = `복사 완료! (아이콘 ${sizeKB}KB — 100KB 이하 권장)`;
         } else {
           msg = "복사 완료! (아이콘 포함)";
         }
       } else if (
-        customIconDataUrl.startsWith("http://localhost") ||
-        customIconDataUrl.startsWith("file://")
+        iconDataUrl.startsWith("http://localhost") ||
+        iconDataUrl.startsWith("file://")
       ) {
         msg = "복사 완료! (로컬 URL — OBS에서 안 보일 수 있음)";
       } else {
@@ -1258,6 +1305,22 @@ function onCopyFailed() {
   }, 4000);
 }
 
+function buildWrapperUrl(chatUrl, configValue) {
+  const wrapperBase =
+    window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
+  const params = new URLSearchParams();
+  params.set("target", chatUrl);
+
+  if (configValue && typeof configValue === "object") {
+    params.set("config", encodeBase64Utf8(JSON.stringify(configValue)));
+  } else {
+    const css = document.getElementById("cssOutput").textContent;
+    if (css) params.set("css", encodeBase64Utf8(css));
+  }
+
+  return `${wrapperBase}live-wrapper.html?${params.toString()}`;
+}
+
 function copyWrapperUrl() {
   const chatUrl = prompt(
     "PandaTV 채팅 URL을 입력하세요:\n예: https://p.pandahp.kr/chat/xxxx",
@@ -1267,11 +1330,8 @@ function copyWrapperUrl() {
     return;
   }
 
-  const css = document.getElementById("cssOutput").textContent;
-  const b64 = btoa(unescape(encodeURIComponent(css)));
-  const wrapperBase =
-    window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
-  const url = `${wrapperBase}live-wrapper.html?target=${encodeURIComponent(chatUrl)}&css=${b64}`;
+  const configValue = typeof getValues === "function" ? getValues() : null;
+  const url = buildWrapperUrl(chatUrl, configValue);
 
   const btn = document.getElementById("wrapperUrlBtn");
   if (navigator.clipboard && navigator.clipboard.writeText) {

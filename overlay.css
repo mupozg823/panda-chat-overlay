@@ -52,7 +52,7 @@ ul.board > li.message__wrapper {
   display: block !important;
   overflow: hidden !important;
   word-break: break-word !important;
-  overflow-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
   background: rgba(255, 240, 245, 0.55) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
@@ -60,7 +60,8 @@ ul.board > li.message__wrapper {
   border-radius: 16px !important;
   padding: 4px 12px !important;
   margin: 0 !important;
-  width: max-content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
   max-width: 90% !important;
   list-style: none !important;
   font-size: 13px !important;
@@ -104,6 +105,8 @@ ul.board > li.message__wrapper .message__nick {
   display: inline !important;
   padding: 0 !important;
   margin: 0 !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
 ul.default > li.message__wrapper .message__name,
@@ -118,6 +121,7 @@ ul.board > li.message__wrapper .message__name {
   font-size: 13px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  min-width: 0 !important;
   max-width: 100% !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -170,6 +174,10 @@ ul.board > li.message__wrapper .message__text {
   font-size: 13px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -231,7 +239,8 @@ ul.board > li.heart__wrapper {
   border-radius: 16px !important;
   padding: 6px 12px !important;
   margin: 0 !important;
-  width: max-content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
   max-width: 90% !important;
   font-size: 12px !important;
   box-shadow: none !important;
@@ -254,6 +263,8 @@ ul.board > li.heart__wrapper .haert__image {
   box-shadow: none !important;
   padding: 0 !important;
   margin: 0 !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
 ul.default > li.heart__wrapper .heart__text,
@@ -288,6 +299,10 @@ ul.board > li.heart__wrapper .haert__image div {
   font-size: 12px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -366,7 +381,8 @@ ul.board > li.chat__notice--list {
   border-radius: 16px !important;
   padding: 5px 12px !important;
   margin: 0 !important;
-  width: max-content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
   max-width: 90% !important;
   box-shadow: none !important;
 }
@@ -382,6 +398,10 @@ ul.board > li.chat__notice--list .notice__text {
   font-size: 12px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -512,7 +532,7 @@ ul > li.board.message__wrapper {
   display: block !important;
   overflow: hidden !important;
   word-break: break-word !important;
-  overflow-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
   background: rgba(255, 240, 245, 0.55) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
@@ -520,7 +540,8 @@ ul > li.board.message__wrapper {
   border-radius: 16px !important;
   padding: 4px 12px !important;
   margin: 0 !important;
-  width: max-content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
   max-width: 90% !important;
   list-style: none !important;
   font-size: 13px !important;
@@ -564,6 +585,8 @@ ul > li.board.message__wrapper .message__nick {
   display: inline !important;
   padding: 0 !important;
   margin: 0 !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
 ul > li.default.message__wrapper .message__name,
@@ -578,6 +601,7 @@ ul > li.board.message__wrapper .message__name {
   font-size: 13px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  min-width: 0 !important;
   max-width: 100% !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
@@ -630,6 +654,10 @@ ul > li.board.message__wrapper .message__text {
   font-size: 13px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -683,7 +711,8 @@ ul > li.board.heart__wrapper {
   border-radius: 16px !important;
   padding: 6px 12px !important;
   margin: 0 !important;
-  width: max-content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
   max-width: 90% !important;
   font-size: 12px !important;
   box-shadow: none !important;
@@ -706,6 +735,8 @@ ul > li.board.heart__wrapper .haert__image {
   box-shadow: none !important;
   padding: 0 !important;
   margin: 0 !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
 ul > li.default.heart__wrapper .heart__text,
@@ -740,6 +771,10 @@ ul > li.board.heart__wrapper .haert__image div {
   font-size: 12px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -817,7 +852,8 @@ ul > li.board.chat__notice--list {
   border-radius: 16px !important;
   padding: 5px 12px !important;
   margin: 0 !important;
-  width: max-content !important;
+  width: fit-content !important;
+  min-width: 0 !important;
   max-width: 90% !important;
   box-shadow: none !important;
 }
@@ -833,6 +869,10 @@ ul > li.board.chat__notice--list .notice__text {
   font-size: 12px !important;
   font-family: inherit !important;
   text-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;

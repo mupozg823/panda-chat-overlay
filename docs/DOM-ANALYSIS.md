@@ -101,18 +101,20 @@ const themeLayouts = {
 
 ### 4.2 chatInline (default 테마)
 
-`message__box` 없이 `<p>` 하나에 닉네임과 메시지가 함께 들어감.
+실위젯 관찰 기준으로는 `message__box` 없이 닉네임과 메시지가 한 줄에 들어간다.
+
+주의: 라이브 DOM에서는 `P.message__nick > DIV.mr-1` 형태가 관찰됐는데, 이는 invalid HTML이다. 브라우저가 자동 재파싱할 수 있으므로 도구/미리보기에서는 아래처럼 **정규화된 유효 구조**(`div.message__nick` + `span.mr-1`)를 기준으로 삼아야 한다.
 
 ```html
 <li class="message__wrapper chat {chatEffect} {chatTheme}"
     style="text-align: {direction}; font-family: {font}; {chatDurationStyle}">
-  <p class="message__nick hide__opacity {opacityClass}">
+  <div class="message__nick hide__opacity {opacityClass}">
     <!-- 배지 (조건부) -->
-    <div class="mr-1 inline-block w-max align-text-bottom">
+    <span class="mr-1 inline-block w-max align-text-bottom">
       <svg data-src="/icons/ico_class_n.svg"
            style="width: {fontSize}px; height: {fontSize}px;" fill="none">
       </svg>
-    </div>
+    </span>
     <!-- 닉네임 -->
     <span class="message__name"
           style="color: {nickColor}; font-size: {fontSize}px;
@@ -139,27 +141,27 @@ const themeLayouts = {
                  text-shadow: {shadow}; font-family: {font}">
       메시지 내용
     </span>
-  </p>
+  </div>
 </li>
 ```
 
 ### 4.3 chatLineBreak (kakaotalk 등)
 
-`message__box` div가 존재하고, 닉네임과 메시지가 별도 `<p>`로 분리.
+`message__box`가 존재하고, 닉네임 행과 메시지 텍스트가 분리된다. 여기서도 도구 쪽 목표 구조는 유효한 마크업이어야 한다.
 
 ```html
 <li class="message__wrapper chat {chatEffect} {chatTheme} hide__opacity {opacityClass}"
     style="text-align: {direction}; font-family: {font}; {chatDurationStyle}">
   <div class="message__box">
-    <p class="message__nick hide__opacity {opacityClass}">
+    <div class="message__nick hide__opacity {opacityClass}">
       <!-- 배지 (조건부) -->
-      <div class="mr-1 inline-block w-max align-text-bottom">
+      <span class="mr-1 inline-block w-max align-text-bottom">
         <svg data-src="..." style="width: ...px; height: ...px;" fill="none"></svg>
-      </div>
+      </span>
       <span class="message__name" style="{nickStyle}">닉네임</span>
       <span class="message__id" style="{nickStyle}">(abc***)</span>
       <span style="{nickStyle}">:&nbsp;&nbsp;</span>
-    </p>
+    </div>
     <!-- 이모티콘 (조건부) -->
     <img src="{emoticonUrl}" alt="채팅 이모티콘" class="my-1">
     <!-- 메시지 (텍스트가 있을 때만) -->
@@ -184,12 +186,12 @@ const themeLayouts = {
     class="message__box"
     style="display: flex; justify-content: {left일때 unset, right일때 end}"
   >
-    <p
+    <div
       class="message__nick hide__opacity {opacityClass}"
       style="white-space: nowrap; padding-right: 0; flex-shrink: 0"
     >
       <!-- 배지, 닉네임, ID, 구분자 (동일) -->
-    </p>
+    </div>
     <p
       class="message__text hide__opacity {opacityClass}"
       style="flex-shrink: 1; color: ...; font-size: ...; text-shadow: ...; font-family: ..."

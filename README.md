@@ -22,6 +22,18 @@
 3. OBS Studio에서 브라우저 소스의 **사용자 지정 CSS**에 붙여넣습니다.
 4. 적용 후 브라우저 소스를 새로고침해 확인합니다.
 
+## 라이브 위젯 래퍼
+
+실제 PandaTV 위젯의 mixed layout / invalid markup 문제를 CSS만으로 덮는 대신,
+로컬 same-origin 프록시 + DOM repair 래퍼를 사용할 수 있습니다.
+
+1. `npm run serve` 또는 `node scripts/serve.js 4173`
+2. OBS 브라우저 소스를 아래처럼 설정
+3. `http://127.0.0.1:4173/live-wrapper.html?target=https://p.pandahp.kr/chat/...`
+
+이 래퍼는 로컬 서버가 팬더TV 위젯을 프록시하고, 부모 페이지에서 iframe DOM에 직접 접근해
+`message__nick` 구조 복구와 테마별 레이아웃 정규화를 수행합니다.
+
 ## 파일 구성
 
 | 파일 | 설명 |

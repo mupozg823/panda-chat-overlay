@@ -26,17 +26,36 @@
       throw new Error("target path must start with /chat/");
     return {
       target: url,
-      css: params.get("css") || "", // base64-encoded CSS
+      css: params.get("css") || "",
+      config: params.get("config") || "",
     };
   }
 
-  function decodeCss(b64) {
-    if (!b64) return "";
+  function decodePayload(value) {
+    if (typeof decodeBase64Utf8 === "function") {
+      return decodeBase64Utf8(value);
+    }
+    if (!value) return "";
     try {
-      return decodeURIComponent(escape(atob(b64)));
+      return decodeURIComponent(escape(atob(value)));
     } catch {
       return "";
     }
+  }
+
+  function resolveUserCss(params) {
+    const rawConfig = decodePayload(params.config);
+    if (rawConfig) {
+      try {
+        const parsed = JSON.parse(rawConfig);
+        if (typeof generateCssText === "function") {
+          return generateCssText(parsed);
+        }
+      } catch {
+        // fall through to legacy css payload
+      }
+    }
+    return decodePayload(params.css);
   }
 
   // ── DOM 정규화 (스타일링 없음, 구조만 수정) ──
@@ -193,7 +212,7 @@ html[data-wrapper] img[alt="heart_image"] { max-width: 100% !important; height: 
       return;
     }
 
-    const userCss = decodeCss(config.css);
+    const userCss = resolveUserCss(config);
     targetLabel.textContent = config.target.href;
     emptyState.style.display = "none";
     iframe.style.display = "block";

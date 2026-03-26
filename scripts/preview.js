@@ -195,8 +195,9 @@ function updatePreview(v) {
       : fullBubbleAvatar
         ? `${v.paddingY}px ${v.paddingX}px ${v.paddingY}px ${avatarInset + v.paddingX}px`
         : `${v.paddingY}px ${v.paddingX}px`;
-    item.style.width = layeredMode ? "auto" : "max-content";
+    item.style.width = layeredMode ? "auto" : "fit-content";
     item.style.maxWidth = `${v.maxWidth}%`;
+    item.style.minWidth = "0";
     item.style.border = layeredMode ? "none" : effectiveBorder;
     item.style.boxShadow = layeredMode ? "none" : effectiveBoxShadow;
     item.style.backdropFilter = layeredMode
@@ -233,6 +234,8 @@ function updatePreview(v) {
     nick.style.color = v.textColor;
     nick.style.textShadow = shadow;
     nick.style.lineHeight = `${v.lineHeight}`;
+    nick.style.maxWidth = "100%";
+    nick.style.minWidth = "0";
 
     name.style.color = v.nickColor;
     name.style.fontSize = `${effectiveNickFontSize}px`;
@@ -248,6 +251,8 @@ function updatePreview(v) {
     name.style.boxShadow = layeredMode ? effectiveBoxShadow : "none";
     name.style.letterSpacing =
       v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
+    name.style.maxWidth = "100%";
+    name.style.minWidth = "0";
 
     messageIds.forEach((messageId) => {
       messageId.style.display = "inline";
@@ -258,6 +263,8 @@ function updatePreview(v) {
       messageId.style.fontFamily = "inherit";
       messageId.style.letterSpacing =
         v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
+      messageId.style.maxWidth = "100%";
+      messageId.style.minWidth = "0";
     });
 
     separator.textContent = v.separatorText;
@@ -282,6 +289,10 @@ function updatePreview(v) {
       : "0";
     text.style.color = v.textColor;
     text.style.textShadow = shadow;
+    text.style.maxWidth = "100%";
+    text.style.minWidth = "0";
+    text.style.wordBreak = "break-word";
+    text.style.overflowWrap = "anywhere";
     const hasTextBg = v.textBgOpacity > 0;
     const textBg = hasTextBg
       ? buildAlphaColor(v.textBgColor, v.textBgOpacity)
@@ -317,7 +328,7 @@ function updatePreview(v) {
     text.style.letterSpacing =
       v.textLetterSpacing > 0 ? `${v.textLetterSpacing}px` : "";
 
-    item.querySelectorAll("div.mr-1").forEach((wrap) => {
+    item.querySelectorAll(".mr-1").forEach((wrap) => {
       const hideBadge = v.hideIcon || (v.nickIcon && v.nickIcon !== "");
       wrap.style.display = hideBadge ? "none" : "inline-block";
       if (!hideBadge) {
@@ -354,8 +365,9 @@ function updatePreview(v) {
     item.style.background = donationBackground;
     item.style.borderRadius = `${effectiveDonationRadius}px`;
     item.style.padding = `${v.paddingY}px ${v.paddingX}px`;
-    item.style.width = "max-content";
+    item.style.width = "fit-content";
     item.style.maxWidth = `${v.maxWidth}%`;
+    item.style.minWidth = "0";
     item.style.border = effectiveBorder;
     item.style.boxShadow =
       donationGlowShadow !== "none" ? donationGlowShadow : effectiveBoxShadow;
@@ -375,6 +387,8 @@ function updatePreview(v) {
     shell.style.boxShadow = "none";
     shell.style.padding = "0";
     shell.style.margin = "0";
+    shell.style.maxWidth = "100%";
+    shell.style.minWidth = "0";
 
     if (image) {
       image.style.display = v.hideImg ? "none" : "block";
@@ -404,6 +418,10 @@ function updatePreview(v) {
       text.style.border = "none";
       text.style.boxShadow = "none";
       text.style.padding = "0";
+      text.style.maxWidth = "100%";
+      text.style.minWidth = "0";
+      text.style.wordBreak = "break-word";
+      text.style.overflowWrap = "anywhere";
     });
 
     const amount = item.querySelector(".mx-1");
@@ -423,8 +441,9 @@ function updatePreview(v) {
     item.style.background = noticeBackground;
     item.style.borderRadius = `${effectiveNoticeRadius}px`;
     item.style.padding = `${v.paddingY}px ${v.paddingX}px`;
-    item.style.width = "max-content";
+    item.style.width = "fit-content";
     item.style.maxWidth = `${v.maxWidth}%`;
+    item.style.minWidth = "0";
     item.style.border = effectiveBorder;
     item.style.borderLeft = v.noticeAccentLine
       ? `${v.noticeAccentWidth}px solid ${v.noticeAccentColor}`
@@ -441,6 +460,10 @@ function updatePreview(v) {
       v.noticeFontSize > 0 ? v.noticeFontSize : Math.max(v.fontSize - 1, 11);
     noticeText.style.fontSize = `${effectiveNoticeFontSize}px`;
     noticeText.style.textShadow = shadow;
+    noticeText.style.maxWidth = "100%";
+    noticeText.style.minWidth = "0";
+    noticeText.style.wordBreak = "break-word";
+    noticeText.style.overflowWrap = "anywhere";
   });
 
   let iconStyle = document.getElementById("nickIconStyle");

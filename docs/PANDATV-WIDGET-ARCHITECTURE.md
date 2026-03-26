@@ -63,6 +63,8 @@ UL.{theme} (채팅 컨테이너)
             └─ SPAN.message__text (메시지 텍스트)
 ```
 
+주의: 위 트리는 **관찰된 라이브 DOM** 기준이다. `P.message__nick > DIV.mr-1`는 invalid HTML이므로 브라우저가 형제 노드로 재배치할 수 있다. 이 저장소의 미리보기/편집기/생성 CSS는 안정성을 위해 `div.message__nick > span.mr-1 + span.message__name + span.message__id + span.message__text` 같은 유효 구조를 목표 모델로 취급해야 한다.
+
 ## 4. 인라인 스타일 매핑 (모듈 89881)
 
 채팅 렌더링 로직은 **웹팩 모듈 89881** (23KB, JSX 96개)에 집중.
