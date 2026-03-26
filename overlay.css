@@ -52,6 +52,7 @@ ul.board > li.message__wrapper {
   display: block !important;
   overflow: hidden !important;
   word-break: break-word !important;
+  overflow-wrap: break-word !important;
   background: rgba(255, 240, 245, 0.55) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;
@@ -511,6 +512,7 @@ ul > li.board.message__wrapper {
   display: block !important;
   overflow: hidden !important;
   word-break: break-word !important;
+  overflow-wrap: break-word !important;
   background: rgba(255, 240, 245, 0.55) !important;
   backdrop-filter: blur(6px) !important;
   -webkit-backdrop-filter: blur(6px) !important;

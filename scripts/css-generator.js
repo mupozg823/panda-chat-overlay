@@ -107,6 +107,10 @@ function buildAlphaColor(hex, opacity) {
 function normalizeCustomCss(value) {
   const text = String(value || "")
     .replace(/\r\n/g, "\n")
+    .replace(/<\/style>/gi, "")
+    .replace(/<script/gi, "")
+    .replace(/expression\s*\(/gi, "")
+    .replace(/javascript\s*:/gi, "")
     .trim();
   return text ? `${text}\n` : "";
 }
@@ -426,6 +430,7 @@ function updateCSS(v) {
         "overflow: hidden !important;",
         "box-sizing: border-box !important;",
         "word-break: break-word !important;",
+        "overflow-wrap: break-word !important;",
         "background: transparent !important;",
         "backdrop-filter: none !important;",
         "-webkit-backdrop-filter: none !important;",
@@ -443,6 +448,7 @@ function updateCSS(v) {
         "overflow: hidden !important;",
         "box-sizing: border-box !important;",
         "word-break: break-word !important;",
+        "overflow-wrap: break-word !important;",
         `background: ${bubbleBackground} !important;`,
         v.blurAmount > 0
           ? `backdrop-filter: blur(${v.blurAmount}px) !important;`
@@ -475,6 +481,7 @@ function updateCSS(v) {
 
   const messageBoxDecls = [
     "all: unset !important;",
+    "font-family: inherit !important;",
     "display: block !important;",
     "max-width: 100% !important;",
   ];
@@ -490,6 +497,7 @@ function updateCSS(v) {
   parts.push(
     buildRule(selectors.messageNick, [
       "all: unset !important;",
+      "font-family: inherit !important;",
       `display: ${layeredMode || v.twoLine ? "block" : "inline"} !important;`,
       "position: relative !important;",
     ]),
@@ -647,6 +655,18 @@ function updateCSS(v) {
   }
   parts.push(buildRule(selectors.messageText, messageTextDecls));
 
+  // 채팅 이모티콘 크기 제한 — H-1
+  parts.push(
+    buildRule(
+      selectorsForThemedListItems(
+        targets,
+        "message__wrapper",
+        " .message__text img",
+      ),
+      ["max-height: 1.5em !important;", "vertical-align: middle !important;"],
+    ),
+  );
+
   if (avatarAsLeft && hasCustomAvatar) {
     const leftPos = `${(layeredMode ? 0 : v.paddingX) + avatarOffsetX}px`;
     const topPos = `${(layeredMode ? 0 : v.paddingY) + avatarOffsetY}px`;
@@ -661,6 +681,7 @@ function updateCSS(v) {
         `top: ${topPos} !important;`,
         `width: ${avatarSize}px !important;`,
         `height: ${avatarSize}px !important;`,
+        "max-width: 100% !important;",
         "display: block !important;",
         "box-sizing: border-box !important;",
         "z-index: 2 !important;",
@@ -689,6 +710,7 @@ function updateCSS(v) {
         `top: ${topPos} !important;`,
         `width: ${avatarSize}px !important;`,
         `height: ${avatarSize}px !important;`,
+        "max-width: 100% !important;",
         "display: flex !important;",
         "box-sizing: border-box !important;",
         "z-index: 2 !important;",
@@ -716,6 +738,7 @@ function updateCSS(v) {
         `height: ${v.iconSize}px !important;`,
         `min-width: ${v.iconSize}px !important;`,
         `min-height: ${v.iconSize}px !important;`,
+        "max-width: 100% !important;",
         `background-color: ${avatarFrame.background} !important;`,
         `background-image: url('${escapeForCssUrl(v.customIconUrl)}') !important;`,
         `background-size: ${avatarFrame.imageFit} !important;`,
@@ -738,6 +761,7 @@ function updateCSS(v) {
         `height: ${v.iconSize}px !important;`,
         `min-width: ${v.iconSize}px !important;`,
         `min-height: ${v.iconSize}px !important;`,
+        "max-width: 100% !important;",
         `font-size: ${v.iconSize}px !important;`,
         "line-height: 1 !important;",
         "text-align: center !important;",
@@ -858,6 +882,7 @@ function updateCSS(v) {
       `align-self: ${v.chatAlign === "right" ? "flex-end" : "flex-start"} !important;`,
       "transition: none !important;",
       "word-break: break-word !important;",
+      "overflow-wrap: break-word !important;",
     ];
     if (v.donationGap > 0) {
       donationDecls.push(`margin-top: ${v.donationGap}px !important;`);

@@ -2385,12 +2385,13 @@ function getToggle(id) {
 }
 
 function hexToRgb(hex) {
-  const normalized = hex.replace('#', '');
-  return {
-    r: parseInt(normalized.substring(0, 2), 16),
-    g: parseInt(normalized.substring(2, 4), 16),
-    b: parseInt(normalized.substring(4, 6), 16)
-  };
+  let h = String(hex || '').replace('#', '');
+  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  if (h.length !== 6) return { r: 0, g: 0, b: 0 };
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return { r: isNaN(r) ? 0 : r, g: isNaN(g) ? 0 : g, b: isNaN(b) ? 0 : b };
 }
 
 function onColorInput(el, hexId) {
@@ -2441,63 +2442,66 @@ function _captureState() {
 
 function _restoreState(json) {
   _undoRestoring = true;
-  const inputs = JSON.parse(json);
-  Object.entries(inputs).forEach(([key, val]) => {
-    if (key === '__customIconDataUrl') {
-      customIconDataUrl = val;
-      return;
+  try {
+    const inputs = JSON.parse(json);
+    Object.entries(inputs).forEach(([key, val]) => {
+      if (key === '__customIconDataUrl') {
+        customIconDataUrl = val;
+        return;
+      }
+      if (key === '__rankBadgeIcons') {
+        try { rankBadgeIcons = JSON.parse(val); } catch(e) {}
+        return;
+      }
+      if (key === '__rankAvatarImages') {
+        try { rankAvatarImages = JSON.parse(val); } catch(e) {}
+        return;
+      }
+      if (key === '__currentTheme') {
+        currentTheme = val;
+        return;
+      }
+      if (key.startsWith('__toggle_')) {
+        const el = document.getElementById(key.slice(9));
+        if (el) { val ? el.classList.add('on') : el.classList.remove('on'); }
+        return;
+      }
+      const el = document.getElementById(key);
+      if (!el) return;
+      if (el.type === 'checkbox') el.checked = val;
+      else el.value = val;
+    });
+    // 아이콘 패널 및 미리보기 동기화
+    if (customIconDataUrl) {
+      const previewImg = document.getElementById('iconPreviewImg');
+      if (previewImg) previewImg.src = customIconDataUrl;
+    } else {
+      const previewImg = document.getElementById('iconPreviewImg');
+      const previewRow = document.getElementById('iconPreviewRow');
+      if (previewImg) previewImg.removeAttribute('src');
+      if (previewRow) previewRow.style.display = 'none';
     }
-    if (key === '__rankBadgeIcons') {
-      try { rankBadgeIcons = JSON.parse(val); } catch(e) {}
-      return;
-    }
-    if (key === '__rankAvatarImages') {
-      try { rankAvatarImages = JSON.parse(val); } catch(e) {}
-      return;
-    }
-    if (key === '__currentTheme') {
-      currentTheme = val;
-      return;
-    }
-    if (key.startsWith('__toggle_')) {
-      const el = document.getElementById(key.slice(9));
-      if (el) { val ? el.classList.add('on') : el.classList.remove('on'); }
-      return;
-    }
-    const el = document.getElementById(key);
-    if (!el) return;
-    if (el.type === 'checkbox') el.checked = val;
-    else el.value = val;
-  });
-  // 아이콘 패널 및 미리보기 동기화
-  if (customIconDataUrl) {
-    const previewImg = document.getElementById('iconPreviewImg');
-    if (previewImg) previewImg.src = customIconDataUrl;
-  } else {
-    const previewImg = document.getElementById('iconPreviewImg');
-    const previewRow = document.getElementById('iconPreviewRow');
-    if (previewImg) previewImg.removeAttribute('src');
-    if (previewRow) previewRow.style.display = 'none';
+    syncIconPanelState();
+    // 등급 배지 패널 동기화
+    const rankOn = document.getElementById('useRankBadge').classList.contains('on');
+    document.getElementById('rankBadgePanel').style.display = rankOn ? 'block' : 'none';
+    if (rankOn) initRankBadgeUI();
+    // 직급별 아바타 패널 동기화
+    const rankAvatarOn = document.getElementById('useRankAvatar').classList.contains('on');
+    document.getElementById('rankAvatarPanel').style.display = rankAvatarOn ? 'block' : 'none';
+    if (rankAvatarOn) initRankAvatarUI();
+    const v = getValues();
+    syncThemeSelectionUI();
+    syncPhaseDashboard();
+    updatePresetHelper();
+    updatePreview(v);
+    clearTimeout(_updateCssTimer);
+    _updateCssTimer = setTimeout(() => updateCSS(v), 80);
+    syncSavedSettingsState();
+    syncPhaseDashboard();
+  } finally {
+    _undoRestoring = false;
   }
-  syncIconPanelState();
-  // 등급 배지 패널 동기화
-  const rankOn = document.getElementById('useRankBadge').classList.contains('on');
-  document.getElementById('rankBadgePanel').style.display = rankOn ? 'block' : 'none';
-  if (rankOn) initRankBadgeUI();
-  // 직급별 아바타 패널 동기화
-  const rankAvatarOn = document.getElementById('useRankAvatar').classList.contains('on');
-  document.getElementById('rankAvatarPanel').style.display = rankAvatarOn ? 'block' : 'none';
-  if (rankAvatarOn) initRankAvatarUI();
-  const v = getValues();
-  syncThemeSelectionUI();
-  syncPhaseDashboard();
-  updatePresetHelper();
-  updatePreview(v);
-  clearTimeout(_updateCssTimer);
-  _updateCssTimer = setTimeout(() => updateCSS(v), 80);
-  syncSavedSettingsState();
-  syncPhaseDashboard();
-  _undoRestoring = false;
 }
 
 function _pushUndo() {
@@ -2839,7 +2843,7 @@ function updatePreview(v) {
     text.style.marginLeft = layeredMode ? `${effectiveSplitTextOffsetX}px` : '0';
     text.style.color = v.textColor;
     text.style.textShadow = shadow;
-    const hasTextBg = v.textBgOpacity > 0;
+    const hasTextBg = v.textBgOpacity > 0 && !splitMode;
     const textBg = hasTextBg ? buildAlphaColor(v.textBgColor, v.textBgOpacity) : 'transparent';
     if (splitMode) {
       text.style.background = bubbleBackground;
@@ -3112,7 +3116,7 @@ function updatePreview(v) {
   if (v.bubbleTail && v.messageStyle === 'fullBubble') {
     const ts = v.bubbleTailSize;
     const bg = hexToRgb(v.bubbleColor);
-    const tc = v.useGradient ? v.gradEnd : `rgba(${bg.r},${bg.g},${bg.b},${(v.bubbleOpacity / 100).toFixed(2)})`;
+    const tc = v.useGradient ? buildAlphaColor(v.gradEnd, v.bubbleOpacity) : `rgba(${bg.r},${bg.g},${bg.b},${(v.bubbleOpacity / 100).toFixed(2)})`;
     const side = v.chatAlign === 'right' ? 'right' : 'left';
     decoCss += `#previewChat li.message__wrapper::after {
       content: '' !important;
