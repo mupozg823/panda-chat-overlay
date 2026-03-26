@@ -298,6 +298,11 @@ function updateCSS(v) {
       "message__wrapper",
       " .message__name::after",
     ),
+    messageId: selectorsForThemedListItems(
+      targets,
+      "message__wrapper",
+      " .message__id",
+    ),
     messageSeparator: selectorsForThemedListItems(
       targets,
       "message__wrapper",
@@ -505,20 +510,27 @@ function updateCSS(v) {
   messageNameDecls.push(
     `color: ${v.nickColor} !important;`,
     `font-size: ${effectiveNickFontSize}px !important;`,
+    buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+    `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
     "max-width: 100% !important;",
     "overflow: hidden !important;",
     "text-overflow: ellipsis !important;",
     "white-space: nowrap !important;",
   );
-  if (v.nickBold) {
-    messageNameDecls.push("font-weight: 700 !important;");
-  }
   if (v.nickLetterSpacing > 0) {
     messageNameDecls.push(
       `letter-spacing: ${v.nickLetterSpacing}px !important;`,
     );
   }
   parts.push(buildRule(selectors.messageName, messageNameDecls));
+
+  // .message__id (PandaTV가 인라인 text-shadow를 주입하므로 직접 타겟 필요)
+  parts.push(
+    buildRule(selectors.messageId, [
+      buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
+      `font-weight: ${v.nickBold ? "700" : "400"} !important;`,
+    ]),
+  );
 
   // 닉네임 프레임 (::after)
   if (v.nameFrameEnabled) {
@@ -551,6 +563,7 @@ function updateCSS(v) {
   // 구분자 (실제 DOM: 클래스 없는 span — .message__nick > span:not(.message__name):not(.message__text))
   const separatorDecls = [
     `display: ${layeredMode || v.twoLine || !v.separatorText ? "none" : "inline"} !important;`,
+    buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
   ];
   if (
     v.separatorText &&
@@ -584,6 +597,7 @@ function updateCSS(v) {
     `display: ${layeredMode || v.twoLine ? "block" : "inline"} !important;`,
     `color: ${v.textColor} !important;`,
     "font-family: inherit !important;",
+    buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
     `margin-top: ${splitMode ? 0 : capsuleMode ? 4 : v.twoLine ? 2 : 0}px !important;`,
     `margin-left: ${layeredMode ? effectiveSplitTextOffsetX : 0}px !important;`,
   ];
@@ -621,9 +635,9 @@ function updateCSS(v) {
         : []),
     );
   }
-  if (v.textBold) {
-    messageTextDecls.push("font-weight: 700 !important;");
-  }
+  messageTextDecls.push(
+    `font-weight: ${v.textBold ? "700" : "400"} !important;`,
+  );
   if (v.textLetterSpacing > 0) {
     messageTextDecls.push(
       `letter-spacing: ${v.textLetterSpacing}px !important;`,

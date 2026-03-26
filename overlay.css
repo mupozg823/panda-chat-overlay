@@ -187,6 +187,16 @@ ul.board > li.message__wrapper .message__name::before {
   content: none !important;
 }
 
+ul.default > li.message__wrapper .message__id,
+ul.kakaotalk > li.message__wrapper .message__id,
+ul.neon > li.message__wrapper .message__id,
+ul.box > li.message__wrapper .message__id,
+ul.roundbox > li.message__wrapper .message__id,
+ul.balloon > li.message__wrapper .message__id,
+ul.board > li.message__wrapper .message__id {
+  text-shadow: none !important;
+}
+
 ul.default > li.message__wrapper .message__nick svg,
 ul.kakaotalk > li.message__wrapper .message__nick svg,
 ul.neon > li.message__wrapper .message__nick svg,
@@ -627,6 +637,16 @@ ul > li.roundbox.message__wrapper .message__name::before,
 ul > li.balloon.message__wrapper .message__name::before,
 ul > li.board.message__wrapper .message__name::before {
   content: none !important;
+}
+
+ul > li.default.message__wrapper .message__id,
+ul > li.kakaotalk.message__wrapper .message__id,
+ul > li.neon.message__wrapper .message__id,
+ul > li.box.message__wrapper .message__id,
+ul > li.roundbox.message__wrapper .message__id,
+ul > li.balloon.message__wrapper .message__id,
+ul > li.board.message__wrapper .message__id {
+  text-shadow: none !important;
 }
 
 ul > li.default.message__wrapper .message__nick svg,
