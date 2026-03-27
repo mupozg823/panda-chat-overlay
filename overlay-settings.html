@@ -256,6 +256,24 @@
     <div class="phase-content" id="phase-design" data-phase="design">
     <div id="designPhaseSummary" style="display:none"></div>
 
+    <!-- 레이아웃 카드 (디자인탭 최상단 — 항상 보임) -->
+    <div style="padding:8px 16px 4px;">
+      <div class="layout-cards" id="topLayoutCards">
+        <div class="layout-card active" data-style="fullBubble" onclick="selectLayout('fullBubble')">
+          <span class="layout-card-icon">💬</span>
+          <span class="layout-card-name">전체 말풍선</span>
+        </div>
+        <div class="layout-card" data-style="nameCapsule" onclick="selectLayout('nameCapsule')">
+          <span class="layout-card-icon">💊</span>
+          <span class="layout-card-name">캡슐형</span>
+        </div>
+        <div class="layout-card" data-style="splitLayers" onclick="selectLayout('splitLayers')">
+          <span class="layout-card-icon">📑</span>
+          <span class="layout-card-name">카드형</span>
+        </div>
+      </div>
+    </div>
+
     <!-- 말풍선 섹션 -->
     <div class="section" id="sec-bubble">
       <div class="section-title" onclick="toggleSection(this)">
@@ -2065,6 +2083,10 @@ function goPhase(direction) {
 
 function selectLayout(style) {
   document.getElementById('messageStyle').value = style;
+  // 상단 카드 + 섹션 내 카드 양쪽 active 동기화
+  document.querySelectorAll('.layout-card').forEach(c => {
+    c.classList.toggle('active', c.dataset.style === style);
+  });
   syncMessageStyleUI();
   update();
 }
