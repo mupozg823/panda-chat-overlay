@@ -1564,7 +1564,7 @@
           <span id="simSpeedLabel" style="font-size:10px;color:#9eacd8;min-width:28px;">1.0x</span>
         </div>
       </div>
-      <div id="simContainer" style="position:relative;width:450px;max-width:100%;height:340px;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:#31475c;">
+      <div id="simContainer" style="position:relative;width:450px;max-width:100%;height:340px;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;">
         <style id="simCssInjection"></style>
         <ul id="simChat" class="default" style="position:relative;left:0;height:100%;width:100%;padding:10px;opacity:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;font-weight:normal;overflow-y:hidden;"></ul>
       </div>
@@ -2571,6 +2571,8 @@ function setBg(el, bg) {
   document.querySelectorAll('.bg-option').forEach(button => button.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('previewContainer').style.background = bg;
+  const simEl = document.getElementById('simContainer');
+  if (simEl) simEl.style.background = bg;
 }
 
 let _updateCssTimer = null;

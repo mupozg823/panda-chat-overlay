@@ -154,12 +154,12 @@ function _simBadgeSvg(lev) {
   const info = SIM_LEVELS.find((l) => l.lev === lev);
   if (!info) return "";
   if (lev === "bj") {
-    return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="26" height="20" viewBox="0 0 26 20" fill="none" style="width:16px;height:16px;"><rect width="26" height="20" rx="10" fill="${info.color}"/><text x="13" y="14" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">BJ</text></svg></div></div>`;
+    return `<span class="mr-1 inline-block w-max align-text-bottom"><span><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="26" height="20" viewBox="0 0 26 20" fill="none" style="width:16px;height:16px;"><rect width="26" height="20" rx="10" fill="${info.color}"/><text x="13" y="14" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">BJ</text></svg></span></span>`;
   }
   if (lev === "chairman") {
-    return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none" style="width:16px;height:16px;"><circle cx="30" cy="30" r="30" fill="${info.color}"/><text x="30" y="36" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">회</text></svg></div></div>`;
+    return `<span class="mr-1 inline-block w-max align-text-bottom"><span><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none" style="width:16px;height:16px;"><circle cx="30" cy="30" r="30" fill="${info.color}"/><text x="30" y="36" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">회</text></svg></span></span>`;
   }
-  return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;"><circle cx="10" cy="10" r="10" fill="${info.color || "#666"}"/></svg></div></div>`;
+  return `<span class="mr-1 inline-block w-max align-text-bottom"><span><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;"><circle cx="10" cy="10" r="10" fill="${info.color || "#666"}"/></svg></span></span>`;
 }
 
 // ──── 스타일 빌더 (역공학: module 89881 K/q 변수) ────
@@ -194,15 +194,15 @@ function simCreateChatMessage() {
   li.className = "message__wrapper chat fadeIn default hide__opacity";
   li.style.cssText = "text-align:left; font-family:'Jeju Gothic', sans-serif;";
 
-  // chatInline 레이아웃 (역공학: default 테마)
+  // chatInline 레이아웃 (live-wrapper 정규화 후 DOM: p→div, badge div→span)
   li.innerHTML = [
-    `<p class="message__nick hide__opacity">`,
+    `<div class="message__nick hide__opacity">`,
     badge,
     `<span class="message__name" style="${nickStyle}">${nick}</span>`,
     `<span class="message__id" style="display:none;${nickStyle}">(${maskedId})</span>`,
     `<span style="${nickStyle}">:&nbsp;&nbsp;</span>`,
     `<span class="message__text" style="${textStyle}"><span>${msg}</span></span>`,
-    `</p>`,
+    `</div>`,
   ].join("");
 
   return li;

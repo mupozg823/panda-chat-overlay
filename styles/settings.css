@@ -761,21 +761,47 @@ input[type="color"]::-webkit-color-swatch {
 #simContainer {
   font-family: "Jeju Gothic", sans-serif;
   font-size: 16px;
+  position: relative;
 }
-#simContainer > ul {
+#simContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect fill="%23222" width="20" height="20"/><rect fill="%23333" width="10" height="10"/><rect fill="%23333" x="10" y="10" width="10" height="10"/></svg>');
+  background-size: 20px 20px;
+  opacity: 0.3;
+  z-index: 0;
+  pointer-events: none;
+}
+#simContainer > ul,
+#simContainer > ul.default,
+#simContainer > ul.kakaotalk,
+#simContainer > ul.neon,
+#simContainer > ul.box,
+#simContainer > ul.roundbox,
+#simContainer > ul.balloon,
+#simContainer > ul.board {
   height: 100% !important;
   max-height: 100% !important;
   min-height: 0 !important;
   position: relative !important;
   overflow-y: auto !important;
+  overflow-x: hidden !important;
   justify-content: flex-start !important;
   scrollbar-width: none;
+  z-index: 1;
 }
 #simContainer > ul::-webkit-scrollbar {
   display: none;
 }
 #simContainer > ul > li {
   flex-shrink: 0;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
 
 .preview-container::before {
