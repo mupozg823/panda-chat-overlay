@@ -1410,6 +1410,7 @@
     </div>
 
     <div class="preview-container" id="previewContainer">
+      <style id="previewCssInjection"></style>
       <!-- 미리보기는 모든 테마를 커버하는 superset 구조.
            실제 default 테마에는 message__box가 없지만, kakaotalk/neon/box 등에서 존재.
            CSS 셀렉터는 대상이 없으면 무시되므로 호환성에 문제 없음. -->
@@ -2720,7 +2721,12 @@ function update() {
 
   // CSS 생성은 debounce 80ms (문자열 조합 — 무거움)
   clearTimeout(_updateCssTimer);
-  _updateCssTimer = setTimeout(() => { updateCSS(v); simUpdateCss(); }, 80);
+  _updateCssTimer = setTimeout(() => {
+    updateCSS(v);
+    simUpdateCss();
+    const previewCss = document.getElementById('previewCssInjection');
+    if (previewCss) previewCss.textContent = generateCssText(v);
+  }, 80);
 
   // Undo 스택에 상태 저장
   _pushUndo();
@@ -4432,6 +4438,10 @@ setTimeout(() => {
   syncPreviewQuickDock(document.querySelector('#previewChat li.message__wrapper'));
   syncApplyModeUI();
   simUpdateCss();
+  const previewCss = document.getElementById('previewCssInjection');
+  if (previewCss && typeof generateCssText === 'function' && typeof getValues === 'function') {
+    previewCss.textContent = generateCssText(getValues());
+  }
 }, 200);
 </script>
 

@@ -754,6 +754,10 @@ input[type="color"]::-webkit-color-swatch {
   min-height: 200px;
   max-height: 50vh;
 }
+#previewChat > li {
+  overflow: visible !important;
+  min-height: fit-content !important;
+}
 /* 라이브 시뮬레이터 패널 */
 #simPanel {
   flex: 0 0 auto;
