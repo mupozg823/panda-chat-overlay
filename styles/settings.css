@@ -800,6 +800,8 @@ input[type="color"]::-webkit-color-swatch {
 #simContainer > ul > li {
   flex-shrink: 0;
   max-width: 100% !important;
+  overflow: visible !important;
+  min-height: fit-content !important;
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
 }

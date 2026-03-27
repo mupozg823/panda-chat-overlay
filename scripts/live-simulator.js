@@ -194,15 +194,15 @@ function simCreateChatMessage() {
   li.className = "message__wrapper chat fadeIn default hide__opacity";
   li.style.cssText = "text-align:left; font-family:'Jeju Gothic', sans-serif;";
 
-  // chatInline 레이아웃 (live-wrapper 정규화 후 DOM: p→div, badge div→span)
+  // chatInline 레이아웃 — badge를 span으로 변경하여 p 안에서 유효한 HTML 유지
   li.innerHTML = [
-    `<div class="message__nick hide__opacity">`,
+    `<p class="message__nick hide__opacity">`,
     badge,
     `<span class="message__name" style="${nickStyle}">${nick}</span>`,
     `<span class="message__id" style="display:none;${nickStyle}">(${maskedId})</span>`,
     `<span style="${nickStyle}">:&nbsp;&nbsp;</span>`,
     `<span class="message__text" style="${textStyle}"><span>${msg}</span></span>`,
-    `</div>`,
+    `</p>`,
   ].join("");
 
   return li;
