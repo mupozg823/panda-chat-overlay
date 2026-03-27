@@ -111,6 +111,9 @@ function normalizeCustomCss(value) {
     .replace(/<script/gi, "")
     .replace(/expression\s*\(/gi, "")
     .replace(/javascript\s*:/gi, "")
+    .replace(/@import\b[^;]*;?/gi, "")
+    .replace(/behavior\s*:/gi, "")
+    .replace(/-moz-binding\s*:/gi, "")
     .trim();
   return text ? `${text}\n` : "";
 }
@@ -1356,7 +1359,7 @@ function onCopyFailed() {
   }
   setTimeout(() => {
     if (btn) {
-      btn.textContent = defaultText;
+      btn.textContent = "고급: CSS 직접 복사";
       btn.classList.remove("copied");
     }
   }, 4000);

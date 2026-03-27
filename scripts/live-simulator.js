@@ -258,7 +258,9 @@ function simCreateNotice() {
 // ──── 시뮬레이터 엔진 ────
 
 const SIM_MAX_MESSAGES = 50;
-let _simTimers = [];
+let _simChatTimer = 0;
+let _simDonationTimer = 0;
+let _simNoticeTimer = 0;
 let _simRunning = false;
 let _simSpeed = 1;
 
@@ -279,25 +281,25 @@ function _simAppendMessage(li) {
 function _simScheduleChat() {
   if (!_simRunning) return;
   _simAppendMessage(simCreateChatMessage());
-  const timer = setTimeout(_simScheduleChat, _simRandInterval(1000, 3000));
-  _simTimers.push(timer);
+  _simChatTimer = setTimeout(_simScheduleChat, _simRandInterval(1000, 3000));
 }
 
 function _simScheduleDonation() {
   if (!_simRunning) return;
   _simAppendMessage(simCreateDonation());
-  const timer = setTimeout(
+  _simDonationTimer = setTimeout(
     _simScheduleDonation,
     _simRandInterval(10000, 20000),
   );
-  _simTimers.push(timer);
 }
 
 function _simScheduleNotice() {
   if (!_simRunning) return;
   _simAppendMessage(simCreateNotice());
-  const timer = setTimeout(_simScheduleNotice, _simRandInterval(15000, 30000));
-  _simTimers.push(timer);
+  _simNoticeTimer = setTimeout(
+    _simScheduleNotice,
+    _simRandInterval(15000, 30000),
+  );
 }
 
 function simStart() {
@@ -312,8 +314,10 @@ function simStart() {
 
 function simStop() {
   _simRunning = false;
-  _simTimers.forEach(clearTimeout);
-  _simTimers = [];
+  clearTimeout(_simChatTimer);
+  clearTimeout(_simDonationTimer);
+  clearTimeout(_simNoticeTimer);
+  _simChatTimer = _simDonationTimer = _simNoticeTimer = 0;
   const btn = document.getElementById("simPlayBtn");
   if (btn) btn.textContent = "▶";
 }

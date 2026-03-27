@@ -12,7 +12,9 @@ function read(relativePath) {
 }
 
 function hexToRgb(hex) {
-  const value = String(hex || "").replace("#", "").trim();
+  const value = String(hex || "")
+    .replace("#", "")
+    .trim();
   const normalized =
     value.length === 3
       ? value
@@ -51,7 +53,15 @@ function createCssGeneratorSandbox() {
     unescape,
     getTargetThemes(compatTheme) {
       return compatTheme === "all"
-        ? ["default", "kakaotalk", "neon", "box", "roundbox", "balloon", "board"]
+        ? [
+            "default",
+            "kakaotalk",
+            "neon",
+            "box",
+            "roundbox",
+            "balloon",
+            "board",
+          ]
         : [compatTheme];
     },
     hexToRgb,
@@ -192,6 +202,12 @@ function createSampleValues(overrides = {}) {
     textBgPadding: 0,
     textBgBlur: 0,
     customCss: "",
+    hideId: true,
+    donationGap: 0,
+    maxMessages: 0,
+    textStroke: false,
+    textStrokeSize: 1,
+    textStrokeColor: "#000000",
     useRankBadge: false,
     rankBadgeSize: 16,
     rankBadgeIcons: {},

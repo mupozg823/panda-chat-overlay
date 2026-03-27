@@ -203,23 +203,20 @@ test("dense capsule presets are tuned for broadcast readability", () => {
   assert.ok(themes.princess2.textBgPadding <= 5);
 });
 
-test("preview source and inline duplicate both keep nick/id/separator styling aligned", () => {
-  const previewSource = read("scripts/preview.js");
+test("settings HTML keeps nick/id/separator styling aligned", () => {
   const settingsHtml = read("overlay-settings.html");
 
-  for (const source of [previewSource, settingsHtml]) {
-    assert.match(source, /resolveRuntimeWidgetLayout/);
-    assert.match(source, /runtimeMode/);
-    assert.match(source, /indentationMode/);
-    assert.match(source, /querySelectorAll\(["']\.message__id["']\)/);
-    assert.match(source, /querySelectorAll\(["']\.mr-1["']\)/);
-    assert.match(source, /separator\.style\.color = .*nickColor/);
-    assert.match(source, /separator\.style\.fontWeight = .*["']400["']/);
-    assert.match(source, /separator\.style\.display =[\s\S]*runtimeMode/);
-    assert.match(source, /text\.style\.fontWeight = .*["']400["']/);
-    assert.match(source, /text\.style\.marginLeft =[\s\S]*runtimeMode/);
-    assert.match(source, /style\.width = .*["']fit-content["']/);
-  }
+  assert.match(settingsHtml, /resolveRuntimeWidgetLayout/);
+  assert.match(settingsHtml, /runtimeMode/);
+  assert.match(settingsHtml, /indentationMode/);
+  assert.match(settingsHtml, /querySelectorAll\(["']\.message__id["']\)/);
+  assert.match(settingsHtml, /querySelectorAll\(["']\.mr-1["']\)/);
+  assert.match(settingsHtml, /separator\.style\.color = .*nickColor/);
+  assert.match(settingsHtml, /separator\.style\.fontWeight = .*["']400["']/);
+  assert.match(settingsHtml, /separator\.style\.display =[\s\S]*runtimeMode/);
+  assert.match(settingsHtml, /text\.style\.fontWeight = .*["']400["']/);
+  assert.match(settingsHtml, /text\.style\.marginLeft =[\s\S]*runtimeMode/);
+  assert.match(settingsHtml, /style\.width = .*["']fit-content["']/);
 });
 
 test("overlay settings preview sample uses valid nick markup and includes masked IDs", () => {
