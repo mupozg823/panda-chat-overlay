@@ -230,7 +230,7 @@ function simCreateDonation() {
   // 역공학: heart__wrapper DOM (width=240 height=300)
   li.innerHTML = [
     `<div class="haert__image hide__opacity flex max-h-[360px] w-full flex-col text-left items-start" style="display:flex; flex-direction:column; align-items:start; width:100%;">`,
-    `<img alt="heart_image" width="240" height="300" src="assets/heart_placeholder.svg" style="color:transparent; max-width:80px; max-height:80px;">`,
+    `<img alt="heart_image" width="240" height="300" src="assets/heart_placeholder.svg" style="color:transparent;">`,
     `<div>`,
     `<p class="hide__opacity heart__text mt-0 p-0" style="${noticeStyle}"><span>${nick}</span>님께서&nbsp;${amount}개를&nbsp;선물하셨습니다.</p>`,
     excelHtml,
