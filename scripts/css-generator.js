@@ -90,9 +90,19 @@ function buildRule(selectors, declarations) {
 function buildShadow(enabled, size, color) {
   if (!enabled) return "none";
   const s = size || 2;
-  const c = color || "#000000";
-  const rgb = hexToRgb(c);
-  return `0 0 ${s * 3}px rgba(${rgb.r},${rgb.g},${rgb.b},0.4), 0 ${Math.ceil(s / 2)}px ${s}px rgba(${rgb.r},${rgb.g},${rgb.b},0.3)`;
+  let c = color || "rgba(0,0,0,0.8)";
+  if (c.startsWith("#")) {
+    const rgb = hexToRgb(c);
+    c = `rgba(${rgb.r},${rgb.g},${rgb.b},0.8)`;
+  }
+  const offsets = [-1, -0.5, 0, 0.5, 1];
+  const shadows = [];
+  for (const x of offsets) {
+    for (const y of offsets) {
+      shadows.push(`${x * s}px ${y * s}px ${s}px ${c}`);
+    }
+  }
+  return shadows.join(", ");
 }
 
 function buildShadowCss(enabled, size, color) {

@@ -1,6 +1,6 @@
 "use strict";
 
-// ──── 시뮬레이션 데이터 ────
+// ──── PandaTV 역공학 데이터 기반 시뮬레이션 데이터 ────
 
 const SIM_NICKNAMES = [
   "루야♡ai",
@@ -41,75 +41,217 @@ const SIM_MESSAGES = [
   "항상 감사하고 고맙습니다! 앞으로도 영원히 저와 함께 해주실거죠?",
 ];
 
-const SIM_BADGE_TYPES = [
-  { name: "bj", color: "#ff9912", label: "BJ", width: 26, height: 20 },
-  { name: "chairman", color: "#e74c3c", label: "회장", width: 60, height: 60 },
-  { name: "m", color: "#303031", label: "매니저", width: 20, height: 20 },
-  null,
+// 등급 코드 (역공학: module 22302 + badge 매핑)
+const SIM_LEVELS = [
+  { lev: "bj", color: "#ff9912", label: "BJ", svgName: "ico_class_bj" },
+  {
+    lev: "chairman",
+    color: "#e74c3c",
+    label: "회장",
+    svgName: "ico_chairman",
+  },
+  { lev: "m", color: "#303031", label: "매니저", svgName: "ico_class_m" },
+  { lev: "n", color: null, label: null, svgName: "ico_class_n" },
+  { lev: "b", color: "#cd7f32", label: null, svgName: "ico_class_b" },
+  { lev: "s", color: "#c0c0c0", label: null, svgName: "ico_class_s" },
+  { lev: "g", color: "#ffd700", label: null, svgName: "ico_class_g" },
+  { lev: "d", color: "#b9f2ff", label: null, svgName: "ico_class_d" },
+  { lev: "v", color: "#9b59b6", label: null, svgName: "ico_class_v" },
+];
+
+// 채팅 시 자주 사용되는 등급 분포 (일반:70%, bj:5%, manager:5%, chairman:2%, 나머지 등급)
+const SIM_LEVEL_WEIGHTS = [
+  { lev: "n", weight: 40 },
+  { lev: "b", weight: 15 },
+  { lev: "s", weight: 10 },
+  { lev: "g", weight: 8 },
+  { lev: "d", weight: 5 },
+  { lev: "v", weight: 5 },
+  { lev: "bj", weight: 5 },
+  { lev: "m", weight: 7 },
+  { lev: "chairman", weight: 5 },
 ];
 
 const SIM_NOTICE_TYPES = [
-  { template: (nick) => `<span>${nick}</span>님께서&nbsp;추천하셨습니다.` },
   {
-    template: (nick) =>
-      `<span>${nick}</span>님의&nbsp;등급이&nbsp;브론즈로&nbsp;변경되었습니다!`,
+    type: "Recommend",
+    template: (nick) => `<span>${nick}</span>님께서&nbsp;추천하셨습니다.`,
   },
   {
+    type: "FanIn",
     template: (nick) =>
       `<span>${nick}</span>님이&nbsp;팬클럽에&nbsp;가입하셨습니다.`,
+  },
+  {
+    type: "KingFanIn",
+    template: (nick) =>
+      `<span>${nick}</span>님이&nbsp;킹팬클럽에&nbsp;가입하셨습니다!`,
+  },
+  {
+    type: "FanUp",
+    template: (nick) =>
+      `<span>${nick}</span>님의&nbsp;팬&nbsp;등급이&nbsp;올랐습니다!`,
+  },
+  {
+    type: "KingFanUp",
+    template: (nick) =>
+      `<span>${nick}</span>님의&nbsp;킹팬&nbsp;등급이&nbsp;올랐습니다!`,
+  },
+  {
+    type: "Mission",
+    template: (nick) =>
+      `<span>${nick}</span>님이&nbsp;미션을&nbsp;완료하셨습니다!`,
   },
 ];
 
 const SIM_DONATION_AMOUNTS = [100, 500, 1000, 5000, 10000];
 
-// ──── DOM 생성 (실제 팬더TV 구조 100% 일치) ────
+// ──── PandaTV 역공학 공식 (module 47538) ────
+
+function _simGenerateTextShadow(size, color) {
+  if (!size) return "none";
+  const c = color || "rgba(0,0,0,0.8)";
+  const offsets = [-1, -0.5, 0, 0.5, 1];
+  const shadows = [];
+  for (const x of offsets) {
+    for (const y of offsets) {
+      shadows.push(`${x * size}px ${y * size}px ${size}px ${c}`);
+    }
+  }
+  return shadows.join(", ");
+}
+
+// 역공학: nickColor(type, chatTextColor, lev)
+function _simNickColor(lev) {
+  const levInfo = SIM_LEVELS.find((l) => l.lev === lev);
+  if (levInfo && levInfo.color) return levInfo.color;
+  return "rgb(241,241,241)";
+}
+
+// ID 마스킹 (역공학: 실제 위젯 마스킹 방식)
+function _simMaskId(nick) {
+  const base = nick.replace(/[^a-zA-Z0-9가-힣]/g, "").slice(0, 5);
+  return base + "***";
+}
+
+// ──── DOM 헬퍼 ────
 
 function _simRandItem(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function _simBadgeSvg(badge) {
-  if (!badge) return "";
-  if (badge.name === "bj") {
-    return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg xmlns="http://www.w3.org/2000/svg" width="26" height="20" viewBox="0 0 26 20" fill="none" style="width:16px;height:16px;"><rect width="26" height="20" rx="10" fill="${badge.color}"/><text x="13" y="14" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">BJ</text></svg></div></div>`;
+function _simWeightedRandLevel() {
+  const total = SIM_LEVEL_WEIGHTS.reduce((s, w) => s + w.weight, 0);
+  let r = Math.random() * total;
+  for (const entry of SIM_LEVEL_WEIGHTS) {
+    r -= entry.weight;
+    if (r <= 0) return entry.lev;
   }
-  return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;"><circle cx="10" cy="10" r="10" fill="${badge.color}"/></svg></div></div>`;
+  return "n";
 }
 
-const _simDefaultStyle = `color:rgb(241,241,241); font-size:16px; text-shadow:-1px 0 #000, 1px 0 #000, 0 -1px #000, 0 1px #000; font-family:'Jeju Gothic';`;
-const _simNoticeStyle = `color:rgb(122,112,244); font-size:16px; text-shadow:-1px 0 #000, 1px 0 #000, 0 -1px #000, 0 1px #000;`;
+function _simBadgeSvg(lev) {
+  const info = SIM_LEVELS.find((l) => l.lev === lev);
+  if (!info) return "";
+  if (lev === "bj") {
+    return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="26" height="20" viewBox="0 0 26 20" fill="none" style="width:16px;height:16px;"><rect width="26" height="20" rx="10" fill="${info.color}"/><text x="13" y="14" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">BJ</text></svg></div></div>`;
+  }
+  if (lev === "chairman") {
+    return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none" style="width:16px;height:16px;"><circle cx="30" cy="30" r="30" fill="${info.color}"/><text x="30" y="36" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold">회</text></svg></div></div>`;
+  }
+  return `<div class="mr-1 inline-block w-max align-text-bottom"><div><svg data-src="/icons/${info.svgName}.svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;"><circle cx="10" cy="10" r="10" fill="${info.color || "#666"}"/></svg></div></div>`;
+}
+
+// ──── 스타일 빌더 (역공학: module 89881 K/q 변수) ────
+
+function _simBuildNickStyle(lev) {
+  const shadow = _simGenerateTextShadow(1, "rgba(0,0,0,0.8)");
+  return `color:${_simNickColor(lev)}; font-size:16px; text-shadow:${shadow}; font-family:'Jeju Gothic', sans-serif;`;
+}
+
+function _simBuildTextStyle() {
+  const shadow = _simGenerateTextShadow(1, "rgba(0,0,0,0.8)");
+  return `color:rgb(241,241,241); font-size:16px; text-shadow:${shadow}; font-family:'Jeju Gothic', sans-serif;`;
+}
+
+function _simBuildNoticeStyle() {
+  const shadow = _simGenerateTextShadow(1, "rgba(0,0,0,0.8)");
+  return `color:rgb(122,112,244); font-size:16px; text-shadow:${shadow};`;
+}
+
+// ──── DOM 생성 (역공학: module 89881 4가지 레이아웃) ────
 
 function simCreateChatMessage() {
   const nick = _simRandItem(SIM_NICKNAMES);
   const msg = _simRandItem(SIM_MESSAGES);
-  const badge = _simRandItem(SIM_BADGE_TYPES);
+  const lev = _simWeightedRandLevel();
+  const nickStyle = _simBuildNickStyle(lev);
+  const textStyle = _simBuildTextStyle();
+  const badge = _simBadgeSvg(lev);
+  const maskedId = _simMaskId(nick);
+
   const li = document.createElement("li");
   li.className = "message__wrapper chat fadeIn default hide__opacity";
-  li.style.cssText = "text-align:left; font-family:'Jeju Gothic';";
-  li.innerHTML = `<p class="message__nick hide__opacity">${_simBadgeSvg(badge)}<span class="message__name" style="${_simDefaultStyle}">${nick}</span><span style="${_simDefaultStyle}">:&nbsp;&nbsp;</span> <span class="message__text" style="${_simDefaultStyle}"><span>${msg}</span></span></p>`;
+  li.style.cssText = "text-align:left; font-family:'Jeju Gothic', sans-serif;";
+
+  // chatInline 레이아웃 (역공학: default 테마)
+  li.innerHTML = [
+    `<p class="message__nick hide__opacity">`,
+    badge,
+    `<span class="message__name" style="${nickStyle}">${nick}</span>`,
+    `<span class="message__id" style="display:none;${nickStyle}">(${maskedId})</span>`,
+    `<span style="${nickStyle}">:&nbsp;&nbsp;</span>`,
+    `<span class="message__text" style="${textStyle}"><span>${msg}</span></span>`,
+    `</p>`,
+  ].join("");
+
   return li;
 }
 
 function simCreateDonation() {
   const nick = _simRandItem(SIM_NICKNAMES);
   const amount = _simRandItem(SIM_DONATION_AMOUNTS);
+  const isExcel = Math.random() < 0.2;
+  const noticeStyle = _simBuildNoticeStyle();
+
   const li = document.createElement("li");
   li.className =
     "default chat heart__wrapper animated hide__opacity min-h-max w-max fadeIn break-keep";
   li.style.cssText =
-    "display:flex; flex-direction:column; align-items:start; width:100%; font-family:'Jeju Gothic';";
-  li.innerHTML = `<div class="haert__image hide__opacity flex max-h-[360px] w-full flex-col text-left items-start" style="display:flex; flex-direction:column; align-items:start; width:100%;"><img alt="heart_image" width="80" height="80" src="assets/heart_placeholder.svg" style="color:transparent;"><div><p class="hide__opacity heart__text p-0 mt-2" style="${_simNoticeStyle}"><span>${nick}</span>님께서&nbsp;${amount}개를&nbsp;선물하셨습니다.</p></div></div>`;
+    "display:flex; flex-direction:column; align-items:start; width:100%; font-family:'Jeju Gothic', sans-serif;";
+
+  let excelHtml = "";
+  if (isExcel) {
+    const excelTarget = _simRandItem(SIM_NICKNAMES);
+    const excelType = Math.random() < 0.5 ? "플러스" : "마이너스";
+    excelHtml = `<p class="hide__opacity heart__text relative top-2 mb-2 whitespace-nowrap p-0" style="${noticeStyle}"><span>${excelTarget}</span>님에게 <span class="mx-1">${amount}</span> <span class="mr-1">${excelType}</span> 선물!</p>`;
+  }
+
+  // 역공학: heart__wrapper DOM (width=240 height=300)
+  li.innerHTML = [
+    `<div class="haert__image hide__opacity flex max-h-[360px] w-full flex-col text-left items-start" style="display:flex; flex-direction:column; align-items:start; width:100%;">`,
+    `<img alt="heart_image" width="240" height="300" src="assets/heart_placeholder.svg" style="color:transparent; max-width:80px; max-height:80px;">`,
+    `<div>`,
+    `<p class="hide__opacity heart__text mt-0 p-0" style="${noticeStyle}"><span>${nick}</span>님께서&nbsp;${amount}개를&nbsp;선물하셨습니다.</p>`,
+    excelHtml,
+    `</div>`,
+    `</div>`,
+  ].join("");
+
   return li;
 }
 
 function simCreateNotice() {
   const nick = _simRandItem(SIM_NICKNAMES);
   const notice = _simRandItem(SIM_NOTICE_TYPES);
+  const noticeStyle = _simBuildNoticeStyle();
+
   const li = document.createElement("li");
   li.className =
     "chat__notice--list chat whitespace-break-spaces fadeIn default hide__opacity";
-  li.style.cssText = "text-align:left; font-family:'Jeju Gothic';";
-  li.innerHTML = `<p class="notice__text hide__opacity" style="${_simNoticeStyle}">${notice.template(nick)}</p>`;
+  li.style.cssText = "text-align:left; font-family:'Jeju Gothic', sans-serif;";
+  li.innerHTML = `<p class="notice__text hide__opacity" style="${noticeStyle}">${notice.template(nick)}</p>`;
+
   return li;
 }
 

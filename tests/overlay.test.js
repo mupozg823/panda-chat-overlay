@@ -288,7 +288,7 @@ test("live simulator script exists and exposes required functions", () => {
   assert.match(simSource, /function simUpdateCss\(\)/);
 });
 
-test("live simulator DOM uses actual PandaTV structure (no message__box, no message__id)", () => {
+test("live simulator DOM uses actual PandaTV structure with RE data", () => {
   const simSource = read("scripts/live-simulator.js");
 
   assert.match(simSource, /message__wrapper/);
@@ -299,10 +299,13 @@ test("live simulator DOM uses actual PandaTV structure (no message__box, no mess
   assert.match(simSource, /heart__text/);
   assert.match(simSource, /chat__notice--list/);
   assert.match(simSource, /notice__text/);
+  assert.match(simSource, /message__id/);
+  assert.match(simSource, /display:none/);
+  assert.match(simSource, /_simGenerateTextShadow/);
+  assert.match(simSource, /_simNickColor/);
+  assert.match(simSource, /SIM_LEVELS/);
 
   assert.doesNotMatch(simSource, /message__box/);
-  assert.doesNotMatch(simSource, /message__id/);
-  assert.doesNotMatch(simSource, /message__separator/);
 });
 
 test("overlay settings includes simulator panel and script", () => {
