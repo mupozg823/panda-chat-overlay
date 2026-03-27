@@ -671,7 +671,7 @@ function generateCssText(v) {
 
   // 구분자 (실제 DOM: 클래스 없는 span — .message__nick > span:not(.message__name):not(.message__text))
   const separatorDecls = [
-    `display: ${((capsuleMode || (!runtimeMode && splitMode)) || v.twoLine || !v.separatorText) ? "none" : "inline"} !important;`,
+    `display: ${capsuleMode || (!runtimeMode && splitMode) || v.twoLine || !v.separatorText ? "none" : "inline"} !important;`,
     buildShadowCss(v.textShadow, v.textShadowSize, v.textShadowColor),
     `color: ${v.nickColor} !important;`,
     `font-size: ${effectiveNickFontSize}px !important;`,
@@ -1288,7 +1288,7 @@ function updateCSS(v) {
 function copyCSS() {
   const css = document.getElementById("cssOutput").textContent;
   const iconDataUrl = resolveCustomIconDataUrl();
-  const defaultText = "바로 붙여넣기용 CSS 복사";
+  const defaultText = "고급: CSS 직접 복사";
 
   function onCopied() {
     const btn = document.getElementById("copyBtn");
@@ -1350,9 +1350,9 @@ function fallbackCopy(text) {
 
 function onCopyFailed() {
   const btn = document.getElementById("copyBtn");
-    if (btn) {
-      btn.textContent = "복사 실패 — 수동 복사해주세요";
-      btn.classList.add("copied");
+  if (btn) {
+    btn.textContent = "복사 실패 — 수동 복사해주세요";
+    btn.classList.add("copied");
   }
   setTimeout(() => {
     if (btn) {
@@ -1387,11 +1387,20 @@ function resolveWrapperTargetUrl() {
 }
 
 function copyWrapperUrl() {
-  const chatUrl =
-    resolveWrapperTargetUrl() ||
-    prompt("PandaTV 채팅 URL을 입력하세요:\n예: https://p.pandahp.kr/chat/xxxx");
+  const chatUrl = resolveWrapperTargetUrl();
   if (!chatUrl || !chatUrl.includes("/chat/")) {
-    alert("올바른 PandaTV 채팅 URL을 입력해주세요.");
+    const input = document.getElementById("wrapperTargetUrl");
+    if (input) {
+      input.focus();
+      input.style.border = "2px solid #ff6b6b";
+      setTimeout(() => {
+        input.style.border = "";
+      }, 2000);
+    }
+    const hint = document.getElementById("wrapperModeHint");
+    if (hint)
+      hint.textContent =
+        "채팅 주소를 먼저 입력해주세요. (예: https://p.pandahp.kr/chat/...)";
     return;
   }
 
@@ -1399,30 +1408,30 @@ function copyWrapperUrl() {
   const url = buildWrapperUrl(chatUrl, configValue);
 
   const btn = document.getElementById("wrapperUrlBtn");
-  const defaultText = "방송용 URL 복사";
+  const defaultText = "OBS URL 복사";
+  function onUrlCopied() {
+    if (btn) {
+      btn.textContent = "복사 완료!";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = defaultText;
+        btn.classList.remove("copied");
+      }, 3000);
+    }
+    const hint = document.getElementById("wrapperModeHint");
+    if (hint)
+      hint.textContent =
+        "URL 복사됨! OBS 브라우저 소스의 URL 칸에 붙여넣으세요.";
+  }
+
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard
       .writeText(url)
-      .then(() => {
-        if (btn) {
-          btn.textContent = "URL 복사됨!";
-          setTimeout(() => {
-            btn.textContent = defaultText;
-          }, 3000);
-        }
-      })
+      .then(onUrlCopied)
       .catch(() => {
-        if (fallbackCopy(url) && btn) {
-          btn.textContent = "URL 복사됨!";
-          setTimeout(() => {
-            btn.textContent = defaultText;
-          }, 3000);
-        }
+        if (fallbackCopy(url)) onUrlCopied();
       });
-  } else if (fallbackCopy(url) && btn) {
-    btn.textContent = "URL 복사됨!";
-    setTimeout(() => {
-      btn.textContent = defaultText;
-    }, 3000);
+  } else if (fallbackCopy(url)) {
+    onUrlCopied();
   }
 }

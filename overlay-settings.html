@@ -170,7 +170,7 @@
         <div class="glossary-list">
           <details class="glossary-item">
             <summary>OBS에서 적용했는데 안 바뀌어요</summary>
-            <p>1) 기존 CSS를 <em>모두 지우고</em> 새 CSS를 붙여넣었는지 확인하세요. 2) 브라우저 소스를 우클릭 → <em>캐시 새로고침</em>을 눌러보세요. 3) 팬더HP 채팅 설정에서 "위젯 테마"가 이 도구의 "호환 테마" 설정과 일치하는지 확인하세요.</p>
+            <p>1) OBS 브라우저 소스의 URL 칸에 복사한 URL을 붙여넣었는지 확인하세요. 2) 브라우저 소스를 우클릭 → <em>캐시 새로고침</em>을 눌러보세요. 3) 팬더HP 채팅 설정에서 "위젯 테마"가 이 도구의 "호환 테마" 설정과 일치하는지 확인하세요.</p>
           </details>
           <details class="glossary-item">
             <summary>글자색이 미리보기와 다르게 나와요</summary>
@@ -178,7 +178,7 @@
           </details>
           <details class="glossary-item">
             <summary>설정을 저장/불러오기 하고 싶어요</summary>
-            <p>상단의 <em>설정 관리</em> 버튼에서 현재 설정을 JSON 파일로 내보내거나, 이전에 저장한 파일을 불러올 수 있습니다.</p>
+            <p>미리보기 옆의 <em>설정 관리</em> 버튼에서 현재 설정을 JSON 파일로 내보내거나, 이전에 저장한 파일을 불러올 수 있습니다.</p>
           </details>
           <details class="glossary-item">
             <summary>초기화하고 싶어요</summary>
@@ -1380,30 +1380,26 @@
         </div>
       </div>
       <div class="preview-header-right">
-        <button class="copy-btn-primary" id="copyBtn" onclick="copyCSS()">바로 붙여넣기용 CSS 복사</button>
-        <button class="copy-btn" style="background:#2a6a4a;" id="wrapperUrlBtn" onclick="copyWrapperUrl()">방송용 URL 복사</button>
+        <button class="copy-btn-primary" id="wrapperUrlBtn" onclick="copyWrapperUrl()">OBS URL 복사</button>
         <div style="position:relative;display:inline-block;">
           <button class="copy-btn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
-          <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:130px;">
+          <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:160px;">
             <button class="copy-btn" style="background:#3a5a7a;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettingsToBrowser()">브라우저 저장</button>
             <button class="copy-btn" style="background:#4e5d8a;width:100%;font-size:11px;padding:6px 10px;" onclick="loadSettingsFromBrowser()">브라우저 불러오기</button>
             <button class="copy-btn" style="background:#3f5a78;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettings()">파일 저장</button>
             <button class="copy-btn" style="background:#5a4a6a;width:100%;font-size:11px;padding:6px 10px;" onclick="document.getElementById('loadSettingsFile').click()">파일 불러오기</button>
+            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:2px 0;">
+            <button class="copy-btn" id="copyBtn" style="background:#555;width:100%;font-size:11px;padding:6px 10px;" onclick="copyCSS()">고급: CSS 직접 복사</button>
           </div>
         </div>
         <input type="file" id="loadSettingsFile" accept=".json" style="display:none" onchange="loadSettings(event)">
       </div>
       <div class="preview-header-controls" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 12px 0 12px;padding:8px 10px;background:rgba(58,74,106,0.18);border:1px solid rgba(255,255,255,0.08);border-radius:10px;">
-        <label for="obsApplyMode" style="font-size:11px;color:#c6d3f5;font-weight:700;white-space:nowrap;">적용 방법</label>
-        <select id="obsApplyMode" onchange="syncApplyModeUI()" style="background:#1e2440;color:#f4f7ff;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;font-size:11px;">
-          <option value="css">1. CSS 복사해서 붙여넣기</option>
-          <option value="wrapper">2. 방송용 URL 쓰기 (더 안정적)</option>
-        </select>
-        <div id="wrapperTargetRow" style="display:none;flex:1 1 420px;align-items:center;gap:8px;min-width:260px;">
-          <input id="wrapperTargetUrl" type="url" placeholder="팬더TV 채팅 주소를 붙여넣으세요 (https://p.pandahp.kr/chat/...)" oninput="syncApplyModeUI()" style="flex:1 1 auto;min-width:220px;background:#141a31;color:#f4f7ff;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;font-size:11px;">
-          <button class="copy-btn" type="button" style="background:#275872;font-size:11px;padding:6px 10px;white-space:nowrap;" onclick="document.getElementById('wrapperUrlBtn').click()">주소 복사</button>
+        <label style="font-size:11px;color:#c6d3f5;font-weight:700;white-space:nowrap;">채팅 주소</label>
+        <div id="wrapperTargetRow" style="display:flex;flex:1 1 420px;align-items:center;gap:8px;min-width:260px;">
+          <input id="wrapperTargetUrl" type="url" placeholder="팬더TV 채팅 주소를 붙여넣으세요 (https://p.pandahp.kr/chat/...)" oninput="syncWrapperHint()" style="flex:1 1 auto;min-width:220px;background:#141a31;color:#f4f7ff;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;font-size:11px;">
         </div>
-        <span id="wrapperModeHint" style="font-size:11px;color:#9eacd8;line-height:1.4;">가장 쉬운 방법은 CSS 복사입니다. 후원/추천/일반채팅이 많이 섞여서 겹치는 방송이면 방송용 URL 방식이 더 안정적입니다.</span>
+        <span id="wrapperModeHint" style="font-size:11px;color:#9eacd8;line-height:1.4;">채팅 주소를 넣고 OBS URL 복사를 누르면 됩니다. 복사된 URL을 OBS 브라우저 소스에 붙여넣으세요.</span>
       </div>
       <div class="preview-quick-dock" id="previewQuickDock">
         <div class="preview-quick-buttons" id="previewQuickButtons">
@@ -1440,7 +1436,7 @@
               <span class="message__name" id="pNick1"
                     style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡ai</span>
               <span class="message__id"
-                    style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(ram***)</span>
+                    style="display:none; color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(ram***)</span>
               <span class="message__separator"
                     style="color: rgb(255, 200, 50); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText1"
@@ -1462,7 +1458,7 @@
               <span class="message__name" id="pNick2"
                     style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">이유♡루야♡김잇콩</span>
               <span class="message__id"
-                    style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(happy***)</span>
+                    style="display:none; color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(happy***)</span>
               <span class="message__separator"
                     style="color: rgb(100, 180, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText2"
@@ -1523,7 +1519,7 @@
               <span class="message__name" id="pNick4"
                     style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">루야♡잇콩</span>
               <span class="message__id"
-                    style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(sun***)</span>
+                    style="display:none; color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(sun***)</span>
               <span class="message__separator"
                     style="color: rgb(180, 150, 255); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText4"
@@ -1545,7 +1541,7 @@
               <span class="message__name" id="pNick5"
                     style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">하루너만의</span>
               <span class="message__id"
-                    style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(rui***)</span>
+                    style="display:none; color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">(rui***)</span>
               <span class="message__separator"
                     style="color: rgb(255, 130, 180); font-size: 16px; text-shadow: -1px 0 #333, 1px 0 #333, 0 -1px #333, 0 1px #333; font-family: 'Jeju Gothic';">:&nbsp;&nbsp;</span>
               <span class="message__text" id="pText5"
@@ -1554,6 +1550,24 @@
           </div>
         </li>
       </ul>
+    </div>
+
+    <!-- 라이브 시뮬레이터 -->
+    <div id="simPanel" style="margin:8px 12px 0 12px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="font-size:12px;font-weight:700;color:#c6d3f5;">라이브 시뮬레이터</span>
+        <span style="font-size:10px;color:#6a7aaa;">실제 팬더TV DOM 구조</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+          <button id="simPlayBtn" type="button" onclick="simToggle()" style="background:#2a6a4a;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;">▶</button>
+          <button type="button" onclick="simClear()" style="background:#4a3a3a;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;">↻</button>
+          <input id="simSpeedRange" type="range" min="0.5" max="3" step="0.5" value="1" oninput="simSetSpeed(this.value)" style="width:60px;accent-color:#7a70f4;">
+          <span id="simSpeedLabel" style="font-size:10px;color:#9eacd8;min-width:28px;">1.0x</span>
+        </div>
+      </div>
+      <div id="simContainer" style="position:relative;width:450px;max-width:100%;height:340px;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:#31475c;">
+        <style id="simCssInjection"></style>
+        <ul id="simChat" class="default" style="position:relative;left:0;height:100%;width:100%;padding:10px;opacity:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;font-weight:normal;overflow-y:hidden;"></ul>
+      </div>
     </div>
 
     <!-- OBS 소스 크기 가이드 -->
@@ -1578,6 +1592,7 @@
 
 <script src="scripts/presets.js"></script>
 <script src="scripts/css-generator.js"></script>
+<script src="scripts/live-simulator.js"></script>
 <script>
 'use strict';
 // ──── CSS 출력 접기/펼치기 ────
@@ -1642,34 +1657,14 @@ function updatePresetHelper() {
   document.getElementById('presetHelperText').textContent = preset.text + stabilitySuffix + loadSuffix;
 }
 
-function syncApplyModeUI() {
-  const mode = document.getElementById('obsApplyMode')?.value || 'css';
-  const row = document.getElementById('wrapperTargetRow');
+function syncApplyModeUI() { syncWrapperHint(); }
+function syncWrapperHint() {
   const hint = document.getElementById('wrapperModeHint');
-  const copyBtn = document.getElementById('copyBtn');
-  const wrapperBtn = document.getElementById('wrapperUrlBtn');
   const targetInput = document.getElementById('wrapperTargetUrl');
-
-  if (row) row.style.display = mode === 'wrapper' ? 'flex' : 'none';
-  if (copyBtn) {
-    copyBtn.style.opacity = mode === 'css' ? '1' : '0.72';
-    copyBtn.style.filter = mode === 'css' ? '' : 'saturate(0.8)';
-    copyBtn.textContent = mode === 'css' ? '바로 붙여넣기용 CSS 복사' : '간편 CSS 복사';
-  }
-  if (wrapperBtn) {
-    wrapperBtn.style.opacity = mode === 'wrapper' ? '1' : '0.82';
-    wrapperBtn.style.filter = mode === 'wrapper' ? '' : 'saturate(0.9)';
-    wrapperBtn.textContent = mode === 'wrapper' ? '방송용 URL 복사' : 'URL 방식 사용';
-  }
-
   if (hint) {
-    if (mode === 'wrapper') {
-      hint.textContent = targetInput?.value
-        ? '이제 주소 복사만 누르면 됩니다. 복사된 값을 OBS 브라우저 소스 URL 칸에 넣으면 현재 설정이 그대로 적용됩니다.'
-        : '팬더TV 채팅 주소를 한 번만 넣어두면 저장/불러오기에도 같이 따라갑니다. 후원/추천이 많이 섞이는 방송이면 이 방식이 더 안정적입니다.';
-    } else {
-      hint.textContent = '가장 쉬운 방법입니다. 복사한 CSS를 OBS 브라우저 소스의 사용자 지정 CSS 칸에 붙여넣으면 됩니다.';
-    }
+    hint.textContent = targetInput?.value
+      ? '채팅 주소 확인됨. OBS URL 복사를 눌러 브라우저 소스에 붙여넣으세요.'
+      : '채팅 주소를 넣고 OBS URL 복사를 누르면 됩니다. 복사된 URL을 OBS 브라우저 소스에 붙여넣으세요.';
   }
 }
 
@@ -2723,7 +2718,7 @@ function update() {
 
   // CSS 생성은 debounce 80ms (문자열 조합 — 무거움)
   clearTimeout(_updateCssTimer);
-  _updateCssTimer = setTimeout(() => updateCSS(v), 80);
+  _updateCssTimer = setTimeout(() => { updateCSS(v); simUpdateCss(); }, 80);
 
   // Undo 스택에 상태 저장
   _pushUndo();
@@ -3015,7 +3010,7 @@ function updatePreview(v) {
     name.style.minWidth = '0';
 
     messageIds.forEach(messageId => {
-      messageId.style.display = 'inline';
+      messageId.style.display = 'none';
       messageId.style.color = v.nickColor;
       messageId.style.fontSize = `${effectiveNickFontSize}px`;
       messageId.style.fontWeight = v.nickBold ? '700' : '400';
@@ -4434,6 +4429,7 @@ setTimeout(() => {
   dragInjectHandles();
   syncPreviewQuickDock(document.querySelector('#previewChat li.message__wrapper'));
   syncApplyModeUI();
+  simUpdateCss();
 }, 200);
 </script>
 

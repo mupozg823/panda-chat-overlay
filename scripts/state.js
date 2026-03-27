@@ -27,6 +27,8 @@ function _captureState() {
   inputs["__currentTheme"] = currentTheme;
   inputs["__customIconDataUrl"] = customIconDataUrl;
   inputs["__rankBadgeIcons"] = JSON.stringify(rankBadgeIcons);
+  const chatUrlInput = document.getElementById("wrapperTargetUrl");
+  if (chatUrlInput) inputs["__wrapperTargetUrl"] = chatUrlInput.value;
   return JSON.stringify(inputs);
 }
 
@@ -46,6 +48,11 @@ function _restoreState(json) {
     }
     if (key === "__currentTheme") {
       currentTheme = val;
+      return;
+    }
+    if (key === "__wrapperTargetUrl") {
+      const chatUrlInput = document.getElementById("wrapperTargetUrl");
+      if (chatUrlInput) chatUrlInput.value = val || "";
       return;
     }
     if (key.startsWith("__toggle_")) {

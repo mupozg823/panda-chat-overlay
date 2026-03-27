@@ -37,7 +37,10 @@ test("runtime widget mode keeps separator visible for live line-break layouts", 
   });
   const css = sandbox.generateCssText(values);
 
-  assert.match(css, /justify-content: flex-end !important;|justify-content: flex-start !important;|justify-content: unset !important;/);
+  assert.match(
+    css,
+    /justify-content: flex-end !important;|justify-content: flex-start !important;|justify-content: unset !important;/,
+  );
   assert.match(
     css,
     /\.message__nick > span:not\(\.message__name\):not\(\.message__text\):not\(\.message__id\)[\s\S]*?display: inline !important;/,
@@ -79,16 +82,18 @@ test("buildWrapperUrl serializes current values as config payload", () => {
   assert.equal(decoded.customCss, ".demo { color: red; }");
 });
 
-test("overlay settings exposes wrapper workflow controls and persists them with saved state", () => {
+test("overlay settings exposes unified wrapper URL workflow", () => {
   const settingsHtml = read("overlay-settings.html");
 
-  assert.match(settingsHtml, /id="obsApplyMode"/);
   assert.match(settingsHtml, /id="wrapperTargetUrl"/);
-  assert.match(settingsHtml, /가장 쉬운 방법은 CSS 복사입니다\./);
-  assert.match(settingsHtml, /방송용 URL 복사/);
-  assert.match(settingsHtml, /function syncApplyModeUI\(\)/);
+  assert.match(settingsHtml, /OBS URL 복사/);
+  assert.match(settingsHtml, /function syncWrapperHint\(\)/);
   assert.match(settingsHtml, /\.preview-header-controls input/);
   assert.match(settingsHtml, /syncApplyModeUI\(\);/);
+  assert.doesNotMatch(
+    settingsHtml,
+    /option value="css".*CSS 복사해서 붙여넣기/,
+  );
 });
 
 test("overlay settings keeps runtime widget parity controls internal", () => {
@@ -96,9 +101,15 @@ test("overlay settings keeps runtime widget parity controls internal", () => {
 
   assert.doesNotMatch(settingsHtml, /data-style="runtimeAuto"/);
   assert.match(settingsHtml, /option value="runtimeAuto" hidden/);
-  assert.match(settingsHtml, /id="runtimeLayoutRow" style="display:none !important;" hidden/);
+  assert.match(
+    settingsHtml,
+    /id="runtimeLayoutRow" style="display:none !important;" hidden/,
+  );
   assert.match(settingsHtml, /id="runtimeLayout"/);
-  assert.match(settingsHtml, /function getMessageLayoutState\(v = getValues\(\)\)/);
+  assert.match(
+    settingsHtml,
+    /function getMessageLayoutState\(v = getValues\(\)\)/,
+  );
   assert.match(settingsHtml, /function syncMessageStyleUI\(\)/);
   assert.match(settingsHtml, /실제 위젯 기준/);
 });
@@ -125,7 +136,9 @@ test("overlay settings surfaces recommended presets before tuned variants", () =
   const basicSafeIndex = settingsHtml.indexOf("applyTheme('studioFlat')");
   const basicTunedIndex = settingsHtml.indexOf("applyTheme('reference')");
   assert.ok(
-    basicSafeIndex >= 0 && basicTunedIndex >= 0 && basicSafeIndex < basicTunedIndex,
+    basicSafeIndex >= 0 &&
+      basicTunedIndex >= 0 &&
+      basicSafeIndex < basicTunedIndex,
     "basic safe presets should appear before tuned presets",
   );
 
@@ -222,7 +235,10 @@ test("overlay settings preview sample uses valid nick markup and includes masked
     "preview sample should not nest a block badge wrapper inside p.message__nick",
   );
   assert.match(settingsHtml, /<div class="message__nick hide__opacity">/);
-  assert.match(settingsHtml, /<span class="mr-1 inline-block w-max align-text-bottom">/);
+  assert.match(
+    settingsHtml,
+    /<span class="mr-1 inline-block w-max align-text-bottom">/,
+  );
   assert.match(settingsHtml, /\(happy\*\*\*\)/);
   assert.match(settingsHtml, /\(rui\*\*\*\)/);
   assert.match(settingsHtml, /\(ram\*\*\*\)/);
@@ -247,7 +263,57 @@ test("live wrapper proxies the widget into a same-origin iframe and installs DOM
   assert.match(wrapperScript, /generateCssText\(parsed\)/);
   assert.match(wrapperScript, /MutationObserver/);
   assert.match(wrapperScript, /fixNickElement/);
-  assert.match(wrapperScript, /querySelectorAll\(":scope > li\.message__wrapper"\)/);
+  assert.match(
+    wrapperScript,
+    /querySelectorAll\(":scope > li\.message__wrapper"\)/,
+  );
   assert.match(read("scripts/css-generator.js"), /resolveWrapperTargetUrl/);
-  assert.match(read("scripts/css-generator.js"), /const defaultText = "방송용 URL 복사"/);
+  assert.match(
+    read("scripts/css-generator.js"),
+    /const defaultText = "OBS URL 복사"/,
+  );
+});
+
+test("live simulator script exists and exposes required functions", () => {
+  const simSource = read("scripts/live-simulator.js");
+
+  assert.match(simSource, /function simCreateChatMessage\(\)/);
+  assert.match(simSource, /function simCreateDonation\(\)/);
+  assert.match(simSource, /function simCreateNotice\(\)/);
+  assert.match(simSource, /function simStart\(\)/);
+  assert.match(simSource, /function simStop\(\)/);
+  assert.match(simSource, /function simToggle\(\)/);
+  assert.match(simSource, /function simClear\(\)/);
+  assert.match(simSource, /function simSetSpeed\(/);
+  assert.match(simSource, /function simUpdateCss\(\)/);
+});
+
+test("live simulator DOM uses actual PandaTV structure (no message__box, no message__id)", () => {
+  const simSource = read("scripts/live-simulator.js");
+
+  assert.match(simSource, /message__wrapper/);
+  assert.match(simSource, /message__nick/);
+  assert.match(simSource, /message__name/);
+  assert.match(simSource, /message__text/);
+  assert.match(simSource, /haert__image/);
+  assert.match(simSource, /heart__text/);
+  assert.match(simSource, /chat__notice--list/);
+  assert.match(simSource, /notice__text/);
+
+  assert.doesNotMatch(simSource, /message__box/);
+  assert.doesNotMatch(simSource, /message__id/);
+  assert.doesNotMatch(simSource, /message__separator/);
+});
+
+test("overlay settings includes simulator panel and script", () => {
+  const settingsHtml = read("overlay-settings.html");
+
+  assert.match(settingsHtml, /id="simPanel"/);
+  assert.match(settingsHtml, /id="simContainer"/);
+  assert.match(settingsHtml, /id="simChat"/);
+  assert.match(settingsHtml, /id="simCssInjection"/);
+  assert.match(settingsHtml, /id="simPlayBtn"/);
+  assert.match(settingsHtml, /id="simSpeedRange"/);
+  assert.match(settingsHtml, /scripts\/live-simulator\.js/);
+  assert.match(settingsHtml, /simUpdateCss\(\)/);
 });

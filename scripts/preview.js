@@ -289,12 +289,8 @@ function updatePreview(v) {
     name.style.alignItems = capsuleMode ? "center" : "";
     name.style.minHeight = capsuleMode ? `${avatarSize}px` : "";
     name.style.padding = capsuleMode ? `0 ${effectiveNamePaddingX}px` : "0";
-    name.style.borderRadius = capsuleMode
-      ? `${effectiveCapsuleRadius}px`
-      : "0";
-    name.style.background = capsuleMode
-      ? nameBubbleBackground
-      : "transparent";
+    name.style.borderRadius = capsuleMode ? `${effectiveCapsuleRadius}px` : "0";
+    name.style.background = capsuleMode ? nameBubbleBackground : "transparent";
     name.style.boxShadow = capsuleMode ? effectiveBoxShadow : "none";
     name.style.letterSpacing =
       v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : "";
@@ -302,7 +298,7 @@ function updatePreview(v) {
     name.style.minWidth = "0";
 
     messageIds.forEach((messageId) => {
-      messageId.style.display = "inline";
+      messageId.style.display = "none";
       messageId.style.color = v.nickColor;
       messageId.style.fontSize = `${effectiveNickFontSize}px`;
       messageId.style.fontWeight = v.nickBold ? "700" : "400";
@@ -316,7 +312,10 @@ function updatePreview(v) {
 
     separator.textContent = v.separatorText;
     separator.style.display =
-      (capsuleMode || (!runtimeMode && splitMode)) || v.twoLine || !v.separatorText
+      capsuleMode ||
+      (!runtimeMode && splitMode) ||
+      v.twoLine ||
+      !v.separatorText
         ? "none"
         : "inline";
     separator.style.color = v.nickColor;
@@ -333,9 +332,8 @@ function updatePreview(v) {
         : v.twoLine
           ? "2px"
           : "0";
-    text.style.marginLeft = !runtimeMode && layeredMode
-      ? `${effectiveSplitTextOffsetX}px`
-      : "0";
+    text.style.marginLeft =
+      !runtimeMode && layeredMode ? `${effectiveSplitTextOffsetX}px` : "0";
     text.style.color = v.textColor;
     text.style.textShadow = shadow;
     text.style.maxWidth = "100%";
