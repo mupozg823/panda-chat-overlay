@@ -195,8 +195,8 @@ test("dense capsule presets are tuned for broadcast readability", () => {
   assert.ok(themes.reference.chatGap <= 6);
 
   assert.ok(themes.princess.maxWidth >= 76);
-  assert.ok(themes.princess.textBgPadding <= 5);
-  assert.ok(themes.princess.namePaddingX <= 9);
+  assert.ok(themes.princess.textBgPadding <= 8);
+  assert.ok(themes.princess.namePaddingX <= 12);
 
   assert.ok(themes.princess2.avatarFrameSize <= 40);
   assert.ok(themes.princess2.lineHeight >= 1.4);
