@@ -600,7 +600,7 @@ function generateCssText(v) {
   );
 
   const messageNameDecls = [];
-  if (capsuleMode) {
+  if (capsuleMode || splitMode) {
     messageNameDecls.push(
       "display: inline-flex !important;",
       "align-items: center !important;",
