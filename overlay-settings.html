@@ -906,6 +906,32 @@
     <div class="phase-content" id="phase-advanced" data-phase="advanced">
     <div id="detailPhaseSummary" style="display:none"></div>
 
+    <!-- 직급별 아바타 이미지 -->
+    <div class="section" id="sec-rankavatar">
+      <div class="section-title" onclick="toggleSection(this)">
+        <span class="section-title-main">
+          <span class="section-title-text">직급별 아바타</span>
+        </span>
+      </div>
+      <div class="section-body">
+      <div class="section-note" style="margin-bottom:12px;color:#9eacd8;font-size:11px;line-height:1.5;">
+        BJ·매니저·VIP 등 직급에 따라 다른 아바타 이미지를 표시합니다. 아바타(닉네임 아이콘) 사용 시에만 동작하며, <code>:has()</code> 셀렉터를 사용하므로 <strong>OBS v29+</strong> 필요합니다.
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">직급별 아바타 사용</span>
+        <div class="toggle-wrap" onclick="toggleSwitch('useRankAvatar')">
+          <div class="toggle-switch" id="useRankAvatar"></div>
+        </div>
+      </div>
+
+      <div id="rankAvatarPanel" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;" id="rankAvatarGrid">
+        </div>
+      </div>
+      </div>
+    </div>
+
     <!-- 후원 & 알림 설정 -->
     <div class="section" id="sec-donation">
       <div class="section-title" onclick="toggleSection(this)">
@@ -1137,32 +1163,6 @@
         <span class="control-label">알림 전체 숨기기</span>
         <div class="toggle-wrap" onclick="toggleSwitch('hideNotice')">
           <div class="toggle-switch" id="hideNotice"></div>
-        </div>
-      </div>
-      </div>
-    </div>
-
-    <!-- 직급별 아바타 이미지 -->
-    <div class="section collapsed" id="sec-rankavatar">
-      <div class="section-title" onclick="toggleSection(this)">
-        <span class="section-title-main">
-          <span class="section-title-text">직급별 아바타</span>
-        </span>
-      </div>
-      <div class="section-body">
-      <div class="section-note" style="margin-bottom:12px;color:#9eacd8;font-size:11px;line-height:1.5;">
-        BJ·매니저·VIP 등 직급에 따라 다른 아바타 이미지를 표시합니다. 아바타(닉네임 아이콘) 사용 시에만 동작하며, <code>:has()</code> 셀렉터를 사용하므로 <strong>OBS v29+</strong> 필요합니다.
-      </div>
-
-      <div class="control-row">
-        <span class="control-label">직급별 아바타 사용</span>
-        <div class="toggle-wrap" onclick="toggleSwitch('useRankAvatar')">
-          <div class="toggle-switch" id="useRankAvatar"></div>
-        </div>
-      </div>
-
-      <div id="rankAvatarPanel" style="display:none;">
-        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;" id="rankAvatarGrid">
         </div>
       </div>
       </div>
