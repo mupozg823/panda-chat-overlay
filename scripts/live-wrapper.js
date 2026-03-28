@@ -162,6 +162,13 @@ html[data-wrapper] img[alt="heart_image"] { max-width: 100% !important; height: 
   }
 
   function connectFrame(userCss) {
+    clearInterval(state.poller);
+    state.poller = null;
+    if (state.observer) {
+      state.observer.disconnect();
+      state.observer = null;
+    }
+
     const doc = iframe.contentDocument;
     if (!doc) {
       setStatus("iframe 접근 실패", "error");
@@ -171,7 +178,6 @@ html[data-wrapper] img[alt="heart_image"] { max-width: 100% !important; height: 
     injectStyles(doc, userCss);
 
     let attempts = 0;
-    clearInterval(state.poller);
     state.poller = setInterval(() => {
       attempts++;
       const container =
@@ -180,7 +186,6 @@ html[data-wrapper] img[alt="heart_image"] { max-width: 100% !important; height: 
         clearInterval(state.poller);
         normalizeAll(container, doc);
 
-        if (state.observer) state.observer.disconnect();
         state.observer = new MutationObserver(() => {
           normalizeAll(container, doc);
           setStatus(`연결됨 · ${container.children.length}개`, "ok");

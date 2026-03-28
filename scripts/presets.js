@@ -4919,8 +4919,15 @@ const RANK_BADGES = (globalThis.RANK_BADGES = [
     key: "s",
     label: "서포터",
     dataSrc: "ico_class_s",
-    defaultEmoji: "💎",
+    defaultEmoji: "⭐",
     color: "#9944cc",
+  },
+  {
+    key: "d",
+    label: "다이아",
+    dataSrc: "ico_class_d",
+    defaultEmoji: "💎",
+    color: "#00bcd4",
   },
   {
     key: "b",

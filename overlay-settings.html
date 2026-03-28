@@ -1400,8 +1400,8 @@
       <div class="preview-header-right">
         <button class="copy-btn-primary" id="wrapperUrlBtn" onclick="copyWrapperUrl()">OBS URL 복사</button>
         <div style="position:relative;display:inline-block;">
-          <button class="copy-btn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
-          <div style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:160px;">
+          <button class="copy-btn" id="settingsMgrBtn" style="background:#3a4a6a;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">설정 관리 ▾</button>
+          <div id="settingsMgrDropdown" style="display:none;position:absolute;right:0;top:100%;margin-top:4px;flex-direction:column;gap:4px;background:#1e2240;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px;z-index:20;min-width:160px;">
             <button class="copy-btn" style="background:#3a5a7a;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettingsToBrowser()">브라우저 저장</button>
             <button class="copy-btn" style="background:#4e5d8a;width:100%;font-size:11px;padding:6px 10px;" onclick="loadSettingsFromBrowser()">브라우저 불러오기</button>
             <button class="copy-btn" style="background:#3f5a78;width:100%;font-size:11px;padding:6px 10px;" onclick="saveSettings()">파일 저장</button>
@@ -1417,7 +1417,7 @@
         <div id="wrapperTargetRow" style="display:flex;flex:1 1 420px;align-items:center;gap:8px;min-width:260px;">
           <input id="wrapperTargetUrl" type="url" placeholder="팬더TV 채팅 주소를 붙여넣으세요 (https://p.pandahp.kr/chat/...)" oninput="syncWrapperHint()" style="flex:1 1 auto;min-width:220px;background:#141a31;color:#f4f7ff;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;font-size:11px;">
         </div>
-        <span id="wrapperModeHint" style="font-size:11px;color:#9eacd8;line-height:1.4;">채팅 주소를 넣고 OBS URL 복사를 누르면 됩니다. 복사된 URL을 OBS 브라우저 소스에 붙여넣으세요.</span>
+        <span id="wrapperModeHint" style="font-size:11px;color:#9eacd8;line-height:1.4;">팬더TV 마이페이지 → 채팅 위젯 → 위젯 URL 복사 후 위 칸에 붙여넣기. OBS URL 복사 → OBS 브라우저 소스 URL에 붙여넣기.</span>
       </div>
       <div class="preview-quick-dock" id="previewQuickDock">
         <div class="preview-quick-buttons" id="previewQuickButtons">
@@ -1965,7 +1965,7 @@ function syncRangeDisplays(v) {
     donationImgRadiusVal: `${v.donationImgRadius}px`,
     donationImgBorderVal: `${v.donationImgBorder}px`,
     donationImgShadowVal: `${v.donationImgShadow}px`,
-    maxMessagesVal: v.maxMessages === 0 ? '무제한' : `${v.maxMessages}개`,
+    maxMessagesVal: v.maxMessages === 0 ? '무제한 (장시간 시 30~50 권장)' : `${v.maxMessages}개`,
     textStrokeSizeVal: `${v.textStrokeSize}px`
   };
 
@@ -2105,6 +2105,7 @@ function filterPresets(cat) {
 }
 
 function resetToDefault() {
+  if (!confirm('모든 설정을 초기화하시겠습니까?\n현재 설정이 사라집니다. (Ctrl+Z로 복구 가능)')) return;
   applyTheme('pink');
   switchPhase('design');
 }
@@ -2357,11 +2358,21 @@ function _doCustomIconInput() {
   });
 }
 
+function isDataUrlTooLarge(dataUrl, label) {
+  const MAX_BYTES = 200 * 1024;
+  if (dataUrl && dataUrl.startsWith('data:') && dataUrl.length > MAX_BYTES) {
+    alert((label || '이미지') + ' 용량이 너무 큽니다 (' + Math.round(dataUrl.length / 1024) + 'KB). 200KB 이하로 줄여주세요.');
+    return true;
+  }
+  return false;
+}
+
 function onCustomIconFile(event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = function(e) {
+    if (isDataUrlTooLarge(e.target.result, '커스텀 아이콘')) return;
     customIconDataUrl = e.target.result;
     document.getElementById('iconPreviewImg').src = customIconDataUrl;
     document.getElementById('iconPreviewRow').style.display = 'flex';
@@ -2372,9 +2383,22 @@ function onCustomIconFile(event) {
 }
 
 // === 등급별 배지 ===
+function syncRankBadgeValues() {
+  RANK_BADGES.forEach(rank => {
+    const saved = rankBadgeIcons[rank.key] || {};
+    const sel = document.getElementById('rankType_' + rank.key);
+    const emojiInput = document.getElementById('rankEmoji_' + rank.key);
+    const urlInput = document.getElementById('rankUrl_' + rank.key);
+    if (sel) sel.value = saved.type || 'default';
+    if (emojiInput) emojiInput.value = saved.emoji || rank.defaultEmoji;
+    if (urlInput) urlInput.value = saved.url || '';
+  });
+}
+
 function initRankBadgeUI() {
   const grid = document.getElementById('rankBadgeGrid');
   if (!grid) return;
+  if (grid.children.length > 0) { syncRankBadgeValues(); return; }
   grid.innerHTML = '';
   RANK_BADGES.forEach(rank => {
     const saved = rankBadgeIcons[rank.key] || {};
@@ -2452,9 +2476,20 @@ function onRankBadgeToggle() {
 }
 
 // === 직급별 아바타 ===
+function syncRankAvatarValues() {
+  RANK_BADGES.forEach(rank => {
+    const saved = rankAvatarImages[rank.key] || '';
+    const urlInput = document.getElementById('rankAvatarUrl_' + rank.key);
+    const preview = document.getElementById('rankAvatarPreview_' + rank.key);
+    if (urlInput) urlInput.value = saved;
+    if (preview) { preview.src = saved || ''; preview.style.display = saved ? '' : 'none'; }
+  });
+}
+
 function initRankAvatarUI() {
   const grid = document.getElementById('rankAvatarGrid');
   if (!grid) return;
+  if (grid.children.length > 0) { syncRankAvatarValues(); return; }
   grid.innerHTML = '';
   RANK_BADGES.forEach(rank => {
     const saved = rankAvatarImages[rank.key] || '';
@@ -2495,6 +2530,7 @@ function initRankAvatarUI() {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(ev) {
+        if (isDataUrlTooLarge(ev.target.result, rank.label + ' 아바타')) return;
         urlInput.value = ev.target.result;
         onRankAvatarChange(rank.key);
       };
@@ -2607,7 +2643,7 @@ let _flashTimer = null;
 const _undoStack = [];
 const _redoStack = [];
 let _undoRestoring = false;
-const UNDO_MAX = 50;
+const UNDO_MAX = 20;
 const LOCAL_SETTINGS_KEY = 'panda_chat_overlay_saved_state_v1';
 const LOCAL_SETTINGS_META_KEY = 'panda_chat_overlay_saved_meta_v1';
 
@@ -2723,6 +2759,14 @@ function clearCustomCss() {
   update();
   setSettingsStatus('추가 커스텀 CSS를 비웠습니다.');
 }
+
+document.addEventListener('click', (e) => {
+  const dd = document.getElementById('settingsMgrDropdown');
+  const btn = document.getElementById('settingsMgrBtn');
+  if (dd && dd.style.display !== 'none' && !dd.contains(e.target) && e.target !== btn) {
+    dd.style.display = 'none';
+  }
+});
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'z' && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
@@ -3477,6 +3521,10 @@ applyTheme(initialTheme);
 switchPhase('preset');
 syncSavedSettingsState();
 syncPhaseDashboard();
+if (!localStorage.getItem('panda_overlay_visited')) {
+  document.getElementById('guidePanel').style.display = 'block';
+  localStorage.setItem('panda_overlay_visited', '1');
+}
 
 // ── 양방향 편집: 미리보기 클릭 → 플로팅 에디터 ──
 
@@ -3974,6 +4022,7 @@ function feShow(type, anchorEl, triggerEl = anchorEl) {
             const rd = new FileReader();
             rd.onload = (re) => {
               if (document.getElementById('customIconUrl').value.trim() !== fetchUrl) return;
+              if (isDataUrlTooLarge(re.target.result, '아이콘 URL')) return;
               customIconDataUrl = re.target.result;
               document.getElementById('iconPreviewImg').src = customIconDataUrl;
               document.getElementById('iconPreviewRow').style.display = 'flex';
@@ -4006,6 +4055,7 @@ function feShow(type, anchorEl, triggerEl = anchorEl) {
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (re) => {
+          if (isDataUrlTooLarge(re.target.result, '커스텀 아이콘')) return;
           customIconDataUrl = re.target.result;
           document.getElementById('iconPreviewImg').src = customIconDataUrl;
           document.getElementById('iconPreviewRow').style.display = 'flex';

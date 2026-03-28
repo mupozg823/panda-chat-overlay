@@ -1427,14 +1427,28 @@ function copyWrapperUrl() {
         "URL 복사됨! OBS 브라우저 소스의 URL 칸에 붙여넣으세요.";
   }
 
+  function onUrlCopyFailed() {
+    if (btn) {
+      btn.textContent = "복사 실패 — 수동 복사 필요";
+      btn.style.background = "#cc4444";
+      setTimeout(() => {
+        btn.textContent = defaultText;
+        btn.style.background = "";
+      }, 4000);
+    }
+  }
+
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard
       .writeText(url)
       .then(onUrlCopied)
       .catch(() => {
         if (fallbackCopy(url)) onUrlCopied();
+        else onUrlCopyFailed();
       });
   } else if (fallbackCopy(url)) {
     onUrlCopied();
+  } else {
+    onUrlCopyFailed();
   }
 }
