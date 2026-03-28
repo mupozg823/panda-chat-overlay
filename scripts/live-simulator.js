@@ -102,6 +102,11 @@ const SIM_NOTICE_TYPES = [
     template: (nick) =>
       `<span>${nick}</span>님이&nbsp;미션을&nbsp;완료하셨습니다!`,
   },
+  {
+    type: "Info",
+    template: (nick) =>
+      `<span>${nick}</span>님의&nbsp;등급이&nbsp;변경되었습니다.`,
+  },
 ];
 
 const SIM_DONATION_AMOUNTS = [100, 500, 1000, 5000, 10000];

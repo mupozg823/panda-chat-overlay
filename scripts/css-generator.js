@@ -1178,7 +1178,7 @@ function generateCssText(v) {
     resolveRankBadges().forEach((rank) => {
       const cfg = v.rankBadgeIcons[rank.key];
       if (!cfg || cfg.type === "default") return;
-      const sel = `div.mr-1:has(svg[data-src*="${rank.dataSrc}"])`;
+      const sel = `.mr-1:has(svg[data-src*="${rank.dataSrc}"])`;
       if (cfg.type === "hide") {
         badgeParts.push(buildRule(sel, ["display: none !important;"]));
       } else if (cfg.type === "emoji" && cfg.emoji) {

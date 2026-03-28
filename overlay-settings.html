@@ -2273,6 +2273,11 @@ function applyTheme(name) {
 
   // 등급별 배지
   setToggle('useRankBadge', t.useRankBadge || false);
+  setRange('rankBadgeSize', t.rankBadgeSize || 16);
+  rankBadgeIcons = t.rankBadgeIcons ? JSON.parse(JSON.stringify(t.rankBadgeIcons)) : {};
+  const rankBadgeOn = document.getElementById('useRankBadge').classList.contains('on');
+  document.getElementById('rankBadgePanel').style.display = rankBadgeOn ? 'block' : 'none';
+  if (rankBadgeOn) initRankBadgeUI();
 
   // 직급별 아바타
   setToggle('useRankAvatar', t.useRankAvatar || false);
@@ -3025,19 +3030,19 @@ function updatePreview(v) {
     name.style.fontWeight = v.nickBold ? '700' : '400';
     name.style.textShadow = shadow;
     name.style.marginRight = '0';
-    name.style.display = capsuleMode ? 'inline-flex' : 'inline';
-    name.style.alignItems = capsuleMode ? 'center' : '';
-    name.style.minHeight = capsuleMode ? `${avatarSize}px` : '';
-    name.style.padding = capsuleMode ? `0 ${effectiveNamePaddingX}px` : '0';
-    name.style.borderRadius = capsuleMode ? `${effectiveCapsuleRadius}px` : '0';
-    name.style.background = capsuleMode ? nameBubbleBackground : 'transparent';
-    name.style.boxShadow = capsuleMode ? effectiveBoxShadow : 'none';
+    name.style.display = (capsuleMode || splitMode) ? 'inline-flex' : 'inline';
+    name.style.alignItems = (capsuleMode || splitMode) ? 'center' : '';
+    name.style.minHeight = (capsuleMode || splitMode) ? `${avatarSize}px` : '';
+    name.style.padding = (capsuleMode || splitMode) ? `0 ${effectiveNamePaddingX}px` : '0';
+    name.style.borderRadius = (capsuleMode || splitMode) ? `${effectiveCapsuleRadius}px` : '0';
+    name.style.background = (capsuleMode || splitMode) ? nameBubbleBackground : 'transparent';
+    name.style.boxShadow = (capsuleMode || splitMode) ? effectiveBoxShadow : 'none';
     name.style.letterSpacing = v.nickLetterSpacing > 0 ? `${v.nickLetterSpacing}px` : '';
     name.style.maxWidth = '100%';
     name.style.minWidth = '0';
 
     messageIds.forEach(messageId => {
-      messageId.style.display = 'none';
+      messageId.style.display = v.hideId ? 'none' : 'inline';
       messageId.style.color = v.nickColor;
       messageId.style.fontSize = `${effectiveNickFontSize}px`;
       messageId.style.fontWeight = v.nickBold ? '700' : '400';

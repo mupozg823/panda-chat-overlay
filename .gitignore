@@ -8,3 +8,4 @@ dist/
 *_original.png
 .vercel
 .superpowers/
+.analysis/
